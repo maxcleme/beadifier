@@ -1,28 +1,55 @@
-# Perler
+# Beadifier - [Demo](http://beadifier.eremes.xyz)
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.3.2.
+### Main purpose
 
-## Development server
+* Display image as bead project
+* Edit color palette (Hama, Nabbi, Artkal, PerlerBeads)
+* Edit bead type (Mini, Midi)
+* Edit project size
+* Display beads usage
+* Export bead sheets as .pdf
+* No installation required
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+### Build
 
-## Code scaffolding
+Project can be built using the following command :
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+```
+yarn build:prod
+```
 
-## Build
+### Docker
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+Docker image is based on [Nginx Image](https://hub.docker.com/_/nginx/) in order to serve static content.
 
-## Running unit tests
+Helper commands are available
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+> Build content and then build Docker image.
+```
+yarn docker:build
+```
 
-## Running end-to-end tests
+> Stop container
+```
+yarn docker:stop
+```
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-Before running the tests make sure you are serving the app via `ng serve`.
+> Remove container
+```
+yarn docker:rm
+```
 
-## Further help
+> All-in-on command, does the following action : Stop, Remove, Build, Start
+```
+yarn docker:start
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+### Contribute
+
+Project can be run locally by using the following command : 
+
+```
+yarn start
+```
+
+

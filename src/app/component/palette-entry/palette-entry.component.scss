@@ -1,0 +1,32 @@
+.palette-entry {
+    cursor: pointer;
+    max-width: 100%;
+
+    .palette-entry-color-preview {
+        height:6px; 
+        width:6px; 
+        border-radius: 12px;
+        box-shadow: 0 0 1px black, inset 0 0 1px #cccccc;
+        display:inline-block; 
+        border-width: 4px;
+        border-style: solid; 
+        margin-right:5px; 
+        margin-bottom:5px;
+        margin-top:5px;
+        flex-grow: 1;
+    }
+
+    .palette-entry-color-ref {
+        font-size: .8em;
+        margin-right: 5px;
+        flex-grow: 1;
+    }
+    
+    .palette-entry-color-name {
+        font-size: .8em;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow-x: hidden;
+        flex-shrink: 2;
+    }
+}

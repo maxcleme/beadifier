@@ -1,0 +1,632 @@
+{
+    "name": "Perler beads",
+    "entries": [
+        {
+            "ref": "P01",
+            "name": "White",
+            "enabled": true,
+            "color": {
+                "r": 241,
+                "g": 241,
+                "b": 241,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P02",
+            "name": "Cream",
+            "enabled": true,
+            "color": {
+                "r": 224,
+                "g": 222,
+                "b": 169,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P03",
+            "name": "Yellow",
+            "enabled": true,
+            "color": {
+                "r": 236,
+                "g": 216,
+                "b": 0,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P04",
+            "name": "Orange",
+            "enabled": true,
+            "color": {
+                "r": 237,
+                "g": 97,
+                "b": 32,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P05",
+            "name": "Red",
+            "enabled": true,
+            "color": {
+                "r": 191,
+                "g": 46,
+                "b": 64,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P06",
+            "name": "Bubblegum",
+            "enabled": true,
+            "color": {
+                "r": 221,
+                "g": 102,
+                "b": 155,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P07",
+            "name": "Purple",
+            "enabled": true,
+            "color": {
+                "r": 96,
+                "g": 64,
+                "b": 137,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P08",
+            "name": "Dark Blue",
+            "enabled": true,
+            "color": {
+                "r": 43,
+                "g": 63,
+                "b": 135,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P69",
+            "name": "Light Blue",
+            "enabled": true,
+            "color": {
+                "r": 51,
+                "g": 112,
+                "b": 192,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P10",
+            "name": "Dark Green",
+            "enabled": true,
+            "color": {
+                "r": 28,
+                "g": 117,
+                "b": 62,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P100",
+            "name": "Pearl Coral",
+            "enabled": true,
+            "color": {
+                "r": 249,
+                "g": 126,
+                "b": 121,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P101",
+            "name": "Pearl Light Blue",
+            "enabled": true,
+            "color": {
+                "r": 122,
+                "g": 174,
+                "b": 162,
+                "a": 255
+            }
+        },
+        {
+            "ref": "p102",
+            "name": "Pearl Green",
+            "enabled": true,
+            "color": {
+                "r": 132,
+                "g": 183,
+                "b": 145,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P103",
+            "name": "Pearl Yellow",
+            "enabled": true,
+            "color": {
+                "r": 202,
+                "g": 192,
+                "b": 51,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P104",
+            "name": "Pearl Light Pink",
+            "enabled": true,
+            "color": {
+                "r": 215,
+                "g": 168,
+                "b": 162,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P105",
+            "name": "Silver",
+            "enabled": true,
+            "color": {
+                "r": 119,
+                "g": 123,
+                "b": 129,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P11",
+            "name": "Light Green",
+            "enabled": true,
+            "color": {
+                "r": 86,
+                "g": 186,
+                "b": 159,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P12",
+            "name": "Brown",
+            "enabled": true,
+            "color": {
+                "r": 81,
+                "g": 57,
+                "b": 49,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P17",
+            "name": "Grey",
+            "enabled": true,
+            "color": {
+                "r": 138,
+                "g": 141,
+                "b": 145,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P18",
+            "name": "Black",
+            "enabled": true,
+            "color": {
+                "r": 46,
+                "g": 47,
+                "b": 50,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P20",
+            "name": "Rust",
+            "enabled": true,
+            "color": {
+                "r": 140,
+                "g": 55,
+                "b": 44,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P21",
+            "name": "Light Brown",
+            "enabled": true,
+            "color": {
+                "r": 129,
+                "g": 93,
+                "b": 52,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P80",
+            "name": "Peach",
+            "enabled": true,
+            "color": {
+                "r": 238,
+                "g": 186,
+                "b": 178,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P35",
+            "name": "Tan",
+            "enabled": true,
+            "color": {
+                "r": 188,
+                "g": 147,
+                "b": 113,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P38",
+            "name": "Magenta",
+            "enabled": true,
+            "color": {
+                "r": 242,
+                "g": 42,
+                "b": 123,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P47",
+            "name": "Neon Yellow",
+            "enabled": true,
+            "color": {
+                "r": 220,
+                "g": 224,
+                "b": 2,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P48",
+            "name": "Neon Orange",
+            "enabled": true,
+            "color": {
+                "r": 255,
+                "g": 119,
+                "b": 0,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P49",
+            "name": "Neon Green",
+            "enabled": true,
+            "color": {
+                "r": 1,
+                "g": 158,
+                "b": 67,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P50",
+            "name": "Neon Pink",
+            "enabled": true,
+            "color": {
+                "r": 255,
+                "g": 57,
+                "b": 145,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P52",
+            "name": "Pastel Blue",
+            "enabled": true,
+            "color": {
+                "r": 83,
+                "g": 144,
+                "b": 209,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P53",
+            "name": "Pastel Green",
+            "enabled": true,
+            "color": {
+                "r": 118,
+                "g": 200,
+                "b": 130,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P54",
+            "name": "Pastel Lavender",
+            "enabled": true,
+            "color": {
+                "r": 138,
+                "g": 114,
+                "b": 193,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P56",
+            "name": "Pastel Yellow",
+            "enabled": true,
+            "color": {
+                "r": 254,
+                "g": 248,
+                "b": 117,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P57",
+            "name": "Chedder",
+            "enabled": true,
+            "color": {
+                "r": 241,
+                "g": 170,
+                "b": 12,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P58",
+            "name": "Toothpaste",
+            "enabled": true,
+            "color": {
+                "r": 147,
+                "g": 200,
+                "b": 212,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P59",
+            "name": "Hot Coral",
+            "enabled": true,
+            "color": {
+                "r": 255,
+                "g": 56,
+                "b": 81,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P60",
+            "name": "Plum",
+            "enabled": true,
+            "color": {
+                "r": 162,
+                "g": 75,
+                "b": 156,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P61",
+            "name": "Kiwi Lime",
+            "enabled": true,
+            "color": {
+                "r": 108,
+                "g": 190,
+                "b": 19,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P62",
+            "name": "Cyan",
+            "enabled": true,
+            "color": {
+                "r": 43,
+                "g": 137,
+                "b": 198,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P63",
+            "name": "Blush",
+            "enabled": true,
+            "color": {
+                "r": 255,
+                "g": 130,
+                "b": 133,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P70",
+            "name": "Periwinkle Blue",
+            "enabled": true,
+            "color": {
+                "r": 100,
+                "g": 124,
+                "b": 190,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P75",
+            "name": "Glow Green",
+            "enabled": true,
+            "color": {
+                "r": 190,
+                "g": 198,
+                "b": 150,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P79",
+            "name": "Light Pink",
+            "enabled": true,
+            "color": {
+                "r": 246,
+                "g": 179,
+                "b": 221,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P80",
+            "name": "Bright Green",
+            "enabled": true,
+            "color": {
+                "r": 79,
+                "g": 173,
+                "b": 66,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P81",
+            "name": "Light Gray",
+            "enabled": true,
+            "color": {
+                "r": 177,
+                "g": 181,
+                "b": 178,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P179",
+            "name": "Evergreen",
+            "enabled": true,
+            "color": {
+                "r": 53,
+                "g": 83,
+                "b": 67,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P82",
+            "name": "Lavender",
+            "enabled": true,
+            "color": {
+                "r": 173,
+                "g": 152,
+                "b": 212,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P83",
+            "name": "Pink",
+            "enabled": true,
+            "color": {
+                "r": 228,
+                "g": 72,
+                "b": 146,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P85",
+            "name": "Gold",
+            "enabled": true,
+            "color": {
+                "r": 187,
+                "g": 118,
+                "b": 52,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P88",
+            "name": "Raspberry",
+            "enabled": true,
+            "color": {
+                "r": 165,
+                "g": 48,
+                "b": 97,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P90",
+            "name": "Butterscotch",
+            "enabled": true,
+            "color": {
+                "r": 212,
+                "g": 132,
+                "b": 55,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P91",
+            "name": "Parrot Green",
+            "enabled": true,
+            "color": {
+                "r": 6,
+                "g": 124,
+                "b": 129,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P92",
+            "name": "Dark Grey",
+            "enabled": true,
+            "color": {
+                "r": 77,
+                "g": 81,
+                "b": 86,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P93",
+            "name": "Blueberry Cream",
+            "enabled": true,
+            "color": {
+                "r": 130,
+                "g": 151,
+                "b": 217,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P96",
+            "name": "Cranapple",
+            "enabled": true,
+            "color": {
+                "r": 128,
+                "g": 50,
+                "b": 69,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P97",
+            "name": "Prickly Pear",
+            "enabled": true,
+            "color": {
+                "r": 189,
+                "g": 218,
+                "b": 1,
+                "a": 255
+            }
+        },
+        {
+            "ref": "P98",
+            "name": "Sand",
+            "enabled": true,
+            "color": {
+                "r": 228,
+                "g": 182,
+                "b": 144,
+                "a": 255
+            }
+        }
+    ]
+}

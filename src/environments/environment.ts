@@ -1,8 +1,18 @@
-// The file contents for the current environment will overwrite these during build.
-// The build system defaults to the dev environment which uses `environment.ts`, but if you do
-// `ng build --env=prod` then `environment.prod.ts` will be used instead.
-// The list of which env maps to which file can be found in `.angular-cli.json`.
+import * as mixpanel from 'mixpanel-browser';
+mixpanel.init("fc2f25ea3494ef7dfdf3eecbf221fd2f");
 
 export const environment = {
-  production: false
+  production: false,
+  mixpanel: mixpanel
 };
+
+// GA
+(function (i, s, o, g, r, a, m) {
+  i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+    (i[r].q = i[r].q || []).push(arguments)
+  }, i[r].l = 1 * new Date().getTime(); a = s.createElement(o),
+    m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+(window as any).ga('create', 'UA-109027550-1', 'none');
+(window as any).ga('send', 'pageview');
