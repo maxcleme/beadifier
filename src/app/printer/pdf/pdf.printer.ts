@@ -2,7 +2,7 @@ import { Printer } from './../printer';
 import { PaletteEntry } from '../../model/palette/palette.model';
 import { Project } from '../../model/project/project.model';
 
-import * as jsPDF from 'jsPdf';
+import * as jsPDF from 'jspdf';
 import * as _ from 'lodash';
 
 export class PdfPrinter implements Printer {
