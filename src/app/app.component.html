@@ -1,4 +1,8 @@
 <div class="mat-typography" fxLayout="column" fxLayoutGap="1em">
+  <div fxLayout="row">
+    <a class="github-button" href="https://github.com/maxcleme" aria-label="Follow @maxcleme on GitHub">Follow @maxcleme</a>
+    <a class="github-button" href="https://github.com/maxcleme/beadifier/issues" data-icon="octicon-issue-opened" aria-label="Issue maxcleme/beadifier on GitHub">Issue</a>
+  </div>
   <div fxLayout="row" fxLayoutAlign="center">
     <div class="banner-container">
       <div fxLayout="row" fxLayoutAlign="center">
@@ -31,11 +35,12 @@
                   <mat-checkbox [(ngModel)]="grid" (change)="beadify(this.project)">Display grid</mat-checkbox>
                 </div>
                 <div [ngStyle]="{'height' : aspectRatio * canvas.height * beadSize + 'px'}" fxLayout="row">
-                  <div #preview class="renderer"  [ngStyle]="{'transform':'scale('+aspectRatio+','+aspectRatio+')'}">
+                  <div #preview class="renderer" [ngStyle]="{'transform':'scale('+aspectRatio+','+aspectRatio+')'}">
                   </div>
                 </div>
               </div>
-              <div fxLayout="column" fxLayoutGap="1em" fxLayoutAlign="center" fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="50%" fxFlex.lg="50%" fxFlex.xl="50%">
+              <div fxLayout="column" fxLayoutGap="1em" fxLayoutAlign="center" fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="50%" fxFlex.lg="50%"
+                fxFlex.xl="50%">
                 <bead-usage [usage]="usage" (onPaletteChange)="beadify(this.project)"></bead-usage>
                 <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="1em">
                   <button mat-raised-button [disabled]="!hasUsageUnderPercent(1, usage)" (click)="removeColorUnderPercent(1, usage)">Reduce color under 1%</button>
