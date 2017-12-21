@@ -13,5 +13,6 @@ export class Board {
 
 export const BOARDS = {
     MIDI: new Board("Midi", 29, 8),
-    MINI: new Board("Mini", 57, 3)
+    MINI: new Board("Mini", 57, 3),
+    MINI_ARTKAL: new Board("Mini", 50, 3),
 }
