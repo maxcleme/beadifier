@@ -51,11 +51,11 @@ export class PdfPrinter implements Printer {
         const usageWidth = doc.getStringUnitWidth("" + maxUsage) * doc.internal.getFontSize() / doc.internal.scaleFactor + cellPadding * 2;
         
         doc.setFontSize(fontSize);
-        _.chunk(Array.from(usage.entries()), usagePerPage).forEach(entries => {
+        _.chunk(Array.from(usage.entries()).sort(([k1, v1], [k2, v2]) => v2 - v1), usagePerPage).forEach(entries => {
             doc.addPage();
             const usageSheetWidthOffset = (width - refWidth - usageWidth) / 2;
             const usageSheetHeightOffset = (height - entries.length * usageLineHeight) / 2;
-            Array.from(entries).sort(([k1, v1], [k2, v2]) => v2 - v1).forEach(([k, v], idx) => {
+            Array.from(entries).forEach(([k, v], idx) => {
                 doc.rect(usageSheetWidthOffset, usageLineHeight * idx + usageSheetHeightOffset, refWidth, usageLineHeight);
                 doc.rect(usageSheetWidthOffset + refWidth, usageLineHeight * idx + usageSheetHeightOffset, usageWidth, usageLineHeight);
                 doc.text(usageSheetWidthOffset + cellPadding, usageLineHeight * idx + usageSheetHeightOffset + usageLineHeight / 2 + this.fontSizeToHeightMm(fontSize), generateName(k));
