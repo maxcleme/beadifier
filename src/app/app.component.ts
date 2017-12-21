@@ -55,7 +55,7 @@ export class AppComponent {
     this.printer = new PdfPrinter();
 
     // Default
-    this.project = new Project(PALETTES.HAMA, BOARDS.MIDI, 2, 2);
+    this.project = new Project(PALETTES.HAMA, BOARDS.MIDI, 2, 2, false);
     this.scaler = new FitScreenScaler();
     this.grid = false;
   }
@@ -77,7 +77,7 @@ export class AppComponent {
 
 
       drawImageInsideCanvas(canvas, imgTag);
-      this.reducedColor = reduceColor(canvas, project.palette);
+      this.reducedColor = reduceColor(canvas, project.palette, project.dithering).data;
       this.usage = this.computeUsage(this.reducedColor, project.palette);
 
       this.renderer.destroy();

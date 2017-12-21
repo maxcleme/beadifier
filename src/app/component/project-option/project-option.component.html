@@ -26,6 +26,9 @@
                 </mat-form-field>
             </div>
             <div>
+                <mat-checkbox [(ngModel)]="project.dithering" name="dithering" (change)="callback()">Dithering</mat-checkbox>
+            </div>
+            <div>
                 <board-size [project]="project" (onBoardSizeChange)="callback()"></board-size>
             </div>
         </div>

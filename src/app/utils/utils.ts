@@ -40,30 +40,46 @@ export function drawImageInsideCanvas(canvas, image) {
     canvas.getContext('2d').drawImage(image, xStart, yStart, renderableWidth, renderableHeight);
 }
 
-export function reduceColor(canvas: HTMLCanvasElement, palette: Palette) {
+export function reduceColor(canvas: HTMLCanvasElement, palette: Palette, dithering: boolean): ImageData {
     const context = canvas.getContext("2d");
-    const sourceColor = context.getImageData(0, 0, canvas.width, canvas.height).data;
+    const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
 
     for (let y = 0; y < canvas.height; y++) {
         for (let x = 0; x < canvas.width; x++) {
-            let color = new Color(
-                sourceColor[y * canvas.width * 4 + x * 4],
-                sourceColor[y * canvas.width * 4 + x * 4 + 1],
-                sourceColor[y * canvas.width * 4 + x * 4 + 2],
-                sourceColor[y * canvas.width * 4 + x * 4 + 3]
-            );
-
+            let color = get(imageData, canvas, x, y);
             if (color.a !== 0) {
                 const closestPaletteEntry = getClosestPaletteEntry(palette, color);
-                sourceColor[y * canvas.width * 4 + x * 4] = closestPaletteEntry.color.r;
-                sourceColor[y * canvas.width * 4 + x * 4 + 1] = closestPaletteEntry.color.g;
-                sourceColor[y * canvas.width * 4 + x * 4 + 2] = closestPaletteEntry.color.b;
-                sourceColor[y * canvas.width * 4 + x * 4 + 3] = closestPaletteEntry.color.a;
+                set(imageData, canvas, x, y, closestPaletteEntry.color)
+
+                // Floyd–Steinberg dithering
+                if (dithering) {
+                    const quantError = color.sub(closestPaletteEntry.color);
+                    set(imageData, canvas, x + 1, y, get(imageData, canvas, x + 1, y).add(quantError.mult(7 / 16)))
+                    set(imageData, canvas, x - 1, y + 1, get(imageData, canvas, x - 1, y + 1).add(quantError.mult(3 / 16)))
+                    set(imageData, canvas, x, y + 1, get(imageData, canvas, x, y + 1).add(quantError.mult(5 / 16)))
+                    set(imageData, canvas, x + 1, y + 1, get(imageData, canvas, x + 1, y + 1).add(quantError.mult(1 / 16)))
+                }
             }
         }
     }
 
-    return sourceColor;
+    return imageData;
+}
+
+function get(source: ImageData, canvas: HTMLCanvasElement, x: number, y: number): Color {
+    return new Color(
+        source.data[y * canvas.width * 4 + x * 4],
+        source.data[y * canvas.width * 4 + x * 4 + 1],
+        source.data[y * canvas.width * 4 + x * 4 + 2],
+        source.data[y * canvas.width * 4 + x * 4 + 3]
+    )
+}
+
+function set(source: ImageData, canvas: HTMLCanvasElement, x: number, y: number, color: Color) {
+    source.data[y * canvas.width * 4 + x * 4] = color.r;
+    source.data[y * canvas.width * 4 + x * 4 + 1] = color.g;
+    source.data[y * canvas.width * 4 + x * 4 + 2] = color.b;
+    source.data[y * canvas.width * 4 + x * 4 + 3] = color.a;
 }
 
 export function getClosestPaletteEntry(palette: Palette, color: Color): PaletteEntry {
