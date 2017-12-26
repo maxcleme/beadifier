@@ -1,4 +1,4 @@
-<form>
+<form (submit)="preventSubmit($event)">
     <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutWrap>
         <div fxLayout="column" fxLayoutGap="1em" fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="30%" fxFlex.lg="30%" fxFlex.xl="30%">
             <div>
@@ -6,19 +6,19 @@
             </div>
             <div fxLayout="row" fxLayoutAlign="start start">
                 <mat-form-field>
-                    <mat-select placeholder="Palette" [(ngModel)]="project.palette" name="palette" (change)="callback()">
+                    <mat-select aria-label="palette" placeholder="Palette" [(ngModel)]="project.palette" name="palette" (change)="callback()">
                         <mat-option *ngFor="let palette of availablePalettes" [value]="palette">
                             {{palette.name}}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
-                <button mat-raised-button (click)="resetPalette()">
+                <button aria-label="reload palette" mat-raised-button (click)="resetPalette()">
                     <mat-icon>cached</mat-icon>
                 </button>
             </div>
             <div>
                 <mat-form-field>
-                    <mat-select placeholder="Board type" [(ngModel)]="project.board" name="board" (change)="callback()">
+                    <mat-select aria-label="board" placeholder="Board type" [(ngModel)]="project.board" name="board" (change)="callback()">
                         <mat-option *ngFor="let board of availableBoards" [value]="board">
                             {{board.name}} ({{board.nbBeadPerRow}}x{{board.nbBeadPerRow}})
                         </mat-option>

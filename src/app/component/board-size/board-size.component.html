@@ -4,10 +4,10 @@
         </mat-grid-tile>
         <mat-grid-tile [colspan]="1" [rowspan]="project.nbBoardHeight">
             <div fxLayout="column" fxLayoutAlign="center center">
-                <button class="btn-small" mat-raised-button (click)="decreaseNbBoardHeight()" *ngIf="project.nbBoardHeight != 1">
+                <button aria-label="remove row" class="btn-small" mat-raised-button (click)="decreaseNbBoardHeight()" *ngIf="project.nbBoardHeight != 1">
                     <mat-icon>remove</mat-icon>
                 </button>
-                <button class="btn-small" mat-raised-button (click)="increaseNbBoardHeight()">
+                <button aria-label="add row" class="btn-small" mat-raised-button (click)="increaseNbBoardHeight()">
                     <mat-icon>add</mat-icon>
                 </button>
             </div>
@@ -16,10 +16,10 @@
         </mat-grid-tile>
         <mat-grid-tile [colspan]="project.nbBoardWidth" [rowspan]="1">
             <div fxLayout="row" fxLayoutAlign="center center">
-                <button class="btn-small" mat-raised-button (click)="decreaseNbBoardWidth()" *ngIf="project.nbBoardWidth != 1">
+                <button aria-label="remove column" class="btn-small" mat-raised-button (click)="decreaseNbBoardWidth()" *ngIf="project.nbBoardWidth != 1">
                     <mat-icon>remove</mat-icon>
                 </button>
-                <button class="btn-small" mat-raised-button (click)="increaseNbBoardWidth()">
+                <button aria-label="add column" class="btn-small" mat-raised-button (click)="increaseNbBoardWidth()">
                     <mat-icon>add</mat-icon>
                 </button>
             </div>

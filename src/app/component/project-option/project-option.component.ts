@@ -27,13 +27,18 @@ export class ProjectOptionComponent {
     this.project.imageSrc = src;
     this.callback();
   }
-  
-  callback(){
+
+  callback() {
     this.onLoad.emit(this.project);
   }
 
-  resetPalette(){
+  resetPalette() {
     this.project.palette.entries.forEach(entry => entry.enabled = true);
     this.callback();
+  }
+
+  preventSubmit(e: Event) {
+    e.preventDefault();
+    return false;
   }
 }

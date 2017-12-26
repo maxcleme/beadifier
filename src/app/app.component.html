@@ -6,7 +6,7 @@
   <div fxLayout="row" fxLayoutAlign="center">
     <div class="banner-container">
       <div fxLayout="row" fxLayoutAlign="center">
-        <img src="/assets/banner.png" width="100%">
+        <img alt="banner" src="/assets/banner.png" width="100%">
       </div>
     </div>
   </div>
@@ -43,8 +43,8 @@
                 fxFlex.xl="50%">
                 <bead-usage [usage]="usage" (onPaletteChange)="beadify(this.project)"></bead-usage>
                 <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="1em">
-                  <button mat-raised-button [disabled]="!hasUsageUnderPercent(1, usage)" (click)="removeColorUnderPercent(1, usage)">Reduce color under 1%</button>
-                  <button mat-raised-button (click)="exportBeadSheets()">Export...</button>
+                  <button aria-label="reduce color" mat-raised-button [disabled]="!hasUsageUnderPercent(1, usage)" (click)="removeColorUnderPercent(1, usage)">Reduce color under 1%</button>
+                  <button aria-label="export" mat-raised-button (click)="exportBeadSheets()">Export...</button>
                 </div>
               </div>
             </div>
