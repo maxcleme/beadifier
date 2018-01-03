@@ -31,8 +31,9 @@
           <mat-card-content>
             <div fxLayout="row" fxLayoutWrap>
               <div fxLayout="column" fxLayoutGap="1em" fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="50%" fxFlex.lg="50%" fxFlex.xl="50%">
-                <div fxLayout="row">
+                <div fxLayout="row" fxLayoutGap="15px">
                   <mat-checkbox [(ngModel)]="grid" (change)="beadify(this.project)">Display grid</mat-checkbox>
+                  <mat-checkbox [(ngModel)]="centered" (change)="beadify(this.project)">Center</mat-checkbox>
                 </div>
                 <div [ngStyle]="{'height' : aspectRatio * canvas.height * beadSize + 'px'}" fxLayout="row">
                   <div #preview class="renderer" [ngStyle]="{'transform':'scale('+aspectRatio+','+aspectRatio+')'}">

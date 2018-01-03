@@ -3,7 +3,7 @@ import { Color } from "../model/color/color.model";
 
 import * as _ from 'lodash';
 
-export function drawImageInsideCanvas(canvas, image) {
+export function drawImageInsideCanvas(canvas, image, centered) {
     /**
      * Credit to : https://sdqali.in/blog/2013/10/03/fitting-an-image-in-to-a-canvas-object/
      */
@@ -17,7 +17,7 @@ export function drawImageInsideCanvas(canvas, image) {
     if (imageAspectRatio < canvasAspectRatio) {
         renderableHeight = canvas.height;
         renderableWidth = image.width * (renderableHeight / image.height);
-        xStart = (canvas.width - renderableWidth) / 2;
+        xStart = centered ? (canvas.width - renderableWidth) / 2 : 0;
         yStart = 0;
     }
 
@@ -27,7 +27,7 @@ export function drawImageInsideCanvas(canvas, image) {
         renderableWidth = canvas.width
         renderableHeight = image.height * (renderableWidth / image.width);
         xStart = 0;
-        yStart = (canvas.height - renderableHeight) / 2;
+        yStart = centered ? (canvas.height - renderableHeight) / 2 : 0;
     }
 
     // Happy path - keep aspect ratio

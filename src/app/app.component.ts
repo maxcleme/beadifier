@@ -37,6 +37,7 @@ export class AppComponent {
   aspectRatio: number;
   usage: Map<PaletteEntry, number>;
   grid: boolean;
+  centered: boolean;
   reducedColor: Uint8ClampedArray;
   beadSize: number;
   printer: Printer;
@@ -58,6 +59,7 @@ export class AppComponent {
     this.project = new Project(PALETTES.HAMA, BOARDS.MIDI, 2, 2, false);
     this.scaler = new FitScreenScaler();
     this.grid = false;
+    this.centered = true;
   }
 
   beadify(project: Project) {
@@ -76,7 +78,7 @@ export class AppComponent {
 
 
 
-      drawImageInsideCanvas(canvas, imgTag);
+      drawImageInsideCanvas(canvas, imgTag, this.centered);
       this.reducedColor = reduceColor(canvas, project.palette, project.dithering).data;
       this.usage = this.computeUsage(this.reducedColor, project.palette);
 
