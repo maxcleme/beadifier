@@ -1,8 +1,33 @@
-FROM nginx
+#############################################################################
+### Credit goes to : https://mherman.org/blog/dockerizing-an-angular-app/ ###
+#############################################################################
 
-## CONFIG NGINX
-COPY docker_content/nginx/nginx.conf /etc/nginx/nginx.conf
-COPY docker_content/nginx/beadifier.conf /etc/nginx/sites-enabled/beadifier.conf
+# base image
+FROM node:12.6.0 as build
 
-## COPY FRONT-RESOURCES
-COPY dist /usr/share/nginx/html
+# set working directory
+WORKDIR /app
+
+# install app dependencies
+RUN npm install -g yarn
+COPY package.json /app/package.json
+COPY yarn.lock /app/yarn.lock
+RUN yarn
+
+# add app
+COPY . /app
+
+# generate build
+RUN yarn build:prod
+
+# base image
+FROM nginx:1.17.1-alpine
+
+# copy artifact build from the 'build environment'
+COPY --from=build /app/dist /usr/share/nginx/html
+
+# expose port 80
+EXPOSE 80
+
+# run nginx
+CMD ["nginx", "-g", "daemon off;"]

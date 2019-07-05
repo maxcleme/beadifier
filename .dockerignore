@@ -1,4 +1,1 @@
-*
-
-!docker_content/nginx
-!dist
+node_modules
