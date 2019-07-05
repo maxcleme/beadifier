@@ -34,7 +34,7 @@ export class PdfPrinter implements Printer {
                 let text = `${y} - ${x}`;
                 let textWidth = doc.getStringUnitWidth(text) * doc.internal.getFontSize() / doc.internal.scaleFactor;
                 let textOffsetWidth = (boardSize - textWidth) / 2;
-                doc.text(x * boardSize + boardSheetWidthOffset + textOffsetWidth, (y * boardSize + boardSheetHeightOffset + boardSize / 2 + this.fontSizeToHeightMm(fontSize)).toFixed(2), text);
+                doc.text(x * boardSize + boardSheetWidthOffset + textOffsetWidth, +(y * boardSize + boardSheetHeightOffset + boardSize / 2 + this.fontSizeToHeightMm(fontSize)).toFixed(2), text);
             }
         }
     }
@@ -93,7 +93,7 @@ export class PdfPrinter implements Printer {
                             text = paletteEntry.ref;
                             let textWidth = doc.getStringUnitWidth(text) * doc.internal.getFontSize() / doc.internal.scaleFactor;
                             let textOffsetWidth = (beadSize - textWidth) / 2;
-                            doc.text(x * beadSize + margin + textOffsetWidth, (y * beadSize + beadSheetOffset + (beadSize - project.board.exportedFontSize * 0.35) / 1.5).toFixed(2), text);
+                            doc.text(x * beadSize + margin + textOffsetWidth, +(y * beadSize + beadSheetOffset + (beadSize - project.board.exportedFontSize * 0.35) / 1.5).toFixed(2), text);
 
                             doc.setFillColor(paletteEntry.color.r, paletteEntry.color.g, paletteEntry.color.b);
                             doc.rect(x * beadSize + margin + beadSize * .1, y * beadSize + beadSheetOffset + beadSize * .6, beadSize - 2 * beadSize * .1, beadSize * .3, 'FD');

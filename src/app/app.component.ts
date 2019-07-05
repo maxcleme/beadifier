@@ -26,9 +26,9 @@ const BEAD_SIZE_PX = 10;
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  @ViewChild('source') divTag: ElementRef;
-  @ViewChild('canvas') canvasTag: ElementRef;
-  @ViewChild('preview') previewTag: ElementRef;
+  @ViewChild('source', {static: true}) divTag: ElementRef;
+  @ViewChild('canvas', {static: true}) canvasTag: ElementRef;
+  @ViewChild('preview', {static: true}) previewTag: ElementRef;
 
   availableRenderers: Renderer[];
   renderer: Renderer;

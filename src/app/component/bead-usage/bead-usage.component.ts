@@ -11,7 +11,7 @@ import * as _ from 'lodash';
     styleUrls: ['./bead-usage.component.scss']
 })
 export class BeadUsageComponent implements OnChanges {
-    @ViewChild('chart') canvasTag: ElementRef;
+    @ViewChild('chart', {static: true}) canvasTag: ElementRef;
     @Input() usage: Map<PaletteEntry, number>;
 
     @Output() onPaletteChange = new EventEmitter<void>();
@@ -79,7 +79,7 @@ export class BeadUsageComponent implements OnChanges {
 
     updateChart(chart: Chart, data: Chart.ChartData) {
         chart.data = data;
-        chart.update(0);
+        chart.update();
     }
 
     generateData(usage: Map<PaletteEntry, number>): Chart.ChartData {

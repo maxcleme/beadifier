@@ -9,7 +9,7 @@ export class UploadImageButtonComponent {
 
     @Output() onLoad = new EventEmitter<String>();
 
-    @ViewChild('input') input: ElementRef;
+    @ViewChild('input', {static: true}) input: ElementRef;
 
 
     triggerInput() {

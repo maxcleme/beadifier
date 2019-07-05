@@ -1,5 +1,5 @@
 <form (submit)="preventSubmit($event)">
-    <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutWrap>
+    <div fxLayout="row" fxLayoutAlign="space-between center wrap">
         <div fxLayout="column" fxLayoutGap="1em" fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="30%" fxFlex.lg="30%" fxFlex.xl="30%">
             <div>
                 <upload-image-button (onLoad)="onLoadingImageCallback($event)"></upload-image-button>
@@ -33,7 +33,7 @@
             </div>
         </div>
         <div fxLayout="column" fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="70%" fxFlex.lg="70%" fxFlex.xl="70%">
-            <div fxLayout="row" fxLayoutWrap>
+            <div fxLayout="row wrap">
                 <div fxFlex.xs="100%" fxFlex.sm="50%" fxFlex.md="33%" fxFlex.lg="25%" fxFlex.xl="20%" fxLayoutAlign="start center" *ngFor="let entry of project.palette.entries">
                     <palette-entry [entry]="entry" (onToggleCallback)="callback()"></palette-entry>
                 </div>
