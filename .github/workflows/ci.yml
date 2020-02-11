@@ -12,7 +12,7 @@ jobs:
     - name: Bump version and push tag
       id: tagging
       if: contains(github.ref, 'master')
-      uses: anothrNick/github-tag-action@1.13.0
+      uses: anothrNick/github-tag-action@master
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         WITH_V: true
@@ -23,4 +23,4 @@ jobs:
         name: maxcleme/beadifier
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-        tags: ${{ steps.tagging.outputs.new_tag }}
+        tags: ${{ steps.tagging.outputs.new_tag }},latest
