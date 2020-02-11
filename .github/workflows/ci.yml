@@ -1,0 +1,26 @@
+name: Beadifier CI
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Test to build docker image
+      run: docker build . --tag maxcleme/beadifier:$GITHUB_SHA
+    - name: Bump version and push tag
+      id: tagging
+      if: contains(github.ref, 'master')
+      uses: anothrNick/github-tag-action@1.13.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        WITH_V: true
+    - name: Publish to registry
+      if: contains(github.ref, 'master')
+      uses: elgohr/Publish-Docker-Github-Action@master
+      with:
+        name: maxcleme/beadifier
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        tags: ${{ steps.tagging.outputs.new_tag }}
