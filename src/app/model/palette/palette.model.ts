@@ -25,6 +25,7 @@ export class PaletteEntry {
 
 export const PALETTES = {
     HAMA: parsePalette(require('./hama.json')),
+    HAMA_GRAYSCALE: parsePalette(require('./hama_grayscale.json')),
     NABBI: parsePalette(require('./nabbi.json')),
     PERLER_BEADS: parsePalette(require('./perlerbeads.json')),
     ARTKAL: parsePalette(require('./artkal.json'))
