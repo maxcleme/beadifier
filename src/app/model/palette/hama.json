@@ -473,6 +473,94 @@
                 "b": 79,
                 "a": 255
             }
+        },
+        {
+            "ref": "H75",
+            "name": "Tan",
+            "enabled": true,
+            "color": {
+                "r": 186,
+                "g": 126,
+                "b": 77,
+                "a": 255
+            }
+        },
+        {
+            "ref": "H76",
+            "name": "Nougat",
+            "enabled": true,
+            "color": {
+                "r": 141,
+                "g": 83,
+                "b": 36,
+                "a": 255
+            }
+        },
+        {
+            "ref": "H77",
+            "name": "Cloudy White",
+            "enabled": true,
+            "color": {
+                "r": 196,
+                "g": 190,
+                "b": 175,
+                "a": 255
+            }
+        },
+        {
+            "ref": "H78",
+            "name": "Light flesh",
+            "enabled": true,
+            "color": {
+                "r": 229,
+                "g": 166,
+                "b": 132,
+                "a": 255
+            }
+        },
+        {
+            "ref": "H79",
+            "name": "Apricot",
+            "enabled": true,
+            "color": {
+                "r": 242,
+                "g": 100,
+                "b": 1,
+                "a": 255
+            }
+        },
+        {
+            "ref": "H82",
+            "name": "Plum",
+            "enabled": true,
+            "color": {
+                "r": 145,
+                "g": 2,
+                "b": 74,
+                "a": 255
+            }
+        },
+        {
+            "ref": "H83",
+            "name": "Petrol Blue",
+            "enabled": true,
+            "color": {
+                "r": 0,
+                "g": 107,
+                "b": 137,
+                "a": 255
+            }
+        },
+        {
+            "ref": "H84",
+            "name": "Olive Green",
+            "enabled": true,
+            "color": {
+                "r": 99,
+                "g": 104,
+                "b": 15,
+                "a": 255
+            }
         }
     ]
 }
