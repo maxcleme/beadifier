@@ -1,4 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -18,6 +19,7 @@ import { BoardSizeComponent } from './component/board-size/board-size.component'
 import { PaletteEntryComponent } from './component/palette-entry/palette-entry.component';
 
 import { AnalyticsService } from './analytics/analytics.service';
+import { PaletteService } from './palette/palette.service';
 
 import { environment } from './../environments/environment';
 
@@ -32,6 +34,7 @@ import { environment } from './../environments/environment';
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     BrowserAnimationsModule,
     FlexLayoutModule,
 
@@ -45,7 +48,7 @@ import { environment } from './../environments/environment';
       { enabled: environment.production }
     )
   ],
-  providers: [AnalyticsService],
+  providers: [AnalyticsService, PaletteService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -6,8 +6,8 @@
             </div>
             <div fxLayout="row" fxLayoutAlign="start start">
                 <mat-form-field>
-                    <mat-select aria-label="palette" placeholder="Palette" [(ngModel)]="project.palette" name="palette" (change)="callback()">
-                        <mat-option *ngFor="let palette of availablePalettes" [value]="palette">
+                    <mat-select aria-label="palette" placeholder="Palette" [(ngModel)]="project.palette" name="palette" (change)="callback()" [compareWith]="paletteEquality">
+                        <mat-option *ngFor="let palette of availablePalettes | async" [value]="palette">
                             {{palette.name}}
                         </mat-option>
                     </mat-select>

@@ -2,9 +2,11 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 import { Project } from '../../model/project/project.model';
 import { BOARDS, Board } from '../../model/board/board.model';
-import { PALETTES, Palette } from '../../model/palette/palette.model';
+import { Palette } from '../../model/palette/palette.model';
+import { PaletteService } from '../../palette/palette.service';
 
 import * as _ from 'lodash';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'project-option',
@@ -16,11 +18,11 @@ export class ProjectOptionComponent {
   @Output() onLoad = new EventEmitter<Project>();
 
   availableBoards: Board[];
-  availablePalettes: Palette[];
+  availablePalettes: Observable<Palette[]>;
 
-  constructor() {
+  constructor(private paletteService: PaletteService) {
     this.availableBoards = _.values(BOARDS);
-    this.availablePalettes = _.values(PALETTES);
+    this.availablePalettes = paletteService.getAll();
   }
 
   onLoadingImageCallback(src) {
@@ -35,6 +37,10 @@ export class ProjectOptionComponent {
   resetPalette() {
     this.project.palette.entries.forEach(entry => entry.enabled = true);
     this.callback();
+  }
+
+  paletteEquality(o1: Palette, o2: Palette) {
+    return o1.name == o2.name;
   }
 
   preventSubmit(e: Event) {
