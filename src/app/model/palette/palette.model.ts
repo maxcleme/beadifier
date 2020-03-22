@@ -1,7 +1,4 @@
 import { Color } from "./../color/color.model";
-import { parsePalette } from "../../utils/utils";
-
-
 
 export class Palette {
     name: string;

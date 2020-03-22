@@ -6,7 +6,7 @@
             </div>
             <div fxLayout="row" fxLayoutAlign="start start">
                 <mat-form-field>
-                    <mat-select aria-label="palette" placeholder="Palette" [(ngModel)]="project.palette" name="palette" (change)="callback()" [compareWith]="paletteEquality">
+                    <mat-select aria-label="palette" placeholder="Palette" [(ngModel)]="project.palette" name="palette" (selectionChange)="callback()" [compareWith]="paletteEquality">
                         <mat-option *ngFor="let palette of availablePalettes | async" [value]="palette">
                             {{palette.name}}
                         </mat-option>
@@ -18,7 +18,7 @@
             </div>
             <div>
                 <mat-form-field>
-                    <mat-select aria-label="board" placeholder="Board type" [(ngModel)]="project.board" name="board" (change)="callback()">
+                    <mat-select aria-label="board" placeholder="Board type" [(ngModel)]="project.board" name="board" (selectionChange)="callback()">
                         <mat-option *ngFor="let board of availableBoards" [value]="board">
                             {{board.name}} ({{board.nbBeadPerRow}}x{{board.nbBeadPerRow}})
                         </mat-option>
