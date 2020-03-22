@@ -49,7 +49,7 @@ export class PdfPrinter implements Printer {
         const maxUsage = _.max(Array.from(usage.values()));
         const refWidth = doc.getStringUnitWidth(generateName(maxRef)) * doc.internal.getFontSize() / doc.internal.scaleFactor + cellPadding * 2;
         const usageWidth = doc.getStringUnitWidth("" + maxUsage) * doc.internal.getFontSize() / doc.internal.scaleFactor + cellPadding * 2;
-        
+
         doc.setFontSize(fontSize);
         _.chunk(Array.from(usage.entries()).sort(([k1, v1], [k2, v2]) => v2 - v1), usagePerPage).forEach(entries => {
             doc.addPage();

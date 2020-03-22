@@ -1,6 +1,7 @@
 import { Palette } from "./../palette/palette.model";
 import { Board } from "./../board/board.model";
 import { digest } from "@angular/compiler/src/i18n/serializers/xmb";
+import { Observable } from 'rxjs';
 
 export class Project {
     palette: Palette;
@@ -10,7 +11,7 @@ export class Project {
     dithering: boolean;
     imageSrc: string;
 
-    constructor(palette, board, nbBoardWidth, nbBoardHeight, dithering) {
+    constructor(palette: Palette, board: Board, nbBoardWidth: number, nbBoardHeight: number, dithering: boolean) {
         this.palette = palette;
         this.board = board;
         this.nbBoardWidth = nbBoardWidth;
