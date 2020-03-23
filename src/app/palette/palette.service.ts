@@ -5,7 +5,7 @@ import { Palette, PaletteEntry } from '../model/palette/palette.model';
 
 import * as _ from 'lodash';
 import { Observable, of, forkJoin } from 'rxjs';
-import { map} from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 
 @Injectable()
@@ -20,7 +20,18 @@ export class PaletteService {
             this.loadPalette("hama"),
             this.loadPalette("nabbi"),
             this.loadPalette("artkal"),
-            this.loadPalette("perler"),
+            this.loadPalette("perler")
+                .pipe(
+                    map(
+                        p => _.assign({}, p, {
+                            entries: _(p.entries)
+                                .map(entry => _.assign({}, entry, {
+                                    ref: `P${(+entry.ref.substring(entry.ref.length-3)).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}`,
+                                }))
+                                .value()
+                        })
+                    ),
+                ),
         ]);
     }
 
