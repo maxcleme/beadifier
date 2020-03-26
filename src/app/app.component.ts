@@ -62,8 +62,8 @@ export class AppComponent {
       this.project = new Project(
         allPalette[0],
         BOARDS.MIDI,
-        5,
-        5,
+        2,
+        2,
         false,
         MATCHINGS.EUCLIDEAN
       );
