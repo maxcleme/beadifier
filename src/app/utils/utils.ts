@@ -2,6 +2,7 @@ import { Palette, PaletteEntry } from "../model/palette/palette.model";
 import { Color } from "../model/color/color.model";
 
 import * as _ from 'lodash';
+import { Matching } from '../model/matching/matching.model';
 
 export function drawImageInsideCanvas(canvas, image, centered) {
     /**
@@ -40,7 +41,7 @@ export function drawImageInsideCanvas(canvas, image, centered) {
     canvas.getContext('2d').drawImage(image, xStart, yStart, renderableWidth, renderableHeight);
 }
 
-export function reduceColor(canvas: HTMLCanvasElement, palette: Palette, dithering: boolean): ImageData {
+export function reduceColor(canvas: HTMLCanvasElement, palette: Palette, dithering: boolean, matching: Matching): ImageData {
     const context = canvas.getContext("2d");
     const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
 
@@ -48,7 +49,7 @@ export function reduceColor(canvas: HTMLCanvasElement, palette: Palette, ditheri
         for (let x = 0; x < canvas.width; x++) {
             let color = get(imageData, canvas, x, y);
             if (color.a !== 0) {
-                const closestPaletteEntry = getClosestPaletteEntry(palette, color);
+                const closestPaletteEntry = getClosestPaletteEntry(palette, color, matching);
                 set(imageData, canvas, x, y, closestPaletteEntry.color)
 
                 // Floyd–Steinberg dithering
@@ -82,17 +83,8 @@ function set(source: ImageData, canvas: HTMLCanvasElement, x: number, y: number,
     source.data[y * canvas.width * 4 + x * 4 + 3] = color.a;
 }
 
-export function getClosestPaletteEntry(palette: Palette, color: Color): PaletteEntry {
-    return _.minBy(palette.entries.filter(paletteEntry => paletteEntry.enabled), paletteEntry => distance(paletteEntry.color, color));
-}
-
-export function distance(c1: Color, c2: Color) {
-    return Math.sqrt(
-        Math.pow(c1.r - c2.r, 2) +
-        Math.pow(c1.g - c2.g, 2) +
-        Math.pow(c1.b - c2.b, 2) +
-        Math.pow(c1.a - c2.a, 2)
-    );
+export function getClosestPaletteEntry(palette: Palette, color: Color, matching: Matching): PaletteEntry {
+    return _.minBy(palette.entries.filter(paletteEntry => paletteEntry.enabled), paletteEntry => matching.delta(paletteEntry.color, color));
 }
 
 export function clearNode(node: Element) {

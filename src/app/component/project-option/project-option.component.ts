@@ -4,6 +4,7 @@ import { Project } from '../../model/project/project.model';
 import { BOARDS, Board } from '../../model/board/board.model';
 import { Palette } from '../../model/palette/palette.model';
 import { PaletteService } from '../../palette/palette.service';
+import { Matching, MATCHINGS } from '../../model/matching/matching.model';
 
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
@@ -19,9 +20,11 @@ export class ProjectOptionComponent {
 
   availableBoards: Board[];
   availablePalettes: Observable<Palette[]>;
+  availableMatchings: Matching[];
 
   constructor(private paletteService: PaletteService) {
     this.availableBoards = _.values(BOARDS);
+    this.availableMatchings = _.values(MATCHINGS);
     this.availablePalettes = paletteService.getAll();
   }
 

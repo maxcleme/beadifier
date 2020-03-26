@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef, HostListener } from '@angular/core';
 
 
-import { Palette, PaletteEntry } from './model/palette/palette.model';
-import { Board, BOARDS } from './model/board/board.model';
+import { PaletteEntry } from './model/palette/palette.model';
+import { BOARDS } from './model/board/board.model';
 
 import { PaletteService } from './palette/palette.service';
 import { Project } from './model/project/project.model';
@@ -18,6 +18,7 @@ import { Scaler } from './scaler/scaler';
 import { FitScreenScaler } from './scaler/fit/fit-screen.scaler';
 
 import { AnalyticsService } from './analytics/analytics.service';
+import { MATCHINGS } from './model/matching/matching.model';
 
 const BEAD_SIZE_PX = 10;
 
@@ -61,9 +62,10 @@ export class AppComponent {
       this.project = new Project(
         allPalette[0],
         BOARDS.MIDI,
-        2,
-        2,
-        false
+        5,
+        5,
+        false,
+        MATCHINGS.EUCLIDEAN
       );
     })
     this.scaler = new FitScreenScaler();
@@ -85,7 +87,7 @@ export class AppComponent {
       canvas.width = project.nbBoardWidth * project.board.nbBeadPerRow;
       canvas.height = project.nbBoardHeight * project.board.nbBeadPerRow;
       drawImageInsideCanvas(canvas, imgTag, this.centered);
-      this.reducedColor = reduceColor(canvas, this.project.palette, project.dithering).data;
+      this.reducedColor = reduceColor(canvas, this.project.palette, this.project.dithering, this.project.matching).data;
       this.usage = this.computeUsage(this.reducedColor, this.project.palette);
       this.renderer.destroy();
       this.renderer.initContainer(previewContainer, canvas.width, canvas.height, BEAD_SIZE_PX);
