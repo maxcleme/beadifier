@@ -22,14 +22,22 @@ export class ProjectOptionComponent {
   availablePalettes: Observable<Palette[]>;
   availableMatchings: Matching[];
 
+  enableAllPaletteEntry: boolean;
+
   constructor(private paletteService: PaletteService) {
     this.availableBoards = _.values(BOARDS);
     this.availableMatchings = _.values(MATCHINGS);
     this.availablePalettes = paletteService.getAll();
+    this.enableAllPaletteEntry = true;
   }
 
   onLoadingImageCallback(src) {
     this.project.imageSrc = src;
+    this.callback();
+  }
+
+  toggleAll(e) {
+    this.project.palette.entries.forEach(entry => entry.enabled = e.checked);
     this.callback();
   }
 
@@ -38,6 +46,7 @@ export class ProjectOptionComponent {
   }
 
   resetPalette() {
+    this.enableAllPaletteEntry = true;
     this.project.palette.entries.forEach(entry => entry.enabled = true);
     this.callback();
   }

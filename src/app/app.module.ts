@@ -18,7 +18,6 @@ import { BeadUsageComponent } from './component/bead-usage/bead-usage.component'
 import { BoardSizeComponent } from './component/board-size/board-size.component';
 import { PaletteEntryComponent } from './component/palette-entry/palette-entry.component';
 
-import { AnalyticsService } from './analytics/analytics.service';
 import { PaletteService } from './palette/palette.service';
 
 import { environment } from './../environments/environment';
@@ -48,7 +47,7 @@ import { environment } from './../environments/environment';
       { enabled: environment.production }
     )
   ],
-  providers: [AnalyticsService, PaletteService],
+  providers: [PaletteService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

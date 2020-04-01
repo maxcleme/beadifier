@@ -1,9 +1,5 @@
-import * as mixpanel from 'mixpanel-browser';
-mixpanel.init("7414766e68b2f682c8497b567ea9a997");
-
 export const environment = {
-  production: true,
-  mixpanel: mixpanel
+  production: true
 };
 
 // GA

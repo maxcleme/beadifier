@@ -17,7 +17,6 @@ import * as _ from 'lodash';
 import { Scaler } from './scaler/scaler';
 import { FitScreenScaler } from './scaler/fit/fit-screen.scaler';
 
-import { AnalyticsService } from './analytics/analytics.service';
 import { MATCHINGS } from './model/matching/matching.model';
 
 const BEAD_SIZE_PX = 10;
@@ -44,7 +43,7 @@ export class AppComponent {
   beadSize: number;
   printer: Printer;
 
-  constructor(private analytics: AnalyticsService, private paletteService: PaletteService) {
+  constructor(private paletteService: PaletteService) {
     // Rendering technology
     this.availableRenderers = [new CanvasWebGLRenderer(), new Canvas2dRenderer()];
     this.renderer = _.find(this.availableRenderers, renderer => renderer.isSupported());
@@ -74,14 +73,18 @@ export class AppComponent {
   }
 
   beadify(project: Project) {
+    if (!project.imageSrc) {
+      return
+    }
+
     const div = this.divTag.nativeElement;
     const previewContainer = this.previewTag.nativeElement;
 
     const imgTag = div.ownerDocument.createElement('img');
     imgTag.setAttribute('style', 'display:none');
     imgTag.src = project.imageSrc;
-
     div.appendChild(imgTag);
+
     imgTag.addEventListener('load', () => {
       const canvas = this.canvasTag.nativeElement;
       canvas.width = project.nbBoardWidth * project.board.nbBeadPerRow;
@@ -94,13 +97,6 @@ export class AppComponent {
       this.computeAspectRatio();
       this.renderer.render(this.reducedColor, canvas.width, canvas.height, BEAD_SIZE_PX, project, this.grid);
       clearNode(div);
-      this.analytics.track("Beadify", {
-        boardType: this.project.board.name,
-        nbBoardHeight: this.project.nbBoardHeight,
-        nbBoardWidth: this.project.nbBoardWidth,
-        paletteName: this.project.palette.name,
-        beadsCount: countBeads(this.usage)
-      });
     });
   }
 
@@ -110,25 +106,11 @@ export class AppComponent {
   }
 
   removeColorUnderPercent(percent: number, usage: Map<PaletteEntry, number>) {
-    this.analytics.track("Automatic color reduction", {
-      boardType: this.project.board.name,
-      nbBoardHeight: this.project.nbBoardHeight,
-      nbBoardWidth: this.project.nbBoardWidth,
-      paletteName: this.project.palette.name,
-      beadsCount: countBeads(this.usage)
-    });
     removeColorUnderPercent(percent, usage);
     this.beadify(this.project);
   }
 
   exportBeadSheets() {
-    this.analytics.track("Export", {
-      boardType: this.project.board.name,
-      nbBoardHeight: this.project.nbBoardHeight,
-      nbBoardWidth: this.project.nbBoardWidth,
-      paletteName: this.project.palette.name,
-      beadsCount: countBeads(this.usage)
-    });
     this.printer.print(this.reducedColor, this.usage, this.project);
   }
 
