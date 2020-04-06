@@ -46,12 +46,6 @@ export class ProjectOptionComponent {
     this.onLoad.emit(this.project);
   }
 
-  resetPalette() {
-    this.enableAllPaletteEntry = true;
-    this.project.palettes.forEach(p => p.entries.forEach(entry => entry.enabled = true));
-    this.callback();
-  }
-
   paletteEquality(o1: Palette, o2: Palette) {
     return o1.name == o2.name;
   }

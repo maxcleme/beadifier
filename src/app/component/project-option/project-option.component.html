@@ -12,9 +12,6 @@
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
-                <button aria-label="reload palette" mat-raised-button (click)="resetPalette()">
-                    <mat-icon>cached</mat-icon>
-                </button>
             </div>
             <div>
                 <mat-form-field>
@@ -41,15 +38,21 @@
                 <board-size [project]="project" (onBoardSizeChange)="callback()"></board-size>
             </div>
         </div>
-        <div fxLayout="column" fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="70%" fxFlex.lg="70%" fxFlex.xl="70%">
+        <div fxLayout="column" fxLayoutGap="5px" fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="70%" fxFlex.lg="70%" fxFlex.xl="70%">
             <div fxLayout="row wrap">
                 <mat-slide-toggle [checked]="enableAllPaletteEntry" (change)="toggleAll($event)">All</mat-slide-toggle>
             </div>
-            <div fxLayout="row wrap" *ngFor="let palette of project.palettes; last as isLastPalette">
+
+            <mat-divider [inset]="true"></mat-divider>
+
+            <div fxLayout="row wrap" *ngFor="let palette of project.palettes">
                 <div fxFlex.xs="100%" fxFlex.sm="50%" fxFlex.md="33%" fxFlex.lg="25%" fxFlex.xl="20%" fxLayoutAlign="start center" *ngFor="let entry of palette.entries">
                     <palette-entry [entry]="entry" (onToggleCallback)="callback()"></palette-entry>
                 </div>
-                <mat-divider [inset]="true" *ngIf="!isLastPalette"></mat-divider>
+                <mat-divider style="margin-top: 5px;" [inset]="true"></mat-divider>
+            </div>
+            <div fxLayout="row wrap" fxLayoutAlign="center center">
+                <div class="mat-small mat-caption">Something wrong about colors ? Please fill an <a href="https://github.com/maxcleme/beadcolors/issues/new" target="blank">issue</a>.</div>   
             </div>
         </div>
     </div>
