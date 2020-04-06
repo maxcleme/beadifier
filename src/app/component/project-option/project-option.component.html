@@ -6,7 +6,7 @@
             </div>
             <div fxLayout="row" fxLayoutAlign="start start">
                 <mat-form-field>
-                    <mat-select aria-label="palette" placeholder="Palette" [(ngModel)]="project.palette" name="palette" (selectionChange)="callback()" [compareWith]="paletteEquality">
+                    <mat-select multiple aria-label="palettes" placeholder="Palettes" [(ngModel)]="project.palettes" name="palettes" (selectionChange)="callback()" [compareWith]="paletteEquality">
                         <mat-option *ngFor="let palette of availablePalettes | async" [value]="palette">
                             {{palette.name}}
                         </mat-option>
@@ -45,11 +45,11 @@
             <div fxLayout="row wrap">
                 <mat-slide-toggle [checked]="enableAllPaletteEntry" (change)="toggleAll($event)">All</mat-slide-toggle>
             </div>
-            <hr>
-            <div fxLayout="row wrap">
-                <div fxFlex.xs="100%" fxFlex.sm="50%" fxFlex.md="33%" fxFlex.lg="25%" fxFlex.xl="20%" fxLayoutAlign="start center" *ngFor="let entry of project.palette.entries">
+            <div fxLayout="row wrap" *ngFor="let palette of project.palettes; last as isLastPalette">
+                <div fxFlex.xs="100%" fxFlex.sm="50%" fxFlex.md="33%" fxFlex.lg="25%" fxFlex.xl="20%" fxLayoutAlign="start center" *ngFor="let entry of palette.entries">
                     <palette-entry [entry]="entry" (onToggleCallback)="callback()"></palette-entry>
                 </div>
+                <mat-divider [inset]="true" *ngIf="!isLastPalette"></mat-divider>
             </div>
         </div>
     </div>

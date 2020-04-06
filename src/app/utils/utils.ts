@@ -41,7 +41,7 @@ export function drawImageInsideCanvas(canvas, image, centered) {
     canvas.getContext('2d').drawImage(image, xStart, yStart, renderableWidth, renderableHeight);
 }
 
-export function reduceColor(canvas: HTMLCanvasElement, palette: Palette, dithering: boolean, matching: Matching): ImageData {
+export function reduceColor(canvas: HTMLCanvasElement, palettes: Palette[], dithering: boolean, matching: Matching): ImageData {
     const context = canvas.getContext("2d");
     const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
 
@@ -49,7 +49,7 @@ export function reduceColor(canvas: HTMLCanvasElement, palette: Palette, ditheri
         for (let x = 0; x < canvas.width; x++) {
             let color = get(imageData, canvas, x, y);
             if (color.a !== 0) {
-                const closestPaletteEntry = getClosestPaletteEntry(palette, color, matching);
+                const closestPaletteEntry = getClosestPaletteEntry(palettes, color, matching);
                 set(imageData, canvas, x, y, closestPaletteEntry.color)
 
                 // Floyd–Steinberg dithering
@@ -83,8 +83,8 @@ function set(source: ImageData, canvas: HTMLCanvasElement, x: number, y: number,
     source.data[y * canvas.width * 4 + x * 4 + 3] = color.a;
 }
 
-export function getClosestPaletteEntry(palette: Palette, color: Color, matching: Matching): PaletteEntry {
-    return _.minBy(palette.entries.filter(paletteEntry => paletteEntry.enabled), paletteEntry => matching.delta(paletteEntry.color, color));
+export function getClosestPaletteEntry(palettes: Palette[], color: Color, matching: Matching): PaletteEntry {
+    return _.minBy(_.flatten(palettes.map(p => p.entries)).filter(paletteEntry => paletteEntry.enabled), paletteEntry => matching.delta(paletteEntry.color, color));
 }
 
 export function clearNode(node: Element) {
@@ -101,12 +101,12 @@ export function parsePalette(json): Palette {
     }
 };
 
-export function computeUsage(colors: Uint8ClampedArray, palette: Palette): Map<PaletteEntry, number> {
+export function computeUsage(colors: Uint8ClampedArray, palettes: Palette[]): Map<PaletteEntry, number> {
     const usage = new Map<PaletteEntry, number>();
     _.chunk(colors, 4)
         .map(component => new Color(component[0], component[1], component[2], component[3]))
         .forEach(color => {
-            let entry: PaletteEntry = _.find(palette.entries, entry => entry.color.r === color.r && entry.color.g === color.g && entry.color.b === color.b && entry.color.a === color.a);
+            let entry: PaletteEntry = _.find(_.flatten(palettes.map(p => p.entries)), entry => entry.color.r === color.r && entry.color.g === color.g && entry.color.b === color.b && entry.color.a === color.a);
             if (entry) {
                 usage.set(entry, (usage.get(entry) || 0) + 1);
             }

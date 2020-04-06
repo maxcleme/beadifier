@@ -37,17 +37,18 @@ export class ProjectOptionComponent {
   }
 
   toggleAll(e) {
-    this.project.palette.entries.forEach(entry => entry.enabled = e.checked);
+    this.project.palettes.forEach(p => p.entries.forEach(entry => entry.enabled = e.checked));
     this.callback();
   }
 
   callback() {
+    console.log(this.project.palettes)
     this.onLoad.emit(this.project);
   }
 
   resetPalette() {
     this.enableAllPaletteEntry = true;
-    this.project.palette.entries.forEach(entry => entry.enabled = true);
+    this.project.palettes.forEach(p => p.entries.forEach(entry => entry.enabled = true));
     this.callback();
   }
 

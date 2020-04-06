@@ -17,7 +17,7 @@ export class PdfPrinter implements Printer {
         this.usage(doc, usage, width, height);
         this.beadMapping(doc, project, reducedColor, width, height, margin);
 
-        doc.save(`beadifier_${project.palette.name}_${project.nbBoardWidth}x${project.nbBoardHeight}.pdf`)
+        doc.save(`beadifier_${project.nbBoardWidth}x${project.nbBoardHeight}.pdf`)
     }
 
     boardMapping(doc: jsPDF, project: Project, margin: number, width: number, height: number) {
@@ -83,7 +83,7 @@ export class PdfPrinter implements Printer {
                     for (let x = 0; x < project.board.nbBeadPerRow; x++) {
                         doc.rect(x * beadSize + margin, y * beadSize + beadSheetOffset, beadSize, beadSize);
 
-                        let paletteEntry: PaletteEntry = _.find(project.palette.entries, entry => {
+                        let paletteEntry: PaletteEntry = _.find(_.flatten(project.palettes.map(p => p.entries)), entry => {
                             return entry.color.r == reducedColor[4 * ((y + i * project.board.nbBeadPerRow) * project.board.nbBeadPerRow * project.nbBoardWidth + x + j * project.board.nbBeadPerRow)]
                                 && entry.color.g == reducedColor[4 * ((y + i * project.board.nbBeadPerRow) * project.board.nbBeadPerRow * project.nbBoardWidth + x + j * project.board.nbBeadPerRow) + 1]
                                 && entry.color.b == reducedColor[4 * ((y + i * project.board.nbBeadPerRow) * project.board.nbBeadPerRow * project.nbBoardWidth + x + j * project.board.nbBeadPerRow) + 2]

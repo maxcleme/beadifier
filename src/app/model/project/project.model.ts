@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { Matching } from '../matching/matching.model';
 
 export class Project {
-    palette: Palette;
+    palettes: Palette[];
     board: Board;
     nbBoardWidth: number;
     nbBoardHeight: number;
@@ -13,8 +13,8 @@ export class Project {
     matching: Matching;
     imageSrc: string;
 
-    constructor(palette: Palette, board: Board, nbBoardWidth: number, nbBoardHeight: number, dithering: boolean, matching: Matching) {
-        this.palette = palette;
+    constructor(palettes: Palette[], board: Board, nbBoardWidth: number, nbBoardHeight: number, dithering: boolean, matching: Matching) {
+        this.palettes = palettes;
         this.board = board;
         this.nbBoardWidth = nbBoardWidth;
         this.nbBoardHeight = nbBoardHeight;

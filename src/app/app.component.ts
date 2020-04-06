@@ -59,7 +59,7 @@ export class AppComponent {
     // Default
     paletteService.getAll().subscribe(allPalette => {
       this.project = new Project(
-        allPalette[0],
+        [allPalette[0]],
         BOARDS.MIDI,
         2,
         2,
@@ -90,8 +90,8 @@ export class AppComponent {
       canvas.width = project.nbBoardWidth * project.board.nbBeadPerRow;
       canvas.height = project.nbBoardHeight * project.board.nbBeadPerRow;
       drawImageInsideCanvas(canvas, imgTag, this.centered);
-      this.reducedColor = reduceColor(canvas, this.project.palette, this.project.dithering, this.project.matching).data;
-      this.usage = this.computeUsage(this.reducedColor, this.project.palette);
+      this.reducedColor = reduceColor(canvas, this.project.palettes, this.project.dithering, this.project.matching).data;
+      this.usage = this.computeUsage(this.reducedColor, this.project.palettes);
       this.renderer.destroy();
       this.renderer.initContainer(previewContainer, canvas.width, canvas.height, BEAD_SIZE_PX);
       this.computeAspectRatio();

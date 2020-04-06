@@ -20,7 +20,7 @@
           Settings
         </mat-card-title>
         <mat-card-content>
-          <project-option [project]="project" (onLoad)="beadify($event)"></project-option>
+          <project-option *ngIf="project" [project]="project" (onLoad)="beadify($event)"></project-option>
         </mat-card-content>
       </mat-card>
     </div>
