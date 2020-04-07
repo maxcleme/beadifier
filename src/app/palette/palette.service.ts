@@ -19,14 +19,17 @@ export class PaletteService {
         return forkJoin([
             this.loadPalette("hama"),
             this.loadPalette("nabbi"),
-            this.loadPalette("artkal"),
+            this.loadPalette("artkal_a", "Artkal A-2.6MM"),
+            this.loadPalette("artkal_c", "Artkal C-2.6MM"),
+            this.loadPalette("artkal_r", "Artkal R-5MM"),
+            this.loadPalette("artkal_s", "Artkal S-5MM"),
             this.loadPalette("perler")
                 .pipe(
                     map(
                         p => _.assign({}, p, {
                             entries: _(p.entries)
                                 .map(entry => _.assign({}, entry, {
-                                    ref: `P${(+entry.ref.substring(entry.ref.length-3)).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}`,
+                                    ref: `P${(+entry.ref.substring(entry.ref.length - 3)).toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false })}`,
                                 }))
                                 .value()
                         })
@@ -36,7 +39,7 @@ export class PaletteService {
     }
 
 
-    private loadPalette(name: string): Observable<Palette> {
+    private loadPalette(name: string, nameOverride?: string): Observable<Palette> {
         if (this.palettes.has(name)) {
             // already loaded
             return of(this.palettes.get(name));
@@ -60,7 +63,7 @@ export class PaletteService {
                             enabled: true
                         }))
                         .value();
-                    return new Palette(_.capitalize(name), entries);
+                    return new Palette(nameOverride || _.capitalize(name), entries);
                 })
             );
     }
