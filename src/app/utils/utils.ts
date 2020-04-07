@@ -38,6 +38,7 @@ export function drawImageInsideCanvas(canvas, image, centered) {
         xStart = 0;
         yStart = 0;
     }
+    canvas.getContext('2d').filter = image.style.filter;
     canvas.getContext('2d').drawImage(image, xStart, yStart, renderableWidth, renderableHeight);
 }
 

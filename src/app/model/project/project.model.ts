@@ -12,6 +12,7 @@ export class Project {
     dithering: boolean;
     matching: Matching;
     imageSrc: string;
+    imgSettings: any;
 
     constructor(palettes: Palette[], board: Board, nbBoardWidth: number, nbBoardHeight: number, dithering: boolean, matching: Matching) {
         this.palettes = palettes;
@@ -20,5 +21,8 @@ export class Project {
         this.nbBoardHeight = nbBoardHeight;
         this.dithering = dithering;
         this.matching = matching;
+        this.imgSettings = {
+            // "display" : "none"
+        }
     }
 }

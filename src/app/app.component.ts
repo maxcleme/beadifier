@@ -27,7 +27,7 @@ const BEAD_SIZE_PX = 10;
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  @ViewChild('source', { static: true }) divTag: ElementRef;
+  @ViewChild('source', { static: true }) imgTag: ElementRef;
   @ViewChild('canvas', { static: true }) canvasTag: ElementRef;
   @ViewChild('preview', { static: true }) previewTag: ElementRef;
 
@@ -77,26 +77,21 @@ export class AppComponent {
       return
     }
 
-    const div = this.divTag.nativeElement;
     const previewContainer = this.previewTag.nativeElement;
 
-    const imgTag = div.ownerDocument.createElement('img');
-    imgTag.setAttribute('style', 'display:none');
-    imgTag.src = project.imageSrc;
-    div.appendChild(imgTag);
+    this.imgTag.nativeElement.src = project.imageSrc;
 
-    imgTag.addEventListener('load', () => {
+    this.imgTag.nativeElement.addEventListener('load', () => {
       const canvas = this.canvasTag.nativeElement;
       canvas.width = project.nbBoardWidth * project.board.nbBeadPerRow;
       canvas.height = project.nbBoardHeight * project.board.nbBeadPerRow;
-      drawImageInsideCanvas(canvas, imgTag, this.centered);
+      drawImageInsideCanvas(canvas, this.imgTag.nativeElement, this.centered);
       this.reducedColor = reduceColor(canvas, this.project.palettes, this.project.dithering, this.project.matching).data;
       this.usage = this.computeUsage(this.reducedColor, this.project.palettes);
       this.renderer.destroy();
       this.renderer.initContainer(previewContainer, canvas.width, canvas.height, BEAD_SIZE_PX);
       this.computeAspectRatio();
       this.renderer.render(this.reducedColor, canvas.width, canvas.height, BEAD_SIZE_PX, project, this.grid);
-      clearNode(div);
     });
   }
 
