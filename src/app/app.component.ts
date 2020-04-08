@@ -18,6 +18,9 @@ import { Scaler } from './scaler/scaler';
 import { FitScreenScaler } from './scaler/fit/fit-screen.scaler';
 
 import { MATCHINGS } from './model/matching/matching.model';
+import { MatchingConfiguration } from './model/configuration/matching-configuration.model';
+import { ImageConfiguration } from './model/configuration/image-configuration.model';
+import { DitheringConfiguration } from './model/configuration/dithering-configuration.model';
 
 const BEAD_SIZE_PX = 10;
 
@@ -63,36 +66,43 @@ export class AppComponent {
         BOARDS.MIDI,
         2,
         2,
-        false,
-        MATCHINGS.EUCLIDEAN
+        new MatchingConfiguration(),
+        new ImageConfiguration(),
+        new DitheringConfiguration()
       );
     })
+
     this.scaler = new FitScreenScaler();
     this.grid = false;
     this.centered = true;
   }
 
+  _beadify = _.debounce(() => {
+    const canvas = this.canvasTag.nativeElement;
+    canvas.width = this.project.nbBoardWidth * this.project.board.nbBeadPerRow;
+    canvas.height = this.project.nbBoardHeight * this.project.board.nbBeadPerRow;
+    drawImageInsideCanvas(canvas, this.imgTag.nativeElement, this.centered);
+    this.reducedColor = reduceColor(canvas, this.project).data;
+    this.usage = this.computeUsage(this.reducedColor, this.project.palettes);
+    this.renderer.destroy();
+    this.renderer.initContainer(this.previewTag.nativeElement, canvas.width, canvas.height, BEAD_SIZE_PX);
+    this.computeAspectRatio();
+    this.renderer.render(this.reducedColor, canvas.width, canvas.height, BEAD_SIZE_PX, this.project, this.grid);
+  }, 250)
+
   beadify(project: Project) {
     if (!project.imageSrc) {
-      return
+      return;
     }
 
-    const previewContainer = this.previewTag.nativeElement;
+    if (this.imgTag.nativeElement.src !== project.imageSrc) {
+      this.imgTag.nativeElement.src = project.imageSrc;
+      this.imgTag.nativeElement.addEventListener('load', () => this._beadify());
+    } else {
 
-    this.imgTag.nativeElement.src = project.imageSrc;
+      this._beadify();
+    }
 
-    this.imgTag.nativeElement.addEventListener('load', () => {
-      const canvas = this.canvasTag.nativeElement;
-      canvas.width = project.nbBoardWidth * project.board.nbBeadPerRow;
-      canvas.height = project.nbBoardHeight * project.board.nbBeadPerRow;
-      drawImageInsideCanvas(canvas, this.imgTag.nativeElement, this.centered);
-      this.reducedColor = reduceColor(canvas, this.project.palettes, this.project.dithering, this.project.matching).data;
-      this.usage = this.computeUsage(this.reducedColor, this.project.palettes);
-      this.renderer.destroy();
-      this.renderer.initContainer(previewContainer, canvas.width, canvas.height, BEAD_SIZE_PX);
-      this.computeAspectRatio();
-      this.renderer.render(this.reducedColor, canvas.width, canvas.height, BEAD_SIZE_PX, project, this.grid);
-    });
   }
 
   @HostListener('window:resize', ['$event'])
@@ -102,7 +112,7 @@ export class AppComponent {
 
   removeColorUnderPercent(percent: number, usage: Map<PaletteEntry, number>) {
     removeColorUnderPercent(percent, usage);
-    this.beadify(this.project);
+    this._beadify();
   }
 
   exportBeadSheets() {

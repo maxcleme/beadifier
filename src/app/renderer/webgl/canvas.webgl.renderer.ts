@@ -132,7 +132,7 @@ export class CanvasWebGLRenderer implements Renderer {
             alert("WebGL not available on this browser.");
             throw new Error("WebGL not available on this browser");
         }
-        return gl;
+        return gl as WebGLRenderingContext;
     }
 
     initShaders(gl: WebGLRenderingContext): AugmentedProgram {

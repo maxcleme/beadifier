@@ -1,28 +1,27 @@
 import { Palette } from "./../palette/palette.model";
 import { Board } from "./../board/board.model";
-import { digest } from "@angular/compiler/src/i18n/serializers/xmb";
-import { Observable } from 'rxjs';
 import { Matching } from '../matching/matching.model';
+import { DitheringConfiguration } from '../configuration/dithering-configuration.model';
+import { ImageConfiguration } from '../configuration/image-configuration.model';
+import { MatchingConfiguration } from '../configuration/matching-configuration.model';
 
 export class Project {
     palettes: Palette[];
     board: Board;
     nbBoardWidth: number;
     nbBoardHeight: number;
-    dithering: boolean;
-    matching: Matching;
     imageSrc: string;
-    imgSettings: any;
+    matchingConfiguration: MatchingConfiguration;
+    ditheringConfiguration: DitheringConfiguration
+    imageConfiguration: ImageConfiguration
 
-    constructor(palettes: Palette[], board: Board, nbBoardWidth: number, nbBoardHeight: number, dithering: boolean, matching: Matching) {
+    constructor(palettes: Palette[], board: Board, nbBoardWidth: number, nbBoardHeight: number, matchingConfiguration: MatchingConfiguration, imageConfiguration: ImageConfiguration, ditheringConfiguration: DitheringConfiguration) {
         this.palettes = palettes;
         this.board = board;
         this.nbBoardWidth = nbBoardWidth;
         this.nbBoardHeight = nbBoardHeight;
-        this.dithering = dithering;
-        this.matching = matching;
-        this.imgSettings = {
-            // "display" : "none"
-        }
+        this.matchingConfiguration = matchingConfiguration;
+        this.imageConfiguration = imageConfiguration;
+        this.ditheringConfiguration = ditheringConfiguration;
     }
 }

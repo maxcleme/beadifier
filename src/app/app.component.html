@@ -15,17 +15,17 @@
 
 
   <div fxLayout="row" fxLayoutAlign="center">
-    <img #source [ngStyle]="{'filter' : project.imgSettings.filter }">
+    <img #source [ngStyle]="{'display': 'none', 'filter' : project ? project.imageConfiguration.css() : ''}">
   </div>
   <div fxLayout="row" fxLayoutAlign="center" class="hidden-container">
     <canvas #canvas></canvas>
   </div>
   
-  <div fxLayout="row" fxLayoutAlign="center">
+  <div fxLayout="row" fxLayoutAlign="center" *ngIf="project">
     <div fxFlex="90%">
       <mat-card>
         <mat-card-content>
-          <project-option *ngIf="project" [project]="project" (onLoad)="beadify($event)"></project-option>
+          <project-option [project]="project" (onLoad)="beadify($event)"></project-option>
         </mat-card-content>
       </mat-card>
     </div>
