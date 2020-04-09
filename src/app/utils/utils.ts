@@ -3,6 +3,7 @@ import { Color } from "../model/color/color.model";
 
 import * as _ from 'lodash';
 import { Matching } from '../model/matching/matching.model';
+import { Project } from '../model/project/project.model';
 
 export function drawImageInsideCanvas(canvas, image, centered) {
     /**
@@ -38,10 +39,11 @@ export function drawImageInsideCanvas(canvas, image, centered) {
         xStart = 0;
         yStart = 0;
     }
+    canvas.getContext('2d').filter = image.style.filter;
     canvas.getContext('2d').drawImage(image, xStart, yStart, renderableWidth, renderableHeight);
 }
 
-export function reduceColor(canvas: HTMLCanvasElement, palettes: Palette[], dithering: boolean, matching: Matching): ImageData {
+export function reduceColor(canvas: HTMLCanvasElement, project: Project): ImageData {
     const context = canvas.getContext("2d");
     const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
 
@@ -49,16 +51,16 @@ export function reduceColor(canvas: HTMLCanvasElement, palettes: Palette[], dith
         for (let x = 0; x < canvas.width; x++) {
             let color = get(imageData, canvas, x, y);
             if (color.a !== 0) {
-                const closestPaletteEntry = getClosestPaletteEntry(palettes, color, matching);
+                const closestPaletteEntry = getClosestPaletteEntry(project.palettes, color, project.matchingConfiguration.matching);
                 set(imageData, canvas, x, y, closestPaletteEntry.color)
 
                 // Floyd–Steinberg dithering
-                if (dithering) {
+                if (project.ditheringConfiguration.enable) {
                     const quantError = color.sub(closestPaletteEntry.color);
-                    set(imageData, canvas, x + 1, y, get(imageData, canvas, x + 1, y).add(quantError.mult(7 / 16)))
-                    set(imageData, canvas, x - 1, y + 1, get(imageData, canvas, x - 1, y + 1).add(quantError.mult(3 / 16)))
-                    set(imageData, canvas, x, y + 1, get(imageData, canvas, x, y + 1).add(quantError.mult(5 / 16)))
-                    set(imageData, canvas, x + 1, y + 1, get(imageData, canvas, x + 1, y + 1).add(quantError.mult(1 / 16)))
+                    set(imageData, canvas, x + 1, y, get(imageData, canvas, x + 1, y).add(quantError.mult(project.ditheringConfiguration.hardness * 7 / 16)))
+                    set(imageData, canvas, x - 1, y + 1, get(imageData, canvas, x - 1, y + 1).add(quantError.mult(project.ditheringConfiguration.hardness * 3 / 16)))
+                    set(imageData, canvas, x, y + 1, get(imageData, canvas, x, y + 1).add(quantError.mult(project.ditheringConfiguration.hardness * 5 / 16)))
+                    set(imageData, canvas, x + 1, y + 1, get(imageData, canvas, x + 1, y + 1).add(quantError.mult(project.ditheringConfiguration.hardness * 1 / 16)))
                 }
             }
         }

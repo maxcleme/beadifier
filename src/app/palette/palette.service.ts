@@ -6,6 +6,7 @@ import { Palette, PaletteEntry } from '../model/palette/palette.model';
 import * as _ from 'lodash';
 import { Observable, of, forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Color } from '../model/color/color.model';
 
 
 @Injectable()

@@ -1,0 +1,15 @@
+<div fxLayout="column" fxLayoutAlign="start start">
+  <div class="mat-subheading-2">Dithering</div>
+  <div>
+    <mat-checkbox [(ngModel)]="configuration.enable" name="dithering" (change)="callback()">Enable
+    </mat-checkbox>
+  </div>
+  <div flexLayout="row" fxLayoutGap="1em" fxLayoutAlign="start center">
+    <span fxFlex="20%">Hardness</span>
+    <mat-slider (change)="callback()" min="0" max="1" step="0.01" [(value)]="configuration.hardness">
+    </mat-slider>
+    <button class="mat-icon-button" (click)="resetHardness()">
+      <mat-icon>loop</mat-icon>
+    </button>
+  </div>
+</div>

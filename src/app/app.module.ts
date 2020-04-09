@@ -14,6 +14,9 @@ import { MaterialModule } from './app.material.module';
 import { AppComponent } from './app.component';
 import { ProjectOptionComponent } from './component/project-option/project-option.component';
 import { UploadImageButtonComponent } from './component/upload-image-button/upload-image-button.component';
+import { ImageConfigurationComponent } from './component/project-option/image/image-configuration.component';
+import { DitheringConfigurationComponent } from './component/project-option/dithering/dithering-configuration.component';
+import { MatchingConfigurationComponent } from './component/project-option/matching/matching-configuration.component';
 import { BeadUsageComponent } from './component/bead-usage/bead-usage.component';
 import { BoardSizeComponent } from './component/board-size/board-size.component';
 import { PaletteEntryComponent } from './component/palette-entry/palette-entry.component';
@@ -29,7 +32,10 @@ import { environment } from './../environments/environment';
     UploadImageButtonComponent,
     BeadUsageComponent,
     BoardSizeComponent,
-    PaletteEntryComponent
+    PaletteEntryComponent,
+    ImageConfigurationComponent,
+    DitheringConfigurationComponent,
+    MatchingConfigurationComponent
   ],
   imports: [
     BrowserModule,
@@ -42,7 +48,7 @@ import { environment } from './../environments/environment';
     MaterialModule,
 
     NtkmeButtonModule,
-    
+
     ServiceWorkerModule.register("/ngsw-worker.js",
       { enabled: environment.production }
     )
