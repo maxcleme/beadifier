@@ -58,16 +58,16 @@
   <mat-tab label="Advanced">
     <div class="example-large-box mat-elevation-z4">
       <form (submit)="preventSubmit($event)">
-        <div style="padding-top:1em;" fxLayout="row" fxLayoutAlign="space-between start">
-          <div fxFlex="33%">
+        <div style="padding-top:1em;" fxLayout="row wrap" fxLayoutAlign="space-between start">
+          <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="50%" fxFlex.lg="33%" fxFlex.xl="33%">
             <image-configuration [configuration]="project.imageConfiguration" (onChange)="callback()">
             </image-configuration>
           </div>
-          <div fxFlex="33%">
+          <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="50%" fxFlex.lg="33%" fxFlex.xl="33%">
             <dithering-configuration [configuration]="project.ditheringConfiguration" (onChange)="callback()">
             </dithering-configuration>
           </div>
-          <div fxFlex="33%">
+          <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="50%" fxFlex.lg="33%" fxFlex.xl="33%">
             <matching-configuration [configuration]="project.matchingConfiguration" (onChange)="callback()">
             </matching-configuration>
           </div>
