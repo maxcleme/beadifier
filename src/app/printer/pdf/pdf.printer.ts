@@ -17,18 +17,18 @@ export class PdfPrinter implements Printer {
         this.usage(doc, usage, width, height);
         this.beadMapping(doc, project, reducedColor, width, height, margin);
 
-        doc.save(`beadifier_${project.nbBoardWidth}x${project.nbBoardHeight}.pdf`)
+        doc.save(`beadifier_${project.boardConfiguration.nbBoardWidth}x${project.boardConfiguration.nbBoardHeight}.pdf`)
     }
 
     boardMapping(doc: jsPDF, project: Project, margin: number, width: number, height: number) {
-        const boardSize = Math.min((width - margin * 2) / project.nbBoardHeight, (width - margin * 2) / project.nbBoardWidth);
-        const boardSheetWidthOffset = (width - boardSize * project.nbBoardWidth) / 2;
-        const boardSheetHeightOffset = (height - boardSize * project.nbBoardHeight) / 2;
+        const boardSize = Math.min((width - margin * 2) / project.boardConfiguration.nbBoardHeight, (width - margin * 2) / project.boardConfiguration.nbBoardWidth);
+        const boardSheetWidthOffset = (width - boardSize * project.boardConfiguration.nbBoardWidth) / 2;
+        const boardSheetHeightOffset = (height - boardSize * project.boardConfiguration.nbBoardHeight) / 2;
         const fontSize = 12;
 
         doc.setFontSize(fontSize);
-        for (let y = 0; y < project.nbBoardHeight; y++) {
-            for (let x = 0; x < project.nbBoardWidth; x++) {
+        for (let y = 0; y < project.boardConfiguration.nbBoardHeight; y++) {
+            for (let x = 0; x < project.boardConfiguration.nbBoardWidth; x++) {
                 doc.rect(x * boardSize + boardSheetWidthOffset, y * boardSize + boardSheetHeightOffset, boardSize, boardSize);
 
                 let text = `${y} - ${x}`;
@@ -65,11 +65,11 @@ export class PdfPrinter implements Printer {
     }
 
     beadMapping(doc: jsPDF, project: Project, reducedColor: Uint8ClampedArray, width: number, height: number, margin: number) {
-        const beadSize = (width - margin * 2) / project.board.nbBeadPerRow;
-        const beadSheetOffset = (height - beadSize * project.board.nbBeadPerRow) / 2;
+        const beadSize = (width - margin * 2) / project.boardConfiguration.board.nbBeadPerRow;
+        const beadSheetOffset = (height - beadSize * project.boardConfiguration.board.nbBeadPerRow) / 2;
 
-        for (let i = 0; i < project.nbBoardHeight; i++) {
-            for (let j = 0; j < project.nbBoardWidth; j++) {
+        for (let i = 0; i < project.boardConfiguration.nbBoardHeight; i++) {
+            for (let j = 0; j < project.boardConfiguration.nbBoardWidth; j++) {
                 doc.addPage();
                 doc.setFontSize(24);
                 let text = `${i} - ${j}`;
@@ -78,22 +78,22 @@ export class PdfPrinter implements Printer {
                 doc.text(textOffset, margin * 2, text);
 
 
-                doc.setFontSize(project.board.exportedFontSize);
-                for (let y = 0; y < project.board.nbBeadPerRow; y++) {
-                    for (let x = 0; x < project.board.nbBeadPerRow; x++) {
+                doc.setFontSize(project.boardConfiguration.board.exportedFontSize);
+                for (let y = 0; y < project.boardConfiguration.board.nbBeadPerRow; y++) {
+                    for (let x = 0; x < project.boardConfiguration.board.nbBeadPerRow; x++) {
                         doc.rect(x * beadSize + margin, y * beadSize + beadSheetOffset, beadSize, beadSize);
 
-                        let paletteEntry: PaletteEntry = _.find(_.flatten(project.palettes.map(p => p.entries)), entry => {
-                            return entry.color.r == reducedColor[4 * ((y + i * project.board.nbBeadPerRow) * project.board.nbBeadPerRow * project.nbBoardWidth + x + j * project.board.nbBeadPerRow)]
-                                && entry.color.g == reducedColor[4 * ((y + i * project.board.nbBeadPerRow) * project.board.nbBeadPerRow * project.nbBoardWidth + x + j * project.board.nbBeadPerRow) + 1]
-                                && entry.color.b == reducedColor[4 * ((y + i * project.board.nbBeadPerRow) * project.board.nbBeadPerRow * project.nbBoardWidth + x + j * project.board.nbBeadPerRow) + 2]
-                                && entry.color.a == reducedColor[4 * ((y + i * project.board.nbBeadPerRow) * project.board.nbBeadPerRow * project.nbBoardWidth + x + j * project.board.nbBeadPerRow) + 3];
+                        let paletteEntry: PaletteEntry = _.find(_.flatten(project.paletteConfiguration.palettes.map(p => p.entries)), entry => {
+                            return entry.color.r == reducedColor[4 * ((y + i * project.boardConfiguration.board.nbBeadPerRow) * project.boardConfiguration.board.nbBeadPerRow * project.boardConfiguration.nbBoardWidth + x + j * project.boardConfiguration.board.nbBeadPerRow)]
+                                && entry.color.g == reducedColor[4 * ((y + i * project.boardConfiguration.board.nbBeadPerRow) * project.boardConfiguration.board.nbBeadPerRow * project.boardConfiguration.nbBoardWidth + x + j * project.boardConfiguration.board.nbBeadPerRow) + 1]
+                                && entry.color.b == reducedColor[4 * ((y + i * project.boardConfiguration.board.nbBeadPerRow) * project.boardConfiguration.board.nbBeadPerRow * project.boardConfiguration.nbBoardWidth + x + j * project.boardConfiguration.board.nbBeadPerRow) + 2]
+                                && entry.color.a == reducedColor[4 * ((y + i * project.boardConfiguration.board.nbBeadPerRow) * project.boardConfiguration.board.nbBeadPerRow * project.boardConfiguration.nbBoardWidth + x + j * project.boardConfiguration.board.nbBeadPerRow) + 3];
                         });
                         if (paletteEntry) {
                             text = paletteEntry.ref;
                             let textWidth = doc.getStringUnitWidth(text) * doc.internal.getFontSize() / doc.internal.scaleFactor;
                             let textOffsetWidth = (beadSize - textWidth) / 2;
-                            doc.text(x * beadSize + margin + textOffsetWidth, +(y * beadSize + beadSheetOffset + (beadSize - project.board.exportedFontSize * 0.35) / 1.5).toFixed(2), text);
+                            doc.text(x * beadSize + margin + textOffsetWidth, +(y * beadSize + beadSheetOffset + (beadSize - project.boardConfiguration.board.exportedFontSize * 0.35) / 1.5).toFixed(2), text);
 
                             doc.setFillColor(paletteEntry.color.r, paletteEntry.color.g, paletteEntry.color.b);
                             doc.rect(x * beadSize + margin + beadSize * .1, y * beadSize + beadSheetOffset + beadSize * .6, beadSize - 2 * beadSize * .1, beadSize * .3, 'FD');

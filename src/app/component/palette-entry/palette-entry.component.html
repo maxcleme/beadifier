@@ -1,4 +1,4 @@
-<div class="palette-entry" fxLayout="row" fxLayoutAlign="center center" (click)="toggle()"
+<div class="palette-entry" fxLayout="row" fxLayoutAlign="start center" (click)="toggle()"
     [ngStyle]="{'opacity': entry.enabled ? '1' : '0.3'}">
     <div class="palette-entry-color-preview" [ngStyle]="{'border-color': 'rgba('+entry.color.r+','+entry.color.g+','+entry.color.b+','+(entry.color.a/255)+')'}"></div>
     <em class="palette-entry-color-ref">{{entry.ref}}</em>

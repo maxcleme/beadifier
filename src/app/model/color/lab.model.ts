@@ -7,10 +7,13 @@ export class Lab {
 }
 
 export function ColorToLab(c: Color): Lab {
-    let r = c.r / 255,
-        g = c.g / 255,
-        b = c.b / 255,
-        x, y, z;
+    let r = c.r / 255;
+    let g = c.g / 255;
+    let b = c.b / 255;
+
+    let x = 0;
+    let y = 0;
+    let z = 0;
 
     r = (r > 0.04045) ? Math.pow((r + 0.055) / 1.055, 2.4) : r / 12.92;
     g = (g > 0.04045) ? Math.pow((g + 0.055) / 1.055, 2.4) : g / 12.92;

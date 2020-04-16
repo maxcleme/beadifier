@@ -1,7 +1,7 @@
 import { Component, Input, EventEmitter, Output } from "@angular/core";
-import { Project } from "../../model/project/project.model";
 
 import * as _ from 'lodash';
+import { BoardConfiguration } from '../../model/configuration/board-configuration.model';
 
 @Component({
     selector: 'board-size',
@@ -9,32 +9,31 @@ import * as _ from 'lodash';
     styleUrls: ['./board-size.component.scss']
 })
 export class BoardSizeComponent {
-    @Input("project") project: Project;
-
-    @Output("onBoardSizeChange") onBoardSizeChange = new EventEmitter<void>();
+    @Input("configuration") configuration: BoardConfiguration;
+    @Output("onBoardSizeChange") onBoardSizeChange = new EventEmitter<BoardConfiguration>();
 
     generateRange(to) {
         return _.range(0, to);
     }
 
     increaseNbBoardWidth() {
-        this.project.nbBoardWidth++;
+        this.configuration.nbBoardWidth++;
         this.onChangeCallback();
     }
     decreaseNbBoardWidth() {
-        this.project.nbBoardWidth--;
+        this.configuration.nbBoardWidth--;
         this.onChangeCallback();
     }
     increaseNbBoardHeight() {
-        this.project.nbBoardHeight++;
+        this.configuration.nbBoardHeight++;
         this.onChangeCallback();
     }
     decreaseNbBoardHeight() {
-        this.project.nbBoardHeight--;
+        this.configuration.nbBoardHeight--;
         this.onChangeCallback();
     }
 
-    onChangeCallback(){
+    onChangeCallback() {
         this.onBoardSizeChange.emit();
     }
 }

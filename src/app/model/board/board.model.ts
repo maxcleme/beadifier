@@ -1,7 +1,6 @@
 export class Board {
     name: string;
     nbBeadPerRow: number;
-
     exportedFontSize: number;
 
     constructor(name, nbBeadPerRow, exportedFontSize) {

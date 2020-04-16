@@ -13,13 +13,11 @@
         margin-right:5px; 
         margin-bottom:5px;
         margin-top:5px;
-        flex-grow: 1;
     }
 
     .palette-entry-color-ref {
         font-size: .8em;
         margin-right: 5px;
-        flex-grow: 1;
     }
     
     .palette-entry-color-name {
@@ -27,6 +25,5 @@
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow-x: hidden;
-        flex-shrink: 2;
     }
 }

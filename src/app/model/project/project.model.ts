@@ -1,27 +1,35 @@
-import { Palette } from "./../palette/palette.model";
-import { Board } from "./../board/board.model";
-import { Matching } from '../matching/matching.model';
+import { BoardConfiguration } from '../configuration/board-configuration.model';
+import { PaletteConfiguration } from '../configuration/palette-configuration.model';
+import { MatchingConfiguration } from '../configuration/matching-configuration.model';
 import { DitheringConfiguration } from '../configuration/dithering-configuration.model';
 import { ImageConfiguration } from '../configuration/image-configuration.model';
-import { MatchingConfiguration } from '../configuration/matching-configuration.model';
+import { RendererConfiguration } from '../configuration/renderer-configuration.model';
 
 export class Project {
-    palettes: Palette[];
-    board: Board;
-    nbBoardWidth: number;
-    nbBoardHeight: number;
     imageSrc: string;
+    srcWidth: number;
+    srcHeight: number;
+
+    boardConfiguration: BoardConfiguration;
+    paletteConfiguration: PaletteConfiguration
     matchingConfiguration: MatchingConfiguration;
     ditheringConfiguration: DitheringConfiguration
     imageConfiguration: ImageConfiguration
+    rendererConfiguration: RendererConfiguration
 
-    constructor(palettes: Palette[], board: Board, nbBoardWidth: number, nbBoardHeight: number, matchingConfiguration: MatchingConfiguration, imageConfiguration: ImageConfiguration, ditheringConfiguration: DitheringConfiguration) {
-        this.palettes = palettes;
-        this.board = board;
-        this.nbBoardWidth = nbBoardWidth;
-        this.nbBoardHeight = nbBoardHeight;
+    constructor(
+        paletteConfiguration: PaletteConfiguration,
+        boardConfiguration: BoardConfiguration,
+        matchingConfiguration: MatchingConfiguration,
+        imageConfiguration: ImageConfiguration,
+        ditheringConfiguration: DitheringConfiguration,
+        rendererConfiguration: RendererConfiguration
+    ) {
+        this.paletteConfiguration = paletteConfiguration;
+        this.boardConfiguration = boardConfiguration;
         this.matchingConfiguration = matchingConfiguration;
         this.imageConfiguration = imageConfiguration;
         this.ditheringConfiguration = ditheringConfiguration;
+        this.rendererConfiguration = rendererConfiguration;
     }
 }

@@ -20,52 +20,49 @@
   <div fxLayout="row" fxLayoutAlign="center" class="hidden-container">
     <canvas #canvas></canvas>
   </div>
-  
+
   <div fxLayout="row" fxLayoutAlign="center" *ngIf="project">
     <div fxFlex="90%">
       <mat-card>
         <mat-card-content>
-          <project-option [project]="project" (onLoad)="beadify($event)"></project-option>
+          <project-option [project]="project" [usage]="usage" [reducedColor]="reducedColor" (onLoad)="beadify($event)"></project-option>
         </mat-card-content>
       </mat-card>
     </div>
   </div>
+
+  <!-- <mat-progress-spinner *ngIf="loading" mode="indeterminate"></mat-progress-spinner> -->
 
   <div [ngStyle]="{'visibility': reducedColor ? 'visible' : 'hidden'}">
     <div fxLayout="row" fxLayoutAlign="center">
       <div fxFlex="90%">
         <mat-card>
           <mat-card-content>
-            <div fxLayout="row wrap">
-              <div fxLayout="column" fxLayoutGap="1em" fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="50%" fxFlex.lg="50%"
-                fxFlex.xl="50%">
-                <div fxLayout="row" fxLayoutGap="15px">
-                  <mat-checkbox [(ngModel)]="grid" (change)="beadify(this.project)">Display grid</mat-checkbox>
-                  <mat-checkbox [(ngModel)]="centered" (change)="beadify(this.project)">Center</mat-checkbox>
-                </div>
-                <div [ngStyle]="{'height' : aspectRatio * canvas.height * beadSize + 'px'}" fxLayout="row">
+            <div fxLayout="column wrap" fxLayoutGap="1em">
+              <div fxLayout="row" fxFlex="100%" fxLayoutGap="1em" fxLayoutAlign="center center">
+                <div fxFlex="50%" class="mat-subheading-2" style="text-align: center;">Pattern</div>
+                <div fxFlex="50%" class="mat-subheading-2" style="text-align: center;">Source</div>
+              </div>
+              <div fxLayout="row" fxFlex="100%" fxLayoutGap="1em" fxLayoutAlign="center center" style="width:100%;">
+                <div fxFlex="50%" [ngStyle]="{'height' : aspectRatio * canvas.height * beadSize + 'px'}">
                   <div #preview class="renderer" [ngStyle]="{'transform':'scale('+aspectRatio+','+aspectRatio+')'}">
                   </div>
                 </div>
-              </div>
-              <div fxLayout="column" fxLayoutGap="1em" fxLayoutAlign="center" fxFlex.xs="100%" fxFlex.sm="100%"
-                fxFlex.md="50%" fxFlex.lg="50%" fxFlex.xl="50%">
-                <bead-usage [usage]="usage" (onPaletteChange)="beadify(this.project)"></bead-usage>
-                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="1em">
-                  <button aria-label="reduce color" mat-raised-button [disabled]="!hasUsageUnderPercent(1, usage)"
-                    (click)="removeColorUnderPercent(1, usage)">Reduce color under 1%</button>
-                  <button aria-label="export" mat-raised-button (click)="exportBeadSheets()">Export...</button>
+                <div fxFlex="50" [ngStyle]="{'height' : aspectRatio * canvas.height * beadSize + 'px'}">
+                  <img *ngIf="project" [src]="project.imageSrc" [ngStyle]="{
+                      'height':'100%', 
+                      'width':'100%', 
+                      'object-fit': 'contain', 
+                      'border': '1px solid',
+                      'border-color': 'rgb(128, 128, 128)',
+                      'filter' : project ? project.imageConfiguration.css() : ''
+                    }">
                 </div>
               </div>
             </div>
-
-
           </mat-card-content>
         </mat-card>
       </div>
     </div>
   </div>
-
-
-
 </div>
