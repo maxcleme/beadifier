@@ -26,7 +26,7 @@ export class CanvasWebGLRenderer implements Renderer {
         container.appendChild(this.canvas);
     };
 
-    render(reducedColor: Uint8ClampedArray, imageWidth: number, imageHeight: number, beadSizePx: number, project: Project, grid: boolean) {
+    render(reducedColor: Uint8ClampedArray, imageWidth: number, imageHeight: number, beadSizePx: number, project: Project) {
         const gl = this.initGL(this.canvas);
         const program = this.initShaders(gl);
         const beadShape = this.initBeadShape(gl);
@@ -34,7 +34,7 @@ export class CanvasWebGLRenderer implements Renderer {
 
         gl.clearColor(0.0, 0.0, 0.0, 1.0);
         gl.enable(gl.DEPTH_TEST);
-        this.drawScene(gl, program, beadShape, boardShape, imageWidth, imageHeight, beadSizePx, reducedColor, project, grid);
+        this.drawScene(gl, program, beadShape, boardShape, imageWidth, imageHeight, beadSizePx, reducedColor, project);
     }
 
     destroy() {
@@ -44,7 +44,7 @@ export class CanvasWebGLRenderer implements Renderer {
     }
 
 
-    drawScene(gl: WebGLRenderingContext, program: AugmentedProgram, beadShape: Shape, boardShape: Shape, width: number, height: number, beadSizePx: number, reducedColor: Uint8ClampedArray, project: Project, grid: boolean) {
+    drawScene(gl: WebGLRenderingContext, program: AugmentedProgram, beadShape: Shape, boardShape: Shape, width: number, height: number, beadSizePx: number, reducedColor: Uint8ClampedArray, project: Project) {
         var mvMatrix = mat4.create();
         var pMatrix = mat4.create();
 
@@ -94,14 +94,14 @@ export class CanvasWebGLRenderer implements Renderer {
 
 
 
-        if (grid) {
-            const wBoardRatio = wBeadRatio * project.board.nbBeadPerRow * 2;
-            const hBoardRatio = hBeadRatio * project.board.nbBeadPerRow * 2;
+        if (project.rendererConfiguration.showGrid) {
+            const wBoardRatio = wBeadRatio * project.boardConfiguration.board.nbBeadPerRow * 2;
+            const hBoardRatio = hBeadRatio * project.boardConfiguration.board.nbBeadPerRow * 2;
             const boardScaling = vec3.create();
             vec3.set(boardScaling, wBoardRatio, hBoardRatio, 1);
 
-            for (let y = 0; y < project.nbBoardHeight; y++) {
-                for (let x = 0; x < project.nbBoardWidth; x++) {
+            for (let y = 0; y < project.boardConfiguration.nbBoardHeight; y++) {
+                for (let x = 0; x < project.boardConfiguration.nbBoardWidth; x++) {
                     mat4.identity(mvMatrix);
 
                     // Set position

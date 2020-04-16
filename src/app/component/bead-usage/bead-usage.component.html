@@ -1,6 +1,24 @@
-<div class="mat-h2">
-    {{countBeads(usage)}} beads
-</div>
-<div class="usage-chart-container" fxLayout="row" fxLayoutAlign="center center">
-    <canvas #chart width="100%"></canvas>
+<div fxFlex="row wrap" fxFlex="100%" fxLayout="space-between start">
+  <div fxFlex="100%" fxLayoutAlign="space-between start">
+    <div class="mat-subheading-2">
+      Total : {{countBeads(usage)}} beads
+    </div>
+
+    <button aria-label="reduce color" mat-raised-button [disabled]="!hasUsageUnderPercent(1, usage)"
+      (click)="removeColorUnderPercent(1, usage)">Reduce color under 1%</button>
+  </div>
+  <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="100%" fxFlex.lg="33%" fxFlex.xl="25%">
+    <div fxLayout="column" fxLayoutAlign="center center">
+      <div class="usage-chart-container" fxLayout="row" fxLayoutAlign="center center">
+        <canvas #polar width="100%"></canvas>
+      </div>
+    </div>
+  </div>
+  <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="100%" fxFlex.lg="66%" fxFlex.xl="75%">
+    <div fxLayout="column" fxLayoutAlign="center center">
+      <div class="usage-chart-container" fxLayout="row" fxLayoutAlign="center center">
+        <canvas #bar width="100%"></canvas>
+      </div>
+    </div>
+  </div>
 </div>

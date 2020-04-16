@@ -1,12 +1,9 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 import { Project } from '../../model/project/project.model';
-import { BOARDS, Board } from '../../model/board/board.model';
-import { Palette } from '../../model/palette/palette.model';
-import { PaletteService } from '../../palette/palette.service';
+import { PaletteEntry } from '../../model/palette/palette.model';
 
 import * as _ from 'lodash';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'project-option',
@@ -15,36 +12,17 @@ import { Observable } from 'rxjs';
 })
 export class ProjectOptionComponent {
   @Input() project: Project;
+  @Input() usage: Map<PaletteEntry, number>;
+  @Input() reducedColor: Uint8ClampedArray;
   @Output() onLoad = new EventEmitter<Project>();
-
-  availableBoards: Board[];
-  availablePalettes: Observable<Palette[]>;
-  
-  enableAllPaletteEntry: boolean;
-
-
-  constructor(private paletteService: PaletteService) {
-    this.availableBoards = _.values(BOARDS);
-    this.availablePalettes = paletteService.getAll();
-    this.enableAllPaletteEntry = true;
-  }
 
   onLoadingImageCallback(src) {
     this.project.imageSrc = src;
     this.callback();
   }
 
-  toggleAll(e) {
-    this.project.palettes.forEach(p => p.entries.forEach(entry => entry.enabled = e.checked));
-    this.callback();
-  }
-
   callback() {
     this.onLoad.emit(this.project);
-  }
-
-  paletteEquality(o1: Palette, o2: Palette) {
-    return o1.name == o2.name;
   }
 
   preventSubmit(e: Event) {

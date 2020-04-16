@@ -1,8 +1,7 @@
 <div fxLayout="column" fxLayoutAlign="start start">
   <div class="mat-subheading-2">Dithering</div>
   <div>
-    <mat-checkbox [(ngModel)]="configuration.enable" name="dithering" (change)="callback()">Enable
-    </mat-checkbox>
+    <mat-slide-toggle [(ngModel)]="configuration.enable" name="enable" (change)="callback()">Enable </mat-slide-toggle>
   </div>
   <div flexLayout="row" fxLayoutGap="1em" fxLayoutAlign="start center">
     <span fxFlex="20%">Hardness</span>

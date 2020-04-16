@@ -18,7 +18,7 @@ export class Canvas2dRenderer implements Renderer {
         container.appendChild(this.canvas);
     };
 
-    render(reducedColor: Uint8ClampedArray, imageWidth: number, imageHeight: number, beadSizePx: number, project: Project, grid: boolean) {
+    render(reducedColor: Uint8ClampedArray, imageWidth: number, imageHeight: number, beadSizePx: number, project: Project) {
         this.canvas.width = imageWidth * beadSizePx;
         this.canvas.height = imageHeight * beadSizePx;
 
@@ -26,11 +26,16 @@ export class Canvas2dRenderer implements Renderer {
         ctx.fillStyle = 'rgb(229, 229, 229)';
         ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-        if (grid) {
+        if (project.rendererConfiguration.showGrid) {
             ctx.strokeStyle = "#000000";
-            for (let y = 0; y < project.nbBoardHeight; y++) {
-                for (let x = 0; x < project.nbBoardWidth; x++) {
-                    ctx.strokeRect(x * project.board.nbBeadPerRow * beadSizePx, y * project.board.nbBeadPerRow * beadSizePx, project.board.nbBeadPerRow * beadSizePx, project.board.nbBeadPerRow * beadSizePx);
+            for (let y = 0; y < project.boardConfiguration.nbBoardHeight; y++) {
+                for (let x = 0; x < project.boardConfiguration.nbBoardWidth; x++) {
+                    ctx.strokeRect(
+                        x * project.boardConfiguration.board.nbBeadPerRow * beadSizePx,
+                        y * project.boardConfiguration.board.nbBeadPerRow * beadSizePx,
+                        project.boardConfiguration.board.nbBeadPerRow * beadSizePx,
+                        project.boardConfiguration.board.nbBeadPerRow * beadSizePx
+                    );
                 }
             }
         }

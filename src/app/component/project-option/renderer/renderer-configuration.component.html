@@ -1,0 +1,9 @@
+<div fxLayout="column" fxLayoutAlign="start start">
+  <div class="mat-subheading-2">Renderer</div>
+  <div>
+    <mat-slide-toggle [(ngModel)]="configuration.center" name="center" (change)="callback()">Center </mat-slide-toggle>
+  </div>
+  <div>
+    <mat-slide-toggle [(ngModel)]="configuration.showGrid" name="show boards" (change)="callback()">Show boards </mat-slide-toggle>
+  </div>
+</div>

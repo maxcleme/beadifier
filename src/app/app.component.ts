@@ -1,4 +1,6 @@
-import { Component, OnInit, ViewChild, ElementRef, HostListener } from '@angular/core';
+import * as _ from 'lodash';
+import { Observable } from 'rxjs';
+import { Component, ViewChild, ElementRef, HostListener } from '@angular/core';
 
 
 import { PaletteEntry } from './model/palette/palette.model';
@@ -6,21 +8,21 @@ import { BOARDS } from './model/board/board.model';
 
 import { PaletteService } from './palette/palette.service';
 import { Project } from './model/project/project.model';
-import { drawImageInsideCanvas, reduceColor, clearNode, countBeads, computeUsage, hasUsageUnderPercent, removeColorUnderPercent } from './utils/utils';
+import { drawImageInsideCanvas, reduceColor, computeUsage } from './utils/utils';
 import { Renderer } from './renderer/renderer';
 import { Canvas2dRenderer } from './renderer/2d/canvas.2d.renderer';
 import { CanvasWebGLRenderer } from './renderer/webgl/canvas.webgl.renderer';
-import { Printer } from './printer/printer';
-import { PdfPrinter } from './printer/pdf/pdf.printer';
 
-import * as _ from 'lodash';
+
 import { Scaler } from './scaler/scaler';
 import { FitScreenScaler } from './scaler/fit/fit-screen.scaler';
 
-import { MATCHINGS } from './model/matching/matching.model';
 import { MatchingConfiguration } from './model/configuration/matching-configuration.model';
 import { ImageConfiguration } from './model/configuration/image-configuration.model';
 import { DitheringConfiguration } from './model/configuration/dithering-configuration.model';
+import { RendererConfiguration } from './model/configuration/renderer-configuration.model';
+import { PaletteConfiguration } from './model/configuration/palette-configuration.model';
+import { BoardConfiguration } from './model/configuration/board-configuration.model';
 
 const BEAD_SIZE_PX = 10;
 
@@ -40,11 +42,9 @@ export class AppComponent {
   scaler: Scaler;
   aspectRatio: number;
   usage: Map<PaletteEntry, number>;
-  grid: boolean;
-  centered: boolean;
   reducedColor: Uint8ClampedArray;
   beadSize: number;
-  printer: Printer;
+  loading: boolean;
 
   constructor(private paletteService: PaletteService) {
     // Rendering technology
@@ -57,37 +57,41 @@ export class AppComponent {
     // Init
     this.usage = new Map();
     this.beadSize = BEAD_SIZE_PX;
-    this.printer = new PdfPrinter();
 
     // Default
     paletteService.getAll().subscribe(allPalette => {
       this.project = new Project(
-        [allPalette[0]],
-        BOARDS.MIDI,
-        2,
-        2,
+        new PaletteConfiguration([allPalette[0]]),
+        new BoardConfiguration(),
         new MatchingConfiguration(),
         new ImageConfiguration(),
-        new DitheringConfiguration()
+        new DitheringConfiguration(),
+        new RendererConfiguration()
       );
     })
 
     this.scaler = new FitScreenScaler();
-    this.grid = false;
-    this.centered = true;
+    this.loading = false;
   }
 
   _beadify = _.debounce(() => {
-    const canvas = this.canvasTag.nativeElement;
-    canvas.width = this.project.nbBoardWidth * this.project.board.nbBeadPerRow;
-    canvas.height = this.project.nbBoardHeight * this.project.board.nbBeadPerRow;
-    drawImageInsideCanvas(canvas, this.imgTag.nativeElement, this.centered);
-    this.reducedColor = reduceColor(canvas, this.project).data;
-    this.usage = this.computeUsage(this.reducedColor, this.project.palettes);
-    this.renderer.destroy();
-    this.renderer.initContainer(this.previewTag.nativeElement, canvas.width, canvas.height, BEAD_SIZE_PX);
-    this.computeAspectRatio();
-    this.renderer.render(this.reducedColor, canvas.width, canvas.height, BEAD_SIZE_PX, this.project, this.grid);
+    this.loading = true;
+    new Observable(subscriber => {
+      setTimeout(() => {
+        const canvas = this.canvasTag.nativeElement;
+        canvas.width = this.project.boardConfiguration.nbBoardWidth * this.project.boardConfiguration.board.nbBeadPerRow;
+        canvas.height = this.project.boardConfiguration.nbBoardHeight * this.project.boardConfiguration.board.nbBeadPerRow;
+        const drawingPosition = drawImageInsideCanvas(canvas, this.imgTag.nativeElement, this.project.rendererConfiguration.center);
+        this.reducedColor = reduceColor(canvas, this.project, drawingPosition).data;
+        this.usage = computeUsage(this.reducedColor, this.project.paletteConfiguration.palettes);
+        this.renderer.destroy();
+        this.renderer.initContainer(this.previewTag.nativeElement, canvas.width, canvas.height, BEAD_SIZE_PX);
+        this.computeAspectRatio();
+        this.renderer.render(this.reducedColor, canvas.width, canvas.height, BEAD_SIZE_PX, this.project);
+        subscriber.next();
+      })
+    })
+      .subscribe(() => this.loading = false);
   }, 250)
 
   beadify(project: Project) {
@@ -97,12 +101,14 @@ export class AppComponent {
 
     if (this.imgTag.nativeElement.src !== project.imageSrc) {
       this.imgTag.nativeElement.src = project.imageSrc;
-      this.imgTag.nativeElement.addEventListener('load', () => this._beadify());
+      this.imgTag.nativeElement.addEventListener('load', () => {
+        this.project.srcWidth = this.imgTag.nativeElement.width;
+        this.project.srcHeight = this.imgTag.nativeElement.height;
+        this._beadify();
+      });
     } else {
-
       this._beadify();
     }
-
   }
 
   @HostListener('window:resize', ['$event'])
@@ -110,15 +116,5 @@ export class AppComponent {
     this.aspectRatio = this.scaler.compute(this.project, this.previewTag.nativeElement.parentElement.clientWidth, this.previewTag.nativeElement.parentElement.clientWidth, BEAD_SIZE_PX);
   }
 
-  removeColorUnderPercent(percent: number, usage: Map<PaletteEntry, number>) {
-    removeColorUnderPercent(percent, usage);
-    this._beadify();
-  }
 
-  exportBeadSheets() {
-    this.printer.print(this.reducedColor, this.usage, this.project);
-  }
-
-  computeUsage = computeUsage;
-  hasUsageUnderPercent = hasUsageUnderPercent;
 }
