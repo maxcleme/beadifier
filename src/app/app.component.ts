@@ -33,7 +33,7 @@ const BEAD_SIZE_PX = 10;
 })
 export class AppComponent {
   @ViewChild('source', { static: true }) imgTag: ElementRef;
-  @ViewChild('canvas', { static: true }) canvasTag: ElementRef;
+  @ViewChild('canvasContainer', { static: true }) canvasContainerTag: ElementRef;
   @ViewChild('preview', { static: true }) previewTag: ElementRef;
 
   availableRenderers: Renderer[];
@@ -78,9 +78,19 @@ export class AppComponent {
     this.loading = true;
     new Observable(subscriber => {
       setTimeout(() => {
-        const canvas = this.canvasTag.nativeElement;
+        const canvasContainer = this.canvasContainerTag.nativeElement
+
+        // clear previous canvas if any
+        while (canvasContainer.firstChild) {
+          canvasContainer.removeChild(canvasContainer.lastChild);
+        }
+
+        const canvas = document.createElement("canvas");
         canvas.width = this.project.boardConfiguration.nbBoardWidth * this.project.boardConfiguration.board.nbBeadPerRow;
         canvas.height = this.project.boardConfiguration.nbBoardHeight * this.project.boardConfiguration.board.nbBeadPerRow;
+
+        canvasContainer.appendChild(canvas);
+
         const drawingPosition = drawImageInsideCanvas(canvas, this.imgTag.nativeElement, this.project.rendererConfiguration.center);
         this.reducedColor = reduceColor(canvas, this.project, drawingPosition).data;
         this.usage = computeUsage(this.reducedColor, this.project.paletteConfiguration.palettes);

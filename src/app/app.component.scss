@@ -1,20 +1,21 @@
 .banner-container {
-    width:100%; 
-    height:150px;
+  width: 100%;
+  height: 150px;
 
-    img {
-        object-fit: contain;
-    }
+  img {
+    object-fit: contain;
+  }
 }
 
 .renderer {
-    transform-origin: top left; 
-    width:100%; 
-    pointer-events:none;
+  transform-origin: top left;
+  width: 100%;
+  pointer-events: none;
 }
 
-.hidden-container {
-    canvas {
-        display: none;
-    }
+:host /deep/ .hidden-container canvas {
+  display: none;
+  position: absolute;
+  top: 0px;
+  left: 0px;
 }
