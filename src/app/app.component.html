@@ -15,7 +15,13 @@
 
 
   <div fxLayout="row" fxLayoutAlign="center">
-    <img #source [ngStyle]="{'display': 'none', 'filter' : project ? project.imageConfiguration.css() : ''}">
+    <img #source [ngStyle]="{
+      'position' : 'absolute',
+      'top' : '0px',
+      'left' : '0px',
+      'display' : 'none',
+      'filter' : project ? project.imageConfiguration.css() : ''
+    }">
   </div>
   <div fxLayout="row" fxLayoutAlign="center" class="hidden-container">
     <canvas #canvas></canvas>
@@ -25,7 +31,8 @@
     <div fxFlex="90%">
       <mat-card>
         <mat-card-content>
-          <project-option [project]="project" [usage]="usage" [reducedColor]="reducedColor" (onLoad)="beadify($event)"></project-option>
+          <project-option [project]="project" [usage]="usage" [reducedColor]="reducedColor" (onLoad)="beadify($event)">
+          </project-option>
         </mat-card-content>
       </mat-card>
     </div>
@@ -45,7 +52,9 @@
               </div>
               <div fxLayout="row" fxFlex="100%" fxLayoutGap="1em" fxLayoutAlign="center center" style="width:100%;">
                 <div fxFlex="50%" [ngStyle]="{'height' : aspectRatio * canvas.height * beadSize + 'px'}">
-                  <div #preview class="renderer" [ngStyle]="{'transform':'scale('+aspectRatio+','+aspectRatio+')'}">
+                  <div #preview class="renderer" [ngStyle]="{
+                    'transform':'scale('+aspectRatio+','+aspectRatio+')'
+                  }">
                   </div>
                 </div>
                 <div fxFlex="50" [ngStyle]="{'height' : aspectRatio * canvas.height * beadSize + 'px'}">
