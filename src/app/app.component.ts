@@ -91,7 +91,7 @@ export class AppComponent {
 
         canvasContainer.appendChild(canvas);
 
-        const drawingPosition = drawImageInsideCanvas(canvas, this.imgTag.nativeElement, this.project.rendererConfiguration.center);
+        const drawingPosition = drawImageInsideCanvas(canvas, this.imgTag.nativeElement, this.project.rendererConfiguration);
         this.reducedColor = reduceColor(canvas, this.project, drawingPosition).data;
         this.usage = computeUsage(this.reducedColor, this.project.paletteConfiguration.palettes);
         this.renderer.destroy();

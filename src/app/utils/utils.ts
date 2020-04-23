@@ -4,6 +4,7 @@ import { Color } from "../model/color/color.model";
 import * as _ from 'lodash';
 import { Matching } from '../model/matching/matching.model';
 import { Project } from '../model/project/project.model';
+import { RendererConfiguration } from '../model/configuration/renderer-configuration.model';
 
 export class ImagePosition {
     xStart: number;
@@ -28,7 +29,7 @@ export class ImagePosition {
     }
 }
 
-export function drawImageInsideCanvas(canvas, image, centered): ImagePosition {
+export function drawImageInsideCanvas(canvas, image, rendererConfiguration: RendererConfiguration): ImagePosition {
     /**
      * Credit to : https://sdqali.in/blog/2013/10/03/fitting-an-image-in-to-a-canvas-object/
      */
@@ -40,36 +41,38 @@ export function drawImageInsideCanvas(canvas, image, centered): ImagePosition {
     // If image's aspect ratio is less than canvas's we fit on height
     // and place the image centrally along width
     if (imageAspectRatio < canvasAspectRatio) {
-        renderableHeight = canvas.height;
-        renderableWidth = image.width * (renderableHeight / image.height);
-        xStart = centered ? (canvas.width - renderableWidth) / 2 : 0;
-        yStart = 0;
+        renderableHeight = rendererConfiguration.fit ? canvas.height : image.height;
+        renderableWidth = rendererConfiguration.fit ? image.width * (renderableHeight / image.height) : image.width;
     }
 
     // If image's aspect ratio is greater than canvas's we fit on width
     // and place the image centrally along height
     else if (imageAspectRatio > canvasAspectRatio) {
-        renderableWidth = canvas.width
-        renderableHeight = image.height * (renderableWidth / image.width);
-        xStart = 0;
-        yStart = centered ? (canvas.height - renderableHeight) / 2 : 0;
+        renderableWidth = rendererConfiguration.fit ? canvas.width : image.width;
+        renderableHeight = rendererConfiguration.fit ? image.height * (renderableWidth / image.width) : image.height;
     }
 
     // Happy path - keep aspect ratio
     else {
-        renderableHeight = canvas.height;
-        renderableWidth = canvas.width;
-        xStart = 0;
-        yStart = 0;
+        renderableHeight = rendererConfiguration.fit ? canvas.height : image.height;
+        renderableWidth = rendererConfiguration.fit ? canvas.width : image.width;
     }
 
+    xStart = rendererConfiguration.center ? (canvas.width - renderableWidth) / 2 : 0;
+    yStart = rendererConfiguration.center ? (canvas.height - renderableHeight) / 2 : 0;
+    
     let rxStart = Math.floor(xStart);
     let ryStart = Math.floor(yStart);
     let rrenderableWidth = Math.floor(renderableWidth);
     let rrenderableHeight = Math.floor(renderableHeight);
 
     canvas.getContext('2d').filter = image.style.filter;
-    canvas.getContext('2d').drawImage(image, rxStart, ryStart, rrenderableWidth, rrenderableHeight);
+    canvas.getContext('2d').drawImage(image,
+        rxStart,
+        ryStart,
+        rrenderableWidth,
+        rrenderableHeight
+    );
     return new ImagePosition(rxStart, ryStart, rrenderableWidth, rrenderableHeight)
 }
 

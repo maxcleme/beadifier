@@ -60,9 +60,9 @@
                 <div fxFlex="50"
                   [ngStyle]="{'height' : aspectRatio * project.boardConfiguration.board.nbBeadPerRow * project.boardConfiguration.nbBoardHeight * beadSize + 'px'}">
                   <img *ngIf="project" [src]="project.imageSrc" [ngStyle]="{
-                      'height':'100%', 
-                      'width':'100%', 
-                      'object-fit': 'contain', 
+                      'height': project.rendererConfiguration.center ? '100%' : 'auto', 
+                      'width': project.rendererConfiguration.center ? '100%' : 'auto', 
+                      'object-fit': project.rendererConfiguration.fit ? 'contain' : 'none', 
                       'border': '1px solid',
                       'border-color': 'rgb(128, 128, 128)',
                       'filter' : project ? project.imageConfiguration.css() : ''
