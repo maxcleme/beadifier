@@ -11,7 +11,7 @@ import { PdfPrinter } from '../../../printer/pdf/pdf.printer';
 })
 export class ExportComponent {
     @Input() project: Project;
-    @Input() usage: Map<PaletteEntry, number>;
+    @Input() usage: Map<string, number>;
     @Input() reducedColor: Uint8ClampedArray;
 
     printer: Printer;

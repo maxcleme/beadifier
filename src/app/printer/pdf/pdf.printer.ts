@@ -1,13 +1,13 @@
-import { Printer } from './../printer';
-import { PaletteEntry } from '../../model/palette/palette.model';
-import { Project } from '../../model/project/project.model';
-
 import * as jsPDF from 'jspdf';
 import * as _ from 'lodash';
 
+import { Printer } from './../printer';
+import { Project } from '../../model/project/project.model';
+import { PaletteEntry } from '../../model/palette/palette.model';
+
 export class PdfPrinter implements Printer {
 
-    print(reducedColor: Uint8ClampedArray, usage: Map<PaletteEntry, number>, project: Project) {
+    print(reducedColor: Uint8ClampedArray, usage: Map<string, number>, project: Project) {
         const height = 297;
         const width = 210;
         const margin = 5;
@@ -39,15 +39,14 @@ export class PdfPrinter implements Printer {
         }
     }
 
-    usage(doc: jsPDF, usage: Map<PaletteEntry, number>, width: number, height: number) {
+    usage(doc: jsPDF, usage: Map<string, number>, width: number, height: number) {
         const fontSize = 12;
         const usagePerPage = 30;
-        const generateName = (paletteEntry: PaletteEntry) => `${paletteEntry.ref} ${paletteEntry.name}`;
         const usageLineHeight = 8;
         const cellPadding = 1;
-        const maxRef = _.maxBy(Array.from(usage.keys()), key => doc.getStringUnitWidth(generateName(key)));
+        const maxRef = _.maxBy(Array.from(usage.keys()), key => doc.getStringUnitWidth(key));
         const maxUsage = _.max(Array.from(usage.values()));
-        const refWidth = doc.getStringUnitWidth(generateName(maxRef)) * doc.internal.getFontSize() / doc.internal.scaleFactor + cellPadding * 2;
+        const refWidth = doc.getStringUnitWidth(maxRef) * doc.internal.getFontSize() / doc.internal.scaleFactor + cellPadding * 2;
         const usageWidth = doc.getStringUnitWidth("" + maxUsage) * doc.internal.getFontSize() / doc.internal.scaleFactor + cellPadding * 2;
 
         doc.setFontSize(fontSize);
@@ -58,7 +57,7 @@ export class PdfPrinter implements Printer {
             Array.from(entries).forEach(([k, v], idx) => {
                 doc.rect(usageSheetWidthOffset, usageLineHeight * idx + usageSheetHeightOffset, refWidth, usageLineHeight);
                 doc.rect(usageSheetWidthOffset + refWidth, usageLineHeight * idx + usageSheetHeightOffset, usageWidth, usageLineHeight);
-                doc.text(usageSheetWidthOffset + cellPadding, usageLineHeight * idx + usageSheetHeightOffset + usageLineHeight / 2 + this.fontSizeToHeightMm(fontSize), generateName(k));
+                doc.text(usageSheetWidthOffset + cellPadding, usageLineHeight * idx + usageSheetHeightOffset + usageLineHeight / 2 + this.fontSizeToHeightMm(fontSize), k);
                 doc.text(usageSheetWidthOffset + refWidth + cellPadding, usageLineHeight * idx + usageSheetHeightOffset + usageLineHeight / 2 + this.fontSizeToHeightMm(fontSize), "" + v);
             });
         })
