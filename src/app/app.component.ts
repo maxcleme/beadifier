@@ -41,7 +41,7 @@ export class AppComponent {
   project: Project;
   scaler: Scaler;
   aspectRatio: number;
-  usage: Map<PaletteEntry, number>;
+  usage: Map<string, number>;
   reducedColor: Uint8ClampedArray;
   beadSize: number;
   loading: boolean;
@@ -123,7 +123,7 @@ export class AppComponent {
 
   @HostListener('window:resize', ['$event'])
   computeAspectRatio() {
-    this.aspectRatio = this.scaler.compute(this.project, this.previewTag.nativeElement.parentElement.clientWidth, this.previewTag.nativeElement.parentElement.clientWidth, BEAD_SIZE_PX);
+    this.aspectRatio = this.scaler.compute(this.project, this.previewTag.nativeElement.parentElement.clientWidth, this.previewTag.nativeElement.parentElement.clientHeight, BEAD_SIZE_PX);
   }
 
 

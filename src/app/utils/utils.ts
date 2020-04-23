@@ -141,31 +141,35 @@ export function parsePalette(json): Palette {
     }
 };
 
-export function computeUsage(colors: Uint8ClampedArray, palettes: Palette[]): Map<PaletteEntry, number> {
-    const usage = new Map<PaletteEntry, number>();
+export function computeUsage(colors: Uint8ClampedArray, palettes: Palette[]): Map<string, number> {
+    const usage = new Map<string, number>();
     _.chunk(colors, 4)
         .map(component => new Color(component[0], component[1], component[2], component[3]))
         .forEach(color => {
             let entry: PaletteEntry = _.find(_.flatten(palettes.map(p => p.entries)), entry => entry.color.r === color.r && entry.color.g === color.g && entry.color.b === color.b && entry.color.a === color.a);
             if (entry) {
-                usage.set(entry, (usage.get(entry) || 0) + 1);
+                usage.set(entry.ref, (usage.get(entry.ref) || 0) + 1);
             }
         });
     return usage;
 }
 
-export function countBeads(usage: Map<PaletteEntry, number>): number {
+export function countBeads(usage: Map<string, number>): number {
     return Array.from(usage.values()).reduce(_.add, 0);
 }
 
-export function hasUsageUnderPercent(percent: number, usage: Map<PaletteEntry, number>) {
+export function hasUsageUnderPercent(percent: number, usage: Map<string, number>) {
     const total = countBeads(usage);
     const lowerBound = total * (percent / 100);
     return _.find(Array.from(usage.values()), v => v < lowerBound);
 }
 
-export function removeColorUnderPercent(percent: number, usage: Map<PaletteEntry, number>) {
+export function removeColorUnderPercent(percent: number, usage: Map<string, number>, palettes: Palette[]) {
     const total = countBeads(usage);
     const lowerBound = total * (percent / 100);
-    Array.from(usage.entries()).filter(([k, v]) => v < lowerBound).forEach(([k, v]) => k.enabled = false);
+    Array.from(usage.entries()).filter(([k, v]) => v < lowerBound).forEach(([k, v]) => {
+        _(palettes).map(p => p.entries).flatten().filter(e => e.ref === k).forEach(e => {
+            e.enabled = false;
+        });
+    });
 }

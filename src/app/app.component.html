@@ -50,13 +50,15 @@
                 <div fxFlex="50%" class="mat-subheading-2" style="text-align: center;">Source</div>
               </div>
               <div fxLayout="row" fxFlex="100%" fxLayoutGap="1em" fxLayoutAlign="center center" style="width:100%;">
-                <div fxFlex="50%" [ngStyle]="{'height' : aspectRatio * project.boardConfiguration.board.nbBeadPerRow * project.boardConfiguration.nbBoardHeight * beadSize + 'px'}">
+                <div fxFlex="50%"
+                  [ngStyle]="{'height' : aspectRatio * project.boardConfiguration.board.nbBeadPerRow * project.boardConfiguration.nbBoardHeight * beadSize + 'px'}">
                   <div #preview class="renderer" [ngStyle]="{
                     'transform':'scale('+aspectRatio+','+aspectRatio+')'
                   }">
                   </div>
                 </div>
-                <div fxFlex="50" [ngStyle]="{'height' : aspectRatio * project.boardConfiguration.board.nbBeadPerRow * project.boardConfiguration.nbBoardHeight * beadSize + 'px'}">
+                <div fxFlex="50"
+                  [ngStyle]="{'height' : aspectRatio * project.boardConfiguration.board.nbBeadPerRow * project.boardConfiguration.nbBoardHeight * beadSize + 'px'}">
                   <img *ngIf="project" [src]="project.imageSrc" [ngStyle]="{
                       'height':'100%', 
                       'width':'100%', 

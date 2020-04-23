@@ -4,8 +4,11 @@
       Total : {{countBeads(usage)}} beads
     </div>
 
-    <button aria-label="reduce color" mat-raised-button [disabled]="!hasUsageUnderPercent(1, usage)"
-      (click)="removeColorUnderPercent(1, usage)">Reduce color under 1%</button>
+    <div fxFlex="row" fxLayoutAlign="end center" fxLayoutGap="1em">
+      <button aria-label="reduce color" mat-raised-button [disabled]="!hasUsageUnderPercent(1, usage)"
+        (click)="removeColorUnderPercent(1, usage, palettes)">Reduce color under 1%</button>
+      <button aria-label="undo" mat-raised-button [disabled]="history.length == 0" (click)="undo()">Undo</button>
+    </div>
   </div>
   <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="100%" fxFlex.lg="33%" fxFlex.xl="25%">
     <div fxLayout="column" fxLayoutAlign="center center">
