@@ -1,10 +1,7 @@
 import * as _ from 'lodash';
+
 import { Observable } from 'rxjs';
 import { Component, ViewChild, ElementRef, HostListener } from '@angular/core';
-
-
-import { PaletteEntry } from './model/palette/palette.model';
-import { BOARDS } from './model/board/board.model';
 
 import { PaletteService } from './palette/palette.service';
 import { Project } from './model/project/project.model';
@@ -68,10 +65,15 @@ export class AppComponent {
         new DitheringConfiguration(),
         new RendererConfiguration()
       );
+
+      // mock loaded image
+      this.project.imageSrc = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAIAAABv85FHAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH5AQXCQkp5e4ieAAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAANElEQVQI152OKQ4AMAzD4v3/zxloQVTQSWM2yCFJtm0XpE5PoAgaBn91brlt76QA/RAeXy7yZHeimZDD7QAAAABJRU5ErkJggg==";
+      this.beadify(this.project);
     })
 
     this.scaler = new FitScreenScaler();
     this.loading = false;
+
   }
 
   _beadify = _.debounce(() => {

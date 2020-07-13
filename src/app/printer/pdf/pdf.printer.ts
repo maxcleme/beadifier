@@ -6,8 +6,12 @@ import { Project } from '../../model/project/project.model';
 import { PaletteEntry } from '../../model/palette/palette.model';
 
 export class PdfPrinter implements Printer {
+    
+    name(): string {
+        return "PDF";
+    }
 
-    print(reducedColor: Uint8ClampedArray, usage: Map<string, number>, project: Project) {
+    print(reducedColor: Uint8ClampedArray, usage: Map<string, number>, project: Project, filename: string) {
         const height = 297;
         const width = 210;
         const margin = 5;
@@ -17,7 +21,7 @@ export class PdfPrinter implements Printer {
         this.usage(doc, usage, width, height);
         this.beadMapping(doc, project, reducedColor, width, height, margin);
 
-        doc.save(`beadifier_${project.boardConfiguration.nbBoardWidth}x${project.boardConfiguration.nbBoardHeight}.pdf`)
+        doc.save(`${filename}.pdf`)
     }
 
     boardMapping(doc: jsPDF, project: Project, margin: number, width: number, height: number) {
