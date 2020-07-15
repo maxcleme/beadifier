@@ -7,7 +7,7 @@ export class BoardConfiguration {
 
     constructor() {
         this.board = BOARDS.MIDI;
-        this.nbBoardHeight = 1;
-        this.nbBoardWidth = 1;
+        this.nbBoardHeight = 2;
+        this.nbBoardWidth = 2;
     }
 }

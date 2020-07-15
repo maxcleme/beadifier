@@ -9,7 +9,7 @@ import { Color } from '../../model/color/color.model';
 export class SvgPrinter implements Printer {
 
     name(): string {
-        return "SVG";
+        return "SVG (Beta)";
     }
 
     drawSVG(reducedColor: Uint8ClampedArray, usage: Map<string, number>, project: Project): SVGElement {
@@ -50,12 +50,15 @@ export class SvgPrinter implements Printer {
         ctx.fillRect(patternWidth + inventoryMargin + inventoryTabMargin + inventoryTabNameWidth, 0, inventoryTabMargin, usage.size * (inventoryTabHeight + inventoryTabMargin) + inventoryTabMargin);
         ctx.fillRect(patternWidth + inventoryMargin + 2 * inventoryTabMargin + inventoryTabNameWidth + inventoryTabCountWidth, 0, inventoryTabMargin, usage.size * (inventoryTabHeight + inventoryTabMargin) + inventoryTabMargin);
 
+
+
         // inventory values
         let y = 0
         Array.from(usage.entries()).sort(([k1, v1], [k2, v2]) => v2 - v1).forEach(([k, v]) => {
             ctx.font = "14px Roboto";
             ctx.textBaseline = "middle";
             ctx.textAlign = "center";
+
             ctx.fillText(k, patternWidth + inventoryMargin + inventoryTabMargin + inventoryTabNameWidth / 2, y * (inventoryTabMargin + inventoryTabHeight) + inventoryTabMargin + inventoryTabHeight / 2);
             ctx.fillText(v, patternWidth + inventoryMargin + 2 * inventoryTabMargin + inventoryTabNameWidth + inventoryTabCountWidth / 2, y * (inventoryTabMargin + inventoryTabHeight) + inventoryTabMargin + inventoryTabHeight / 2);
             y++

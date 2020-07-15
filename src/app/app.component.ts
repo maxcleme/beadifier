@@ -65,10 +65,6 @@ export class AppComponent {
         new DitheringConfiguration(),
         new RendererConfiguration()
       );
-
-      // mock loaded image
-      this.project.imageSrc = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAIAAABv85FHAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH5AQXCQkp5e4ieAAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAANElEQVQI152OKQ4AMAzD4v3/zxloQVTQSWM2yCFJtm0XpE5PoAgaBn91brlt76QA/RAeXy7yZHeimZDD7QAAAABJRU5ErkJggg==";
-      this.beadify(this.project);
     })
 
     this.scaler = new FitScreenScaler();

@@ -1,10 +1,14 @@
-<div fxLayout="column" fxFlex="100%" fxLayoutGap="1em">
-  <mat-form-field>
-    <mat-select aria-label="format" placeholder="Format" [(ngModel)]="printer" name="printer">
-      <mat-option *ngFor="let printer of availablePrinters" [value]="printer">
-        {{ printer.name() }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-  <button aria-label="export" mat-raised-button (click)="export()">Export</button>
+<div fxLayout="row wrap" fxFlex="100%" fxLayoutAlign="start start" fxLayoutGap="1em">
+  <div>
+    <mat-form-field>
+      <mat-select aria-label="format" placeholder="Format" [(ngModel)]="printer" name="printer">
+        <mat-option *ngFor="let printer of availablePrinters" [value]="printer">
+          {{ printer.name() }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div>
+    <button aria-label="export" mat-raised-button (click)="export()">Export</button>
+  </div>
 </div>
