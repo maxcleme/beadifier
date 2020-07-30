@@ -1,10 +1,7 @@
 import * as _ from 'lodash';
+
 import { Observable } from 'rxjs';
 import { Component, ViewChild, ElementRef, HostListener } from '@angular/core';
-
-
-import { PaletteEntry } from './model/palette/palette.model';
-import { BOARDS } from './model/board/board.model';
 
 import { PaletteService } from './palette/palette.service';
 import { Project } from './model/project/project.model';
@@ -72,6 +69,7 @@ export class AppComponent {
 
     this.scaler = new FitScreenScaler();
     this.loading = false;
+
   }
 
   _beadify = _.debounce(() => {
