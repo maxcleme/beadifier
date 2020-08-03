@@ -51,7 +51,7 @@ export class PaletteService {
             // already loaded
             return of(this.palettes.get(name));
         }
-        return this.http.get(`https://beadcolors.eremes.xyz/gen/v1/${name}.csv`, { responseType: 'arraybuffer' })
+        return this.http.get(`https://beadcolors.eremes.xyz/gen/v3/${name}.csv`, { responseType: 'arraybuffer' })
             .pipe(
                 map(p => {
                     let decoder = new TextDecoder("utf-8");
@@ -61,10 +61,11 @@ export class PaletteService {
                         .map(cells => ({
                             ref: cells[0],
                             name: cells[1],
+                            symbol: cells[2],
                             color: {
-                                r: +cells[2],
-                                g: +cells[3],
-                                b: +cells[4],
+                                r: +cells[3],
+                                g: +cells[4],
+                                b: +cells[5],
                                 a: 255,
                             },
                             enabled: true

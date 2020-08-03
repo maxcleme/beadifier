@@ -13,6 +13,7 @@ export class Palette {
 export class PaletteEntry {
     name: string;
     ref: string;
+    symbol: string;
     color: Color;
     enabled: boolean = true;
 
