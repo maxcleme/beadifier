@@ -4,6 +4,7 @@ import * as _ from 'lodash';
 import { Printer } from './../printer';
 import { Project } from '../../model/project/project.model';
 import { PaletteEntry } from '../../model/palette/palette.model';
+import { getPaletteEntryByColorRef } from '../../utils/utils';
 
 export class PdfPrinter implements Printer {
     
@@ -18,7 +19,7 @@ export class PdfPrinter implements Printer {
 
         let doc: jsPDF = new jsPDF();
         this.boardMapping(doc, project, margin, width, height);
-        this.usage(doc, usage, width, height);
+        this.usage(doc, usage, width, height, project);
         this.beadMapping(doc, project, reducedColor, width, height, margin);
 
         doc.save(`${filename}.pdf`)
@@ -43,7 +44,7 @@ export class PdfPrinter implements Printer {
         }
     }
 
-    usage(doc: jsPDF, usage: Map<string, number>, width: number, height: number) {
+    usage(doc: jsPDF, usage: Map<string, number>, width: number, height: number, project: Project) {
         const fontSize = 12;
         const usagePerPage = 30;
         const usageLineHeight = 8;
@@ -59,10 +60,24 @@ export class PdfPrinter implements Printer {
             const usageSheetWidthOffset = (width - refWidth - usageWidth) / 2;
             const usageSheetHeightOffset = (height - entries.length * usageLineHeight) / 2;
             Array.from(entries).forEach(([k, v], idx) => {
+                let paletteEntry = getPaletteEntryByColorRef(project.paletteConfiguration.palettes, k);
+
                 doc.rect(usageSheetWidthOffset, usageLineHeight * idx + usageSheetHeightOffset, refWidth, usageLineHeight);
                 doc.rect(usageSheetWidthOffset + refWidth, usageLineHeight * idx + usageSheetHeightOffset, usageWidth, usageLineHeight);
+                doc.rect(usageSheetWidthOffset + refWidth + usageWidth, usageLineHeight * idx + usageSheetHeightOffset, usageWidth, usageLineHeight);
+                
+                doc.setFillColor(paletteEntry.color.r,paletteEntry.color.g,paletteEntry.color.b);
+                doc.rect(usageSheetWidthOffset + refWidth + usageWidth + usageWidth / 4, usageLineHeight * idx + usageSheetHeightOffset + 1, usageWidth / 2, usageLineHeight -2, 'F');
+
+                doc.setTextColor(0, 0, 0);
                 doc.text(usageSheetWidthOffset + cellPadding, usageLineHeight * idx + usageSheetHeightOffset + usageLineHeight / 2 + this.fontSizeToHeightMm(fontSize), k);
                 doc.text(usageSheetWidthOffset + refWidth + cellPadding, usageLineHeight * idx + usageSheetHeightOffset + usageLineHeight / 2 + this.fontSizeToHeightMm(fontSize), "" + v);
+                
+                var symbolWidth = doc.getStringUnitWidth(paletteEntry.symbol) * doc.internal.getFontSize() / doc.internal.scaleFactor;
+                if (paletteEntry.color.r + paletteEntry.color.g + paletteEntry.color.b < 128 * 3) {
+                    doc.setTextColor(255, 255, 255);
+                }
+                doc.text(usageSheetWidthOffset + refWidth + usageWidth + usageWidth / 2 - symbolWidth / 2, usageLineHeight * idx + usageSheetHeightOffset + usageLineHeight / 2 + this.fontSizeToHeightMm(fontSize) / 2, "" + paletteEntry.symbol);
             });
         })
     }

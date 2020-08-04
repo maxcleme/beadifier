@@ -176,3 +176,10 @@ export function removeColorUnderPercent(percent: number, usage: Map<string, numb
         });
     });
 }
+
+export function getPaletteEntryByColorRef(palettes: Palette[], ref: string): PaletteEntry {
+    let paletteList = _.flatten(palettes.map(p => p.entries));
+    return  _.minBy(_.filter(paletteList, (paletteEntry => {
+        return paletteEntry.enabled && paletteEntry.ref === ref;
+    })));
+}
