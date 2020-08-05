@@ -99,7 +99,7 @@ export class SvgPrinter implements Printer {
                         ctx.textBaseline = "middle";
                         ctx.textAlign = "center";
 
-                        if ((0.299 * color.r + 0.587 * color.g + 0.114 * color.b) > 255 / 2) {
+                        if ((0.299 * paletteEntry.color.r + 0.587 * paletteEntry.color.g + 0.114 * paletteEntry.color.b) > (255 / 2)) {
                             ctx.fillStyle = `rgb(0,0,0)`;
                         } else {
                             ctx.fillStyle = `rgb(255,255,255)`;
