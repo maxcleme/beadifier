@@ -183,3 +183,7 @@ export function getPaletteEntryByColorRef(palettes: Palette[], ref: string): Pal
         return paletteEntry.enabled && paletteEntry.ref === ref;
     })));
 }
+
+export function colorIsLight(color: Color) {
+    return (0.299 * color.r + 0.587 * color.g + 0.114 * color.b) > 255 / 2;
+}

@@ -5,6 +5,7 @@ import { Printer } from '../printer';
 import { Project } from "../../model/project/project.model";
 import { PaletteEntry } from '../../model/palette/palette.model';
 import { Color } from '../../model/color/color.model';
+import { colorIsLight } from '../../utils/utils';
 
 export class SvgPrinter implements Printer {
 
@@ -99,7 +100,7 @@ export class SvgPrinter implements Printer {
                         ctx.textBaseline = "middle";
                         ctx.textAlign = "center";
 
-                        if ((0.299 * color.r + 0.587 * color.g + 0.114 * color.b) > 255 / 2) {
+                        if (colorIsLight(color)) {
                             ctx.fillStyle = `rgb(0,0,0)`;
                         } else {
                             ctx.fillStyle = `rgb(255,255,255)`;
