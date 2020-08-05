@@ -20,6 +20,7 @@ import { DitheringConfiguration } from './model/configuration/dithering-configur
 import { RendererConfiguration } from './model/configuration/renderer-configuration.model';
 import { PaletteConfiguration } from './model/configuration/palette-configuration.model';
 import { BoardConfiguration } from './model/configuration/board-configuration.model';
+import { ExportConfiguration } from './model/configuration/export-configuration.model';
 
 const BEAD_SIZE_PX = 10;
 
@@ -63,7 +64,8 @@ export class AppComponent {
         new MatchingConfiguration(),
         new ImageConfiguration(),
         new DitheringConfiguration(),
-        new RendererConfiguration()
+        new RendererConfiguration(),
+        new ExportConfiguration()
       );
     })
 

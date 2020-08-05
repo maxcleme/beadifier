@@ -1,4 +1,12 @@
-<div fxLayout="row wrap" fxFlex="100%" fxLayoutAlign="start start" fxLayoutGap="1em">
+<div style="padding-bottom: 1em">
+  <div fxLayout="row wrap" fxLayoutAlign="space-between start">
+    <div>
+      <mat-slide-toggle [(ngModel)]="configuration.useSymbols" name="use symbols" (change)="callback()">Use Symbols </mat-slide-toggle>
+    </div>
+  </div>
+</div>
+
+<div fxLayout="row wrap" fxLayoutAlign="space-between start">
   <div>
     <mat-form-field>
       <mat-select aria-label="format" placeholder="Format" [(ngModel)]="printer" name="printer">
