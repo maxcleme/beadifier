@@ -57,7 +57,7 @@ export class PdfPrinter implements Printer {
         doc.setFontSize(fontSize);
         _.chunk(Array.from(usage.entries()).sort(([k1, v1], [k2, v2]) => v2 - v1), usagePerPage).forEach(entries => {
             doc.addPage();
-            const usageSheetWidthOffset = (width - refWidth - usageWidth) / 2;
+            const usageSheetWidthOffset = (width - (refWidth * 2) - usageWidth) / 2;
             const usageSheetHeightOffset = (height - entries.length * usageLineHeight) / 2;
             Array.from(entries).forEach(([k, v], idx) => {
                 let paletteEntry = getPaletteEntryByColorRef(project.paletteConfiguration.palettes, k);
@@ -95,7 +95,6 @@ export class PdfPrinter implements Printer {
                 let textOffset = (doc.internal.pageSize.width - textWidth) / 2;
                 doc.text(textOffset, margin * 2, text);
 
-
                 doc.setFontSize(project.boardConfiguration.board.exportedFontSize);
                 for (let y = 0; y < project.boardConfiguration.board.nbBeadPerRow; y++) {
                     for (let x = 0; x < project.boardConfiguration.board.nbBeadPerRow; x++) {
@@ -108,13 +107,17 @@ export class PdfPrinter implements Printer {
                                 && entry.color.a == reducedColor[4 * ((y + i * project.boardConfiguration.board.nbBeadPerRow) * project.boardConfiguration.board.nbBeadPerRow * project.boardConfiguration.nbBoardWidth + x + j * project.boardConfiguration.board.nbBeadPerRow) + 3];
                         });
                         if (paletteEntry) {
-                            text = paletteEntry.ref;
+                            text = paletteEntry.symbol;
                             let textWidth = doc.getStringUnitWidth(text) * doc.internal.getFontSize() / doc.internal.scaleFactor;
                             let textOffsetWidth = (beadSize - textWidth) / 2;
-                            doc.text(x * beadSize + margin + textOffsetWidth, +(y * beadSize + beadSheetOffset + (beadSize - project.boardConfiguration.board.exportedFontSize * 0.35) / 1.5).toFixed(2), text);
-
+                            
                             doc.setFillColor(paletteEntry.color.r, paletteEntry.color.g, paletteEntry.color.b);
-                            doc.rect(x * beadSize + margin + beadSize * .1, y * beadSize + beadSheetOffset + beadSize * .6, beadSize - 2 * beadSize * .1, beadSize * .3, 'FD');
+                            doc.rect(x * beadSize + margin + beadSize * .1, y * beadSize + beadSheetOffset + beadSize * 0.1, beadSize - 2 * beadSize * .1, beadSize - 2 * beadSize * 0.1, 'FD');
+                            
+                            let foregroundColor = foreground(paletteEntry.color);
+                            doc.setTextColor(foregroundColor.r, foregroundColor.g, foregroundColor.b);
+
+                            doc.text(x * beadSize + margin + textOffsetWidth, (y * beadSize + beadSheetOffset + (beadSize / 2) + (project.boardConfiguration.board.exportedFontSize / 2) * 0.35), text);
                         } else {
                             doc.line(x * beadSize + margin, y * beadSize + beadSheetOffset, x * beadSize + margin + beadSize, y * beadSize + beadSheetOffset + beadSize);
                         }
