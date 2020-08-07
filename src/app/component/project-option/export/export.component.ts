@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Project } from '../../../model/project/project.model';
 import { ExportConfiguration } from '../../../model/configuration/export-configuration.model';
 import { Printer } from '../../../printer/printer';
