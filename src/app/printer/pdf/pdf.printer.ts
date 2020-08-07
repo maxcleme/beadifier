@@ -4,7 +4,7 @@ import * as _ from 'lodash';
 import { Printer } from './../printer';
 import { Project } from '../../model/project/project.model';
 import { PaletteEntry } from '../../model/palette/palette.model';
-import { getPaletteEntryByColorRef, colorIsLight } from '../../utils/utils';
+import { getPaletteEntryByColorRef, foreground } from '../../utils/utils';
 
 export class PdfPrinter implements Printer {
     
@@ -73,10 +73,10 @@ export class PdfPrinter implements Printer {
                 doc.text(usageSheetWidthOffset + cellPadding, usageLineHeight * idx + usageSheetHeightOffset + usageLineHeight / 2 + this.fontSizeToHeightMm(fontSize), k);
                 doc.text(usageSheetWidthOffset + refWidth + cellPadding, usageLineHeight * idx + usageSheetHeightOffset + usageLineHeight / 2 + this.fontSizeToHeightMm(fontSize), "" + v);
                 
-                var symbolWidth = doc.getStringUnitWidth(paletteEntry.symbol) * doc.internal.getFontSize() / doc.internal.scaleFactor;
-                if (! colorIsLight (paletteEntry.color)) {
-                    doc.setTextColor(255, 255, 255);
-                }
+                let symbolWidth = doc.getStringUnitWidth(paletteEntry.symbol) * doc.internal.getFontSize() / doc.internal.scaleFactor;
+                let foregroundColor = foreground(paletteEntry.color);
+                doc.setTextColor(foregroundColor.r, foregroundColor.g, foregroundColor.b);
+                
                 doc.text(usageSheetWidthOffset + refWidth + usageWidth + usageWidth / 2 - symbolWidth / 2, usageLineHeight * idx + usageSheetHeightOffset + usageLineHeight / 2 + this.fontSizeToHeightMm(fontSize) / 2, "" + paletteEntry.symbol);
             });
         })

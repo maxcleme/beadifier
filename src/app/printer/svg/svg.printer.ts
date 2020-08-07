@@ -5,7 +5,7 @@ import { Printer } from '../printer';
 import { Project } from "../../model/project/project.model";
 import { PaletteEntry } from '../../model/palette/palette.model';
 import { Color } from '../../model/color/color.model';
-import { colorIsLight } from '../../utils/utils';
+import { foreground } from '../../utils/utils';
 
 export class SvgPrinter implements Printer {
 
@@ -100,11 +100,9 @@ export class SvgPrinter implements Printer {
                         ctx.textBaseline = "middle";
                         ctx.textAlign = "center";
 
-                        if (colorIsLight(color)) {
-                            ctx.fillStyle = `rgb(0,0,0)`;
-                        } else {
-                            ctx.fillStyle = `rgb(255,255,255)`;
-                        }
+                        let foregroundColor = foreground(paletteEntry.color);
+                        ctx.fillStyle = `rgb(${foregroundColor.r},${foregroundColor.g},${foregroundColor.b})`;
+                        
                         ctx.fillText(paletteEntry.ref, beadX + beadSize / 2, beadY + beadSize / 2);
                     }
                 } else {
