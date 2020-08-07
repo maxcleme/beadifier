@@ -17,7 +17,6 @@ export class ExportComponent {
     @Input() project: Project;
     @Input() usage: Map<string, number>;
     @Input() reducedColor: Uint8ClampedArray;
-    @Output() onChange = new EventEmitter<ExportConfiguration>();
 
     availablePrinters: Printer[];
     printer: Printer;
@@ -34,9 +33,5 @@ export class ExportComponent {
 
     export() {
         this.printer.print(this.reducedColor, this.usage, this.project, `beadifier_${this.project.boardConfiguration.nbBoardWidth}x${this.project.boardConfiguration.nbBoardHeight}`);
-    }
-
-    callback() {
-        this.onChange.emit(this.configuration)
     }
 }
