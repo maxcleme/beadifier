@@ -118,6 +118,8 @@ export class PdfPrinter implements Printer {
                             doc.setTextColor(foregroundColor.r, foregroundColor.g, foregroundColor.b);
 
                             doc.text(x * beadSize + margin + textOffsetWidth, (y * beadSize + beadSheetOffset + (beadSize / 2) + (project.boardConfiguration.board.exportedFontSize / 2) * 0.35), text);
+
+                            doc.setTextColor(0, 0, 0);
                         } else {
                             doc.line(x * beadSize + margin, y * beadSize + beadSheetOffset, x * beadSize + margin + beadSize, y * beadSize + beadSheetOffset + beadSize);
                         }
