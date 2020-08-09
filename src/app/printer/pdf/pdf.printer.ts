@@ -7,7 +7,7 @@ import { PaletteEntry } from '../../model/palette/palette.model';
 import { getPaletteEntryByColorRef, foreground } from '../../utils/utils';
 
 export class PdfPrinter implements Printer {
-    
+
     name(): string {
         return "PDF";
     }
@@ -65,18 +65,18 @@ export class PdfPrinter implements Printer {
                 doc.rect(usageSheetWidthOffset, usageLineHeight * idx + usageSheetHeightOffset, refWidth, usageLineHeight);
                 doc.rect(usageSheetWidthOffset + refWidth, usageLineHeight * idx + usageSheetHeightOffset, usageWidth, usageLineHeight);
                 doc.rect(usageSheetWidthOffset + refWidth + usageWidth, usageLineHeight * idx + usageSheetHeightOffset, usageWidth, usageLineHeight);
-                
-                doc.setFillColor(paletteEntry.color.r,paletteEntry.color.g,paletteEntry.color.b);
-                doc.rect(usageSheetWidthOffset + refWidth + usageWidth + usageWidth / 4, usageLineHeight * idx + usageSheetHeightOffset + 1, usageWidth / 2, usageLineHeight -2, 'F');
+
+                doc.setFillColor(paletteEntry.color.r, paletteEntry.color.g, paletteEntry.color.b);
+                doc.rect(usageSheetWidthOffset + refWidth + usageWidth + usageWidth / 4, usageLineHeight * idx + usageSheetHeightOffset + 1, usageWidth / 2, usageLineHeight - 2, 'F');
 
                 doc.setTextColor(0, 0, 0);
                 doc.text(usageSheetWidthOffset + cellPadding, usageLineHeight * idx + usageSheetHeightOffset + usageLineHeight / 2 + this.fontSizeToHeightMm(fontSize), k);
                 doc.text(usageSheetWidthOffset + refWidth + cellPadding, usageLineHeight * idx + usageSheetHeightOffset + usageLineHeight / 2 + this.fontSizeToHeightMm(fontSize), "" + v);
-                
+
                 let symbolWidth = doc.getStringUnitWidth(paletteEntry.symbol) * doc.internal.getFontSize() / doc.internal.scaleFactor;
                 let foregroundColor = foreground(paletteEntry.color);
                 doc.setTextColor(foregroundColor.r, foregroundColor.g, foregroundColor.b);
-                
+
                 doc.text(usageSheetWidthOffset + refWidth + usageWidth + usageWidth / 2 - symbolWidth / 2, usageLineHeight * idx + usageSheetHeightOffset + usageLineHeight / 2 + this.fontSizeToHeightMm(fontSize) / 2, "" + paletteEntry.symbol);
             });
         })
@@ -94,8 +94,8 @@ export class PdfPrinter implements Printer {
                 let textWidth = doc.getStringUnitWidth(text) * doc.internal.getFontSize() / doc.internal.scaleFactor;
                 let textOffset = (doc.internal.pageSize.width - textWidth) / 2;
                 doc.text(textOffset, margin * 2, text);
-
-                doc.setFontSize(project.boardConfiguration.board.exportedFontSize);
+                
+                doc.setFontSize(this.getFontSizeForBoardsOnSymbols(project));
                 for (let y = 0; y < project.boardConfiguration.board.nbBeadPerRow; y++) {
                     for (let x = 0; x < project.boardConfiguration.board.nbBeadPerRow; x++) {
                         doc.rect(x * beadSize + margin, y * beadSize + beadSheetOffset, beadSize, beadSize);
@@ -110,15 +110,14 @@ export class PdfPrinter implements Printer {
                             text = paletteEntry.symbol;
                             let textWidth = doc.getStringUnitWidth(text) * doc.internal.getFontSize() / doc.internal.scaleFactor;
                             let textOffsetWidth = (beadSize - textWidth) / 2;
-                            
+
                             doc.setFillColor(paletteEntry.color.r, paletteEntry.color.g, paletteEntry.color.b);
                             doc.rect(x * beadSize + margin + beadSize * .1, y * beadSize + beadSheetOffset + beadSize * 0.1, beadSize - 2 * beadSize * .1, beadSize - 2 * beadSize * 0.1, 'FD');
-                            
+
                             let foregroundColor = foreground(paletteEntry.color);
                             doc.setTextColor(foregroundColor.r, foregroundColor.g, foregroundColor.b);
 
-                            doc.text(x * beadSize + margin + textOffsetWidth, (y * beadSize + beadSheetOffset + (beadSize / 2) + (project.boardConfiguration.board.exportedFontSize / 2) * 0.35), text);
-
+                            doc.text(x * beadSize + margin + textOffsetWidth, +(y * beadSize + beadSheetOffset + (beadSize / 2 + (this.fontSizeToHeightMm(project.boardConfiguration.board.exportedFontSize) / 2)) + beadSize * 0.1).toFixed(2), text);
                             doc.setTextColor(0, 0, 0);
                         } else {
                             doc.line(x * beadSize + margin, y * beadSize + beadSheetOffset, x * beadSize + margin + beadSize, y * beadSize + beadSheetOffset + beadSize);
@@ -131,6 +130,20 @@ export class PdfPrinter implements Printer {
 
     fontSizeToHeightMm(fontSize: number) {
         return (fontSize * 0.35) / 1.5;
+    }
+
+    getFontSizeForBoardsOnSymbols(project) {
+        let fontSize = project.boardConfiguration.board.exportedFontSize;
+        switch (project.boardConfiguration.board.name) {
+            case 'Midi':
+                fontSize = 12;
+                break;
+            case 'Mini':
+                fontSize = 6;
+                break;
+        }
+
+        return fontSize;
     }
 
 }
