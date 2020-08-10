@@ -85,8 +85,9 @@ export class PdfPrinter implements Printer {
                     let foregroundColor = foreground(paletteEntry.color);
                     doc.setTextColor(foregroundColor.r, foregroundColor.g, foregroundColor.b);
                     
-                    let symbolWidth = doc.getStringUnitWidth(paletteEntry.symbol) * doc.internal.getFontSize() / doc.internal.scaleFactor;
-                    doc.text(usageSheetWidthOffset + refWidth + usageWidth + usageWidth / 2 - symbolWidth / 2, usageLineHeight * idx + usageSheetHeightOffset + usageLineHeight / 2 + this.fontSizeToHeightMm(fontSize) / 2, "" + paletteEntry.symbol);
+                    let symbolText = paletteEntry.prefix + paletteEntry.symbol;
+                    let symbolWidth = doc.getStringUnitWidth(symbolText) * doc.internal.getFontSize() / doc.internal.scaleFactor;
+                    doc.text(usageSheetWidthOffset + refWidth + usageWidth + usageWidth / 2 - symbolWidth / 2, usageLineHeight * idx + usageSheetHeightOffset + usageLineHeight / 2 + this.fontSizeToHeightMm(fontSize) / 2, "" + symbolText);
                 }
             });
         })
@@ -122,7 +123,7 @@ export class PdfPrinter implements Printer {
                         if (paletteEntry) {
                             text = paletteEntry.ref;
                             if (project.exportConfiguration.useSymbols) {
-                                text = paletteEntry.symbol;
+                                text = paletteEntry.prefix + paletteEntry.symbol;
                             }
                             let textWidth = doc.getStringUnitWidth(text) * doc.internal.getFontSize() / doc.internal.scaleFactor;
                             let textOffsetWidth = (beadSize - textWidth) / 2;
@@ -157,10 +158,10 @@ export class PdfPrinter implements Printer {
         let fontSize = project.boardConfiguration.board.exportedFontSize;
         switch (project.boardConfiguration.board.name) {
             case 'Midi':
-                fontSize = 12;
+                fontSize = 11;
                 break;
             case 'Mini':
-                fontSize = 6;
+                fontSize = 5;
                 break;
         }
 

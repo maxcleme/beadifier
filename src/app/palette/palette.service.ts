@@ -23,15 +23,15 @@ export class PaletteService {
 
     getAll(): Observable<Palette[]> {
         return forkJoin([
-            this.loadPalette("hama"),
-            this.loadPalette("nabbi"),
-            this.loadPalette("artkal_a", "Artkal A-2.6MM"),
-            this.loadPalette("artkal_c", "Artkal C-2.6MM"),
-            this.loadPalette("artkal_r", "Artkal R-5MM"),
-            this.loadPalette("artkal_s", "Artkal S-5MM"),
-            this.loadPalette("perler").pipe(map(this.perlerTransform)),
-            this.loadPalette("perler_mini", "Perler Mini").pipe(map(this.perlerTransform)),
-            this.loadPalette("diamondDotz", "Diamond Dotz"),
+            this.loadPalette("hama", "H"),
+            this.loadPalette("nabbi", "N"),
+            this.loadPalette("artkal_a", "A", "Artkal A-2.6MM"),
+            this.loadPalette("artkal_c", "C", "Artkal C-2.6MM"),
+            this.loadPalette("artkal_r", "R", "Artkal R-5MM"),
+            this.loadPalette("artkal_s", "S", "Artkal S-5MM"),
+            this.loadPalette("perler", "P").pipe(map(this.perlerTransform)),
+            this.loadPalette("perler_mini", "M", "Perler Mini").pipe(map(this.perlerTransform)),
+            this.loadPalette("diamondDotz", "D", "Diamond Dotz"),
         ]);
     }
 
@@ -46,7 +46,7 @@ export class PaletteService {
     }
 
 
-    private loadPalette(name: string, nameOverride?: string): Observable<Palette> {
+    private loadPalette(name: string, prefix: string, nameOverride?: string): Observable<Palette> {
         if (this.palettes.has(name)) {
             // already loaded
             return of(this.palettes.get(name));
@@ -68,6 +68,7 @@ export class PaletteService {
                                 b: +cells[5],
                                 a: 255,
                             },
+                            prefix: prefix,
                             enabled: true
                         }))
                         .value();
