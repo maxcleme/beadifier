@@ -21,8 +21,8 @@ export class ExportComponent {
 
     constructor() {
         this.availablePrinters = [
-            new PdfPrinter(),
             new SvgPrinter(),
+            new PdfPrinter(),
             new PngPrinter(),
             new JpgPrinter()
         ]
