@@ -108,7 +108,7 @@ export class PdfPrinter implements Printer {
 
                 doc.setFontSize(project.boardConfiguration.board.exportedFontSize);
                 if (project.exportConfiguration.useSymbols) {
-                    doc.setFontSize(this.getFontSizeForBoardsOnSymbols(project));
+                    doc.setFontSize(project.boardConfiguration.board.exportedSymbolSize);
                 }
                 for (let y = 0; y < project.boardConfiguration.board.nbBeadPerRow; y++) {
                     for (let x = 0; x < project.boardConfiguration.board.nbBeadPerRow; x++) {
@@ -152,20 +152,6 @@ export class PdfPrinter implements Printer {
 
     fontSizeToHeightMm(fontSize: number) {
         return (fontSize * 0.35) / 1.5;
-    }
-
-    getFontSizeForBoardsOnSymbols(project) {
-        let fontSize = project.boardConfiguration.board.exportedFontSize;
-        switch (project.boardConfiguration.board.name) {
-            case 'Midi':
-                fontSize = 11;
-                break;
-            case 'Mini':
-                fontSize = 5;
-                break;
-        }
-
-        return fontSize;
     }
 
 }
