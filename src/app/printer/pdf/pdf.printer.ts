@@ -63,28 +63,22 @@ export class PdfPrinter implements Printer {
             }
             const usageSheetHeightOffset = (height - entries.length * usageLineHeight) / 2;
             Array.from(entries).forEach(([k, v], idx) => {
-	            doc.rect(usageSheetWidthOffset, usageLineHeight * idx + usageSheetHeightOffset, refWidth, usageLineHeight);
-                doc.rect(usageSheetWidthOffset + refWidth, usageLineHeight * idx + usageSheetHeightOffset, usageWidth, usageLineHeight);
-
                 const paletteEntry = getPaletteEntryByColorRef(project.paletteConfiguration.palettes, k);
                 doc.setFillColor(paletteEntry.color.r, paletteEntry.color.g, paletteEntry.color.b);
 
-                doc.rect(usageSheetWidthOffset + 1, usageLineHeight * idx + usageSheetHeightOffset + 1, refWidth - 2, usageLineHeight - 2, 'F');
+	            doc.rect(usageSheetWidthOffset, usageLineHeight * idx + usageSheetHeightOffset, refWidth, usageLineHeight, 'FD');
+                doc.rect(usageSheetWidthOffset + refWidth, usageLineHeight * idx + usageSheetHeightOffset, usageWidth, usageLineHeight, 'FD');
 
                 let foregroundColor = foreground(paletteEntry.color);
                 doc.setTextColor(foregroundColor.r, foregroundColor.g, foregroundColor.b);
                 doc.text(usageSheetWidthOffset + cellPadding, usageLineHeight * idx + usageSheetHeightOffset + usageLineHeight / 2 + this.fontSizeToHeightMm(fontSize) / 2, k);
-                doc.setTextColor(0, 0, 0);
 	    
 	            if ( project.exportConfiguration.useSymbols) {
                     doc.setFillColor(paletteEntry.color.r, paletteEntry.color.g, paletteEntry.color.b);
-                    doc.rect(usageSheetWidthOffset + refWidth + usageWidth, usageLineHeight * idx + usageSheetHeightOffset, usageWidth, usageLineHeight);
-                    doc.rect(usageSheetWidthOffset + refWidth + usageWidth + usageWidth / 4, usageLineHeight * idx + usageSheetHeightOffset + 1, usageWidth / 2, usageLineHeight - 2, 'F');
-                    doc.setTextColor(0, 0, 0);
+                    doc.rect(usageSheetWidthOffset + refWidth + usageWidth, usageLineHeight * idx + usageSheetHeightOffset, usageWidth, usageLineHeight, 'FD');
                 }
 
                 let textWidth = doc.getStringUnitWidth("" + v) * doc.internal.getFontSize() / doc.internal.scaleFactor;
-
                 doc.text(usageSheetWidthOffset + refWidth + (usageWidth / 2) - (textWidth / 2), usageLineHeight * idx + usageSheetHeightOffset + usageLineHeight / 2 + this.fontSizeToHeightMm(fontSize) / 2, "" + v);
 		
                 if ( project.exportConfiguration.useSymbols) {
