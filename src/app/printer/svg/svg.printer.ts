@@ -115,7 +115,11 @@ export class SvgPrinter implements Printer {
                         let foregroundColor = foreground(paletteEntry.color);
                         ctx.fillStyle = `rgb(${foregroundColor.r},${foregroundColor.g},${foregroundColor.b})`;
                         
-                        ctx.fillText(paletteEntry.ref, beadX + beadSize / 2, beadY + beadSize / 2);
+                        let referenceText = paletteEntry.ref;
+                        if (project.exportConfiguration.useSymbols) {
+                            referenceText = paletteEntry.prefix + paletteEntry.symbol;
+                        }
+                        ctx.fillText(referenceText, beadX + beadSize / 2, beadY + beadSize / 2);
                     }
                 } else {
                     ctx.fillStyle = "rgb(0,0,0)";
