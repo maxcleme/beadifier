@@ -44,7 +44,6 @@ export class SvgPrinter implements Printer {
         ctx.fillStyle = 'rgb(255,255,255)'
         ctx.fillRect(0, 0, patternWidth + inventoryMargin + inventoryWidth, Math.max(patternHeight, inventoryHeight));
 
-        // Get the fill of the current colour?
         ctx.fillStyle = 'rgb(0,0,0)';
 
         // inventory table
