@@ -67,15 +67,24 @@ export class SvgPrinter implements Printer {
             ctx.textBaseline = "middle";
             ctx.textAlign = "center";
 
+            const paletteEntry = getPaletteEntryByColorRef(project.paletteConfiguration.palettes, k);
+            ctx.fillStyle = `rgb(${paletteEntry.color.r},${paletteEntry.color.g},${paletteEntry.color.b})`;
+            ctx.fillRect(patternWidth + inventoryMargin + inventoryTabMargin, y * (inventoryTabMargin + inventoryTabHeight) + inventoryTabMargin, inventoryTabNameWidth, inventoryTabHeight);
+            ctx.fillRect(patternWidth + inventoryMargin + 2 * inventoryTabMargin + inventoryTabNameWidth, y * (inventoryTabMargin + inventoryTabHeight) + inventoryTabMargin, inventoryTabCountWidth, inventoryTabHeight);
+            ctx.fillRect(patternWidth + inventoryMargin + 3 * inventoryTabMargin + inventoryTabNameWidth + inventoryTabCountWidth, y * (inventoryTabMargin + inventoryTabHeight) + inventoryTabMargin, inventoryTabSymbolWidth, inventoryTabHeight);
+
+            let foregroundColor = foreground(paletteEntry.color);
+            ctx.fillStyle = `rgb(${foregroundColor.r},${foregroundColor.g},${foregroundColor.b})`;
             ctx.fillText(k, patternWidth + inventoryMargin + inventoryTabMargin + inventoryTabNameWidth / 2, y * (inventoryTabMargin + inventoryTabHeight) + inventoryTabMargin + inventoryTabHeight / 2);
             ctx.fillText(v, patternWidth + inventoryMargin + 2 * inventoryTabMargin + inventoryTabNameWidth + inventoryTabCountWidth / 2, y * (inventoryTabMargin + inventoryTabHeight) + inventoryTabMargin + inventoryTabHeight / 2);
             
-            const paletteEntry = getPaletteEntryByColorRef(project.paletteConfiguration.palettes, k);
             if (project.exportConfiguration.useSymbols) {
                 ctx.fillText(paletteEntry.prefix + paletteEntry.symbol, patternWidth + inventoryMargin + 3 * inventoryTabMargin + inventoryTabNameWidth + inventoryTabCountWidth + inventoryTabSymbolWidth / 2, y * (inventoryTabMargin + inventoryTabHeight) + inventoryTabMargin + inventoryTabHeight / 2);
             }
-            y++
+            y++;
         });
+
+        ctx.fillStyle = 'rgb(0,0,0)';
 
         // boards
         for (let x = 0; x < project.boardConfiguration.nbBoardWidth + 1; x++) {
