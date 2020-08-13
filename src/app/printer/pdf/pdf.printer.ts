@@ -82,10 +82,10 @@ export class PdfPrinter implements Printer {
                 doc.text(usageSheetWidthOffset + refWidth + (usageWidth / 2) - (textWidth / 2), usageLineHeight * idx + usageSheetHeightOffset + usageLineHeight / 2 + this.fontSizeToHeightMm(fontSize) / 2, "" + v);
 		
                 if ( project.exportConfiguration.useSymbols) {
-                    let foregroundColor = foreground(paletteEntry.color);
-                    doc.setTextColor(foregroundColor.r, foregroundColor.g, foregroundColor.b);
-                    
-                    let symbolText = paletteEntry.prefix + paletteEntry.symbol;
+                    let symbolText = paletteEntry.symbol;
+                    if (project.paletteConfiguration.palettes.length > 1) {
+                        symbolText = paletteEntry.prefix + symbolText;
+                    }
                     let symbolWidth = doc.getStringUnitWidth(symbolText) * doc.internal.getFontSize() / doc.internal.scaleFactor;
                     doc.text(usageSheetWidthOffset + refWidth + usageWidth + usageWidth / 2 - symbolWidth / 2, usageLineHeight * idx + usageSheetHeightOffset + usageLineHeight / 2 + this.fontSizeToHeightMm(fontSize) / 2, "" + symbolText);
                 }
@@ -123,7 +123,10 @@ export class PdfPrinter implements Printer {
                         if (paletteEntry) {
                             text = paletteEntry.ref;
                             if (project.exportConfiguration.useSymbols) {
-                                text = paletteEntry.prefix + paletteEntry.symbol;
+                                text = paletteEntry.symbol;
+                                if (project.paletteConfiguration.palettes.length > 1) {
+                                    text = paletteEntry.prefix + text;
+                                }
                             }
                             let textWidth = doc.getStringUnitWidth(text) * doc.internal.getFontSize() / doc.internal.scaleFactor;
                             let textOffsetWidth = (beadSize - textWidth) / 2;
