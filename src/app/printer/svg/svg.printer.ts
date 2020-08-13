@@ -78,7 +78,12 @@ export class SvgPrinter implements Printer {
             ctx.fillText(v, patternWidth + inventoryMargin + 2 * inventoryTabMargin + inventoryTabNameWidth + inventoryTabCountWidth / 2, y * (inventoryTabMargin + inventoryTabHeight) + inventoryTabMargin + inventoryTabHeight / 2);
             
             if (project.exportConfiguration.useSymbols) {
-                ctx.fillText(paletteEntry.prefix + paletteEntry.symbol, patternWidth + inventoryMargin + 3 * inventoryTabMargin + inventoryTabNameWidth + inventoryTabCountWidth + inventoryTabSymbolWidth / 2, y * (inventoryTabMargin + inventoryTabHeight) + inventoryTabMargin + inventoryTabHeight / 2);
+                let text = paletteEntry.symbol
+                if (project.paletteConfiguration.palettes.length > 1) {
+                    text = paletteEntry.prefix + text;
+                }
+
+                ctx.fillText(text, patternWidth + inventoryMargin + 3 * inventoryTabMargin + inventoryTabNameWidth + inventoryTabCountWidth + inventoryTabSymbolWidth / 2, y * (inventoryTabMargin + inventoryTabHeight) + inventoryTabMargin + inventoryTabHeight / 2);
             }
             y++;
         });
@@ -125,7 +130,10 @@ export class SvgPrinter implements Printer {
                         
                         let referenceText = paletteEntry.ref;
                         if (project.exportConfiguration.useSymbols) {
-                            referenceText = paletteEntry.prefix + paletteEntry.symbol;
+                            referenceText = paletteEntry.symbol
+                            if (project.paletteConfiguration.palettes.length > 1) {
+                                referenceText = paletteEntry.prefix + referenceText;
+                            }
                         }
                         ctx.fillText(referenceText, beadX + beadSize / 2, beadY + beadSize / 2);
                     }
