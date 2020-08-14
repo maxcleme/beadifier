@@ -1,4 +1,4 @@
-<mat-tab-group dynamicHeight [selectedIndex]="5">
+<mat-tab-group dynamicHeight>
   <mat-tab label="Configuration">
     <div class="example-small-box mat-elevation-z4">
       <form (submit)="preventSubmit($event)">
@@ -74,8 +74,8 @@
   <mat-tab label="Save & Export" [disabled]="!project.imageSrc">
     <div class="example-large-box mat-elevation-z4">
       <form (submit)="preventSubmit($event)">
-        <div style="padding:1em;" fxLayout="row wrap" fxLayoutAlign="space-between start">
-          <export [project]="project" [usage]="usage" [reducedColor]="reducedColor"></export>
+        <div style="padding:1em;">
+          <export [project]="project" [usage]="usage" [reducedColor]="reducedColor" [configuration]="project.exportConfiguration"></export>
         </div>
       </form>
     </div>

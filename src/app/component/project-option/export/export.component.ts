@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Project } from '../../../model/project/project.model';
+import { ExportConfiguration } from '../../../model/configuration/export-configuration.model';
 import { Printer } from '../../../printer/printer';
 import { PdfPrinter } from '../../../printer/pdf/pdf.printer';
 import { SvgPrinter } from '../../../printer/svg/svg.printer';
@@ -12,6 +13,7 @@ import { JpgPrinter } from '../../../printer/jpg/jpg.printer';
     styleUrls: ['./export.component.scss']
 })
 export class ExportComponent {
+    @Input() configuration: ExportConfiguration;
     @Input() project: Project;
     @Input() usage: Map<string, number>;
     @Input() reducedColor: Uint8ClampedArray;
@@ -21,8 +23,8 @@ export class ExportComponent {
 
     constructor() {
         this.availablePrinters = [
-            new SvgPrinter(),
             new PdfPrinter(),
+            new SvgPrinter(),
             new PngPrinter(),
             new JpgPrinter()
         ]

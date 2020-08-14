@@ -7,6 +7,7 @@ import './RobotoMono'
 import { Printer } from './../printer';
 import { Project } from '../../model/project/project.model';
 import { PaletteEntry } from '../../model/palette/palette.model';
+import { foreground, getPaletteEntryByColorRef } from '../../utils/utils';
 
 class rect {
     x: number
@@ -38,7 +39,7 @@ class rect {
 }
 
 export class PdfPrinter implements Printer {
-    
+
     name(): string {
         return "PDF";
     }
@@ -52,7 +53,7 @@ export class PdfPrinter implements Printer {
         doc.setFont('RobotoMono');
 
         this.boardMapping(doc, project, margin, width, height);
-        this.usage(doc, usage, width, height, margin);
+        this.usage(doc, usage, width, height, margin, project);
         this.beadMapping(doc, project, reducedColor, width, height, margin);
         doc.save(`${filename}.pdf`)
     }
@@ -90,7 +91,7 @@ export class PdfPrinter implements Printer {
         }
     }
 
-    usage(doc: jsPDF, usage: Map<string, number>, width: number, height: number, margin:number) {
+    usage(doc: jsPDF, usage: Map<string, number>, width: number, height: number, margin:number, project: Project) {
         const usagePerPage = 30;
 
         const maxUsage = (""+_.max(Array.from(usage.values())))
@@ -99,6 +100,7 @@ export class PdfPrinter implements Printer {
         const longestWord = maxUsage.length > longestRef.length ? maxUsage: longestRef;
 
         const refWidth = 50;
+        const symbolWidth = project.exportConfiguration.useSymbols ? 50 : 0;
         const usageWidth = 50;
 
         const heightWithMargins = (height - 2 * margin) 
@@ -106,18 +108,24 @@ export class PdfPrinter implements Printer {
 
         _.chunk(Array.from(usage.entries()).sort(([k1, v1], [k2, v2]) => v2 - v1), usagePerPage).forEach(entries => {
             doc.addPage();
-            const usageSheetWidthOffset = (width - refWidth - usageWidth) / 2;
+            const usageSheetWidthOffset = (width - refWidth - usageWidth - symbolWidth) / 2;
             const usageSheetHeightOffset = margin;
 
             // ref column
             Array.from(entries).forEach(([k, v], idx) => {
+                const entry = getPaletteEntryByColorRef(project.paletteConfiguration.palettes, ""+k);
+                let bg = entry.color;
+                let fg = foreground(bg);
+                doc.setFillColor(bg.r, bg.g, bg.b);
+                doc.setTextColor(fg.r, fg.g, fg.b);
+
                 const container = new rect(
                     usageSheetWidthOffset, 
                     rowHeight * idx + usageSheetHeightOffset, 
                     refWidth, 
                     rowHeight
                 )
-                doc.rect(container.x, container.y, container.width, container.height);
+                doc.rect(container.x, container.y, container.width, container.height, 'FD');
 
                 const txtContainer = container.scale(.9, .8)
                 let text = k;
@@ -130,18 +138,54 @@ export class PdfPrinter implements Printer {
                         align: "center"
                     }
                 );
-
             });
+
+            if (project.exportConfiguration.useSymbols) {
+                // symbol column
+                Array.from(entries).forEach(([k, v], idx) => {
+                    const entry = getPaletteEntryByColorRef(project.paletteConfiguration.palettes, ""+k);
+                    let bg = entry.color;
+                    let fg = foreground(bg);
+                    doc.setFillColor(bg.r, bg.g, bg.b);
+                    doc.setTextColor(fg.r, fg.g, fg.b);
+
+                    const container = new rect(
+                        usageSheetWidthOffset + refWidth, 
+                        rowHeight * idx + usageSheetHeightOffset, 
+                        symbolWidth, 
+                        rowHeight
+                    )
+                    doc.rect(container.x, container.y, container.width, container.height, 'FD');
+    
+                    const txtContainer = container.scale(.9, .8)
+                    let text = (project.paletteConfiguration.palettes.length  > 1? entry.prefix : '') + entry.symbol;
+                    doc.setFontSize(this.biggestFontSize(longestWord, txtContainer))
+                    doc.text(
+                        txtContainer.x + txtContainer.width / 2, 
+                        txtContainer.y + txtContainer.height / 2 + this.fontSizeToHeightMm(doc.getFontSize()) / 2,
+                        text, 
+                        {
+                            align: "center"
+                        }
+                    );
+                });
+            }
 
             // usage column
             Array.from(entries).forEach(([k, v], idx) => {
+                const entry = getPaletteEntryByColorRef(project.paletteConfiguration.palettes, ""+k);
+                let bg = entry.color;
+                let fg = foreground(bg);
+                doc.setFillColor(bg.r, bg.g, bg.b);
+                doc.setTextColor(fg.r, fg.g, fg.b);
+
                 const container = new rect(
-                    usageSheetWidthOffset + refWidth, 
+                    usageSheetWidthOffset + refWidth + symbolWidth, 
                     rowHeight * idx + usageSheetHeightOffset, 
                     usageWidth, 
                     rowHeight
                 )
-                doc.rect(container.x, container.y, container.width, container.height);
+                doc.rect(container.x, container.y, container.width, container.height, 'FD');
 
                 const txtContainer = container.scale(.9, .8)
                 let text = "" + v;
@@ -154,9 +198,8 @@ export class PdfPrinter implements Printer {
                         align: "center"
                     }
                 );
-
             });
-        })
+        });
     }
 
     beadMapping(doc: jsPDF, project: Project, reducedColor: Uint8ClampedArray, width: number, height: number, margin: number) {
@@ -172,12 +215,11 @@ export class PdfPrinter implements Printer {
                 let textOffset = (doc.internal.pageSize.width - textWidth) / 2;
                 doc.text(textOffset, margin * 2, text);
 
-
                 for (let y = 0; y < project.boardConfiguration.board.nbBeadPerRow; y++) {
                     for (let x = 0; x < project.boardConfiguration.board.nbBeadPerRow; x++) {
                         doc.rect(x * beadSize + margin, y * beadSize + beadSheetOffset, beadSize, beadSize);
 
-                        let paletteEntry: PaletteEntry = _.find(_.flatten(project.paletteConfiguration.palettes.map(p => p.entries)), entry => {
+                        const paletteEntry: PaletteEntry = _.find(_.flatten(project.paletteConfiguration.palettes.map(p => p.entries)), entry => {
                             return entry.color.r == reducedColor[4 * ((y + i * project.boardConfiguration.board.nbBeadPerRow) * project.boardConfiguration.board.nbBeadPerRow * project.boardConfiguration.nbBoardWidth + x + j * project.boardConfiguration.board.nbBeadPerRow)]
                                 && entry.color.g == reducedColor[4 * ((y + i * project.boardConfiguration.board.nbBeadPerRow) * project.boardConfiguration.board.nbBeadPerRow * project.boardConfiguration.nbBoardWidth + x + j * project.boardConfiguration.board.nbBeadPerRow) + 1]
                                 && entry.color.b == reducedColor[4 * ((y + i * project.boardConfiguration.board.nbBeadPerRow) * project.boardConfiguration.board.nbBeadPerRow * project.boardConfiguration.nbBoardWidth + x + j * project.boardConfiguration.board.nbBeadPerRow) + 2]
@@ -195,7 +237,12 @@ export class PdfPrinter implements Printer {
             
                             const txtContainer = container.scale(.8)
                             let text = paletteEntry.ref;
+                            if (project.exportConfiguration.useSymbols) {
+                                text = (project.paletteConfiguration.palettes.length > 1 ? paletteEntry.prefix : '') + paletteEntry.symbol;
+                            }
                             doc.setFontSize(this.biggestFontSize(text, txtContainer))
+                            let fg = foreground(paletteEntry.color)
+                            doc.setTextColor(fg.r, fg.g, fg.b)
                             doc.text(
                                 txtContainer.x + txtContainer.width / 2, 
                                 txtContainer.y + txtContainer.height / 2 + this.fontSizeToHeightMm(doc.getFontSize()) / 2,
@@ -229,7 +276,4 @@ export class PdfPrinter implements Printer {
         return biggestForWidth * r.height / expectedHeight
     }
 
-
 }
-
-

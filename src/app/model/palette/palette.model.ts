@@ -13,7 +13,9 @@ export class Palette {
 export class PaletteEntry {
     name: string;
     ref: string;
+    symbol: string;
     color: Color;
+    prefix: string;
     enabled: boolean = true;
 
     constructor(name, color) {

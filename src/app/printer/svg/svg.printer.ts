@@ -5,6 +5,7 @@ import { Printer } from '../printer';
 import { Project } from "../../model/project/project.model";
 import { PaletteEntry } from '../../model/palette/palette.model';
 import { Color } from '../../model/color/color.model';
+import { foreground, getPaletteEntryByColorRef } from '../../utils/utils';
 
 import { defsStyle } from './RobotoMono'
 
@@ -64,9 +65,12 @@ export class SvgPrinter implements Printer {
         const inventoryMargin = 100;
         const inventoryTabMargin = 5;
         const inventoryTabHeight = 60;
+
         const inventoryTabNameWidth = 150;
+        const inventoryTabSymbolWidth = (project.exportConfiguration.useSymbols ? 150 : 0);
         const inventoryTabCountWidth = 150;
-        const inventoryWidth = inventoryTabNameWidth + inventoryTabCountWidth + 3 * inventoryTabMargin;
+        const inventoryWidth = inventoryTabNameWidth + inventoryTabSymbolWidth + inventoryTabCountWidth + (project.exportConfiguration.useSymbols ? 4 : 3) * inventoryTabMargin;
+
         const inventoryHeight = usage.size * (inventoryTabHeight + inventoryTabMargin) + inventoryTabMargin;
 
         // @ts-ignore
@@ -74,11 +78,11 @@ export class SvgPrinter implements Printer {
             patternWidth + inventoryMargin + inventoryWidth,
             Math.max(patternHeight, inventoryHeight)
         );
+        ctx.textBaseline = "middle";
+        ctx.textAlign = "center";
         ctx.fillStyle = 'rgb(255,255,255)'
         ctx.fillRect(0, 0, patternWidth + inventoryMargin + inventoryWidth, Math.max(patternHeight, inventoryHeight));
 
-
-        ctx.fillStyle = 'rgb(0,0,0)';
 
         const maxUsage = (""+_.max(Array.from(usage.values())))
         const longestRef = _.maxBy(Array.from(usage.keys()), s => s.length)
@@ -86,42 +90,75 @@ export class SvgPrinter implements Printer {
         const longestWord = maxUsage.length > longestRef.length ? maxUsage: longestRef;
 
         // inventory table
-        for (let x = 0; x < usage.size + 1; x++) {
-            const offset = x * (inventoryTabMargin + inventoryTabHeight);
-            ctx.fillRect(patternWidth + inventoryMargin, offset, inventoryWidth, inventoryTabMargin);
-        }
-        ctx.fillRect(patternWidth + inventoryMargin, 0, inventoryTabMargin, usage.size * (inventoryTabHeight + inventoryTabMargin) + inventoryTabMargin);
-        ctx.fillRect(patternWidth + inventoryMargin + inventoryTabMargin + inventoryTabNameWidth, 0, inventoryTabMargin, usage.size * (inventoryTabHeight + inventoryTabMargin) + inventoryTabMargin);
-        ctx.fillRect(patternWidth + inventoryMargin + 2 * inventoryTabMargin + inventoryTabNameWidth + inventoryTabCountWidth, 0, inventoryTabMargin, usage.size * (inventoryTabHeight + inventoryTabMargin) + inventoryTabMargin);
-
-        ctx.textBaseline = "middle";
-        ctx.textAlign = "center";
-
-        // inventory values
         let y = 0
+        ctx.fillStyle = `rgb(0,0,0)`;
+        ctx.fillRect(
+            patternWidth + inventoryMargin, 
+            0, 
+            inventoryWidth, 
+            inventoryHeight 
+        )
         Array.from(usage.entries()).sort(([k1, v1], [k2, v2]) => v2 - v1).forEach(([k, v]) => {
+            const entry = getPaletteEntryByColorRef(project.paletteConfiguration.palettes, k);
+            let bg = entry.color;
+            let fg = foreground(bg);
+            ctx.fillStyle = `rgb(${bg.r}, ${bg.g}, ${bg.b})`;
+            ctx.fillRect(
+                patternWidth + inventoryTabMargin + inventoryMargin, 
+                inventoryTabMargin + y * ( inventoryTabHeight + inventoryTabMargin ), 
+                inventoryTabNameWidth, 
+                inventoryTabHeight 
+            )
+            if (project.exportConfiguration.useSymbols) {
+                ctx.fillRect(
+                    patternWidth + 2 * inventoryTabMargin + inventoryMargin + inventoryTabCountWidth, 
+                    inventoryTabMargin + y * ( inventoryTabHeight + inventoryTabMargin ), 
+                    inventoryTabNameWidth, 
+                    inventoryTabHeight 
+                )
+            }
+            ctx.fillRect(
+                patternWidth + (project.exportConfiguration.useSymbols ? 3 : 2) * inventoryTabMargin + inventoryMargin + inventoryTabCountWidth + inventoryTabSymbolWidth, 
+                inventoryTabMargin + y * ( inventoryTabHeight + inventoryTabMargin ), 
+                inventoryTabNameWidth, 
+                inventoryTabHeight 
+            )
+
+            ctx.fillStyle = `rgb(${fg.r}, ${fg.g}, ${fg.b})`;
             const txtContainerName = new rect(
                 patternWidth + inventoryMargin + inventoryTabMargin,
                 y * (inventoryTabMargin + inventoryTabHeight) + inventoryTabMargin,
                 inventoryTabNameWidth,
                 inventoryTabHeight,
-            ).scale(.9);
+            ).scale(.7);
             ctx.font = `${this.biggestFontSize(longestWord, txtContainerName)}pt Roboto Mono`;
             ctx.fillText(k, txtContainerName.centerX(), txtContainerName.centerY());
 
+            if (project.exportConfiguration.useSymbols) {
+                let text = (project.paletteConfiguration.palettes.length > 1 ? entry.prefix : '') + entry.symbol; 
+                const txtContainerName = new rect(
+                    patternWidth + inventoryMargin + 2 * inventoryTabMargin + inventoryTabNameWidth,
+                    y * (inventoryTabMargin + inventoryTabHeight) + inventoryTabMargin,
+                    inventoryTabNameWidth,
+                    inventoryTabHeight,
+                ).scale(.7);
+                ctx.font = `${this.biggestFontSize(longestWord, txtContainerName)}pt Roboto Mono`;
+                ctx.fillText(text, txtContainerName.centerX(), txtContainerName.centerY());
+            }
+
             const txtContainerCount = new rect(
-                patternWidth + inventoryMargin + 2 * inventoryTabMargin + inventoryTabNameWidth,
+                patternWidth + inventoryMargin + (project.exportConfiguration.useSymbols ? 3 : 2) * inventoryTabMargin + inventoryTabNameWidth + inventoryTabSymbolWidth,
                 y * (inventoryTabMargin + inventoryTabHeight) + inventoryTabMargin,
                 inventoryTabCountWidth,
                 inventoryTabHeight,
-            ).scale(.9);
+            ).scale(.7);
             ctx.font = `${this.biggestFontSize(longestWord, txtContainerCount)}pt Roboto Mono`;
             ctx.fillText(""+v, txtContainerCount.centerX(), txtContainerCount.centerY());
 
-            // ctx.fillText(k, patternWidth + inventoryMargin + inventoryTabMargin + inventoryTabNameWidth / 2, y * (inventoryTabMargin + inventoryTabHeight) + inventoryTabMargin + inventoryTabHeight / 2);
-            // ctx.fillText(v, patternWidth + inventoryMargin + 2 * inventoryTabMargin + inventoryTabNameWidth + inventoryTabCountWidth / 2, y * (inventoryTabMargin + inventoryTabHeight) + inventoryTabMargin + inventoryTabHeight / 2);
             y++
         });
+
+        ctx.fillStyle = 'rgb(0,0,0)';
 
         // boards
         for (let x = 0; x < project.boardConfiguration.nbBoardWidth + 1; x++) {
@@ -134,6 +171,7 @@ export class SvgPrinter implements Printer {
         }
 
         // pattern
+
         for (let y = 0; y < height; y++) {
             for (let x = 0; x < width; x++) {
                 let color = new Color(
@@ -155,15 +193,26 @@ export class SvgPrinter implements Printer {
                         return entry.color.r === color.r && entry.color.g === color.g && entry.color.b === color.b;
                     });
                     if (paletteEntry) {
-                        if ((0.299 * color.r + 0.587 * color.g + 0.114 * color.b) > 255 / 2) {
-                            ctx.fillStyle = `rgb(0,0,0)`;
-                        } else {
-                            ctx.fillStyle = `rgb(255,255,255)`;
+                        let bg = paletteEntry.color;
+                        let fg = foreground(bg);
+                        ctx.fillStyle = `rgb(${fg.r}, ${fg.g}, ${fg.b})`;
+
+                        const txtContainer = container.scale(.7)
+                        let text = paletteEntry.ref
+                        if (project.exportConfiguration.useSymbols) {
+                            text = (project.paletteConfiguration.palettes.length > 1 ? paletteEntry.prefix : '') + paletteEntry.symbol;
                         }
-                        const txtContainer = container.scale(.8)
-                        const text = paletteEntry.ref
                         ctx.font = `${this.biggestFontSize(text, txtContainer)}pt Roboto Mono`;
                         ctx.fillText(text, txtContainer.centerX(), txtContainer.centerY());
+                        
+                        let referenceText = paletteEntry.ref;
+                        if (project.exportConfiguration.useSymbols) {
+                            referenceText = paletteEntry.symbol
+                            if (project.paletteConfiguration.palettes.length > 1) {
+                                referenceText = paletteEntry.prefix + referenceText;
+                            }
+                        }
+                        ctx.fillText(referenceText, beadX + beadSize / 2, beadY + beadSize / 2);
                     }
                 } else {
                     ctx.fillStyle = "rgb(0,0,0)";
