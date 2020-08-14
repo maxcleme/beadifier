@@ -5,6 +5,7 @@ import { Printer } from '../printer';
 import { Project } from "../../model/project/project.model";
 import { PaletteEntry } from '../../model/palette/palette.model';
 import { Color } from '../../model/color/color.model';
+import { foreground, getPaletteEntryByColorRef } from '../../utils/utils';
 
 export class SvgPrinter implements Printer {
 
@@ -27,8 +28,13 @@ export class SvgPrinter implements Printer {
         const inventoryTabHeight = 60;
         const inventoryTabNameWidth = 60;
         const inventoryTabCountWidth = 100;
-        const inventoryWidth = inventoryTabNameWidth + inventoryTabCountWidth + 3 * inventoryTabMargin;
+        let inventoryWidth = inventoryTabNameWidth + inventoryTabCountWidth + 3 * inventoryTabMargin;
         const inventoryHeight = usage.size * (inventoryTabHeight + inventoryTabMargin) + inventoryTabMargin;
+
+        const inventoryTabSymbolWidth = 60;
+        if (project.exportConfiguration.useSymbols) {
+            inventoryWidth += inventoryTabSymbolWidth + inventoryTabMargin;
+        }
 
         // @ts-ignore
         const ctx = new C2S(
@@ -37,7 +43,6 @@ export class SvgPrinter implements Printer {
         );
         ctx.fillStyle = 'rgb(255,255,255)'
         ctx.fillRect(0, 0, patternWidth + inventoryMargin + inventoryWidth, Math.max(patternHeight, inventoryHeight));
-
 
         ctx.fillStyle = 'rgb(0,0,0)';
 
@@ -50,7 +55,9 @@ export class SvgPrinter implements Printer {
         ctx.fillRect(patternWidth + inventoryMargin + inventoryTabMargin + inventoryTabNameWidth, 0, inventoryTabMargin, usage.size * (inventoryTabHeight + inventoryTabMargin) + inventoryTabMargin);
         ctx.fillRect(patternWidth + inventoryMargin + 2 * inventoryTabMargin + inventoryTabNameWidth + inventoryTabCountWidth, 0, inventoryTabMargin, usage.size * (inventoryTabHeight + inventoryTabMargin) + inventoryTabMargin);
 
-
+        if (project.exportConfiguration.useSymbols) {
+            ctx.fillRect(patternWidth + inventoryMargin + 3 * inventoryTabMargin + inventoryTabNameWidth + inventoryTabCountWidth + inventoryTabSymbolWidth, 0, inventoryTabMargin, usage.size * (inventoryTabHeight + inventoryTabMargin) + inventoryTabMargin);
+        }
 
         // inventory values
         let y = 0
@@ -59,10 +66,29 @@ export class SvgPrinter implements Printer {
             ctx.textBaseline = "middle";
             ctx.textAlign = "center";
 
+            const paletteEntry = getPaletteEntryByColorRef(project.paletteConfiguration.palettes, k);
+            ctx.fillStyle = `rgb(${paletteEntry.color.r},${paletteEntry.color.g},${paletteEntry.color.b})`;
+            ctx.fillRect(patternWidth + inventoryMargin + inventoryTabMargin, y * (inventoryTabMargin + inventoryTabHeight) + inventoryTabMargin, inventoryTabNameWidth, inventoryTabHeight);
+            ctx.fillRect(patternWidth + inventoryMargin + 2 * inventoryTabMargin + inventoryTabNameWidth, y * (inventoryTabMargin + inventoryTabHeight) + inventoryTabMargin, inventoryTabCountWidth, inventoryTabHeight);
+            ctx.fillRect(patternWidth + inventoryMargin + 3 * inventoryTabMargin + inventoryTabNameWidth + inventoryTabCountWidth, y * (inventoryTabMargin + inventoryTabHeight) + inventoryTabMargin, inventoryTabSymbolWidth, inventoryTabHeight);
+
+            let foregroundColor = foreground(paletteEntry.color);
+            ctx.fillStyle = `rgb(${foregroundColor.r},${foregroundColor.g},${foregroundColor.b})`;
             ctx.fillText(k, patternWidth + inventoryMargin + inventoryTabMargin + inventoryTabNameWidth / 2, y * (inventoryTabMargin + inventoryTabHeight) + inventoryTabMargin + inventoryTabHeight / 2);
             ctx.fillText(v, patternWidth + inventoryMargin + 2 * inventoryTabMargin + inventoryTabNameWidth + inventoryTabCountWidth / 2, y * (inventoryTabMargin + inventoryTabHeight) + inventoryTabMargin + inventoryTabHeight / 2);
-            y++
+            
+            if (project.exportConfiguration.useSymbols) {
+                let text = paletteEntry.symbol
+                if (project.paletteConfiguration.palettes.length > 1) {
+                    text = paletteEntry.prefix + text;
+                }
+
+                ctx.fillText(text, patternWidth + inventoryMargin + 3 * inventoryTabMargin + inventoryTabNameWidth + inventoryTabCountWidth + inventoryTabSymbolWidth / 2, y * (inventoryTabMargin + inventoryTabHeight) + inventoryTabMargin + inventoryTabHeight / 2);
+            }
+            y++;
         });
+
+        ctx.fillStyle = 'rgb(0,0,0)';
 
         // boards
         for (let x = 0; x < project.boardConfiguration.nbBoardWidth + 1; x++) {
@@ -99,12 +125,17 @@ export class SvgPrinter implements Printer {
                         ctx.textBaseline = "middle";
                         ctx.textAlign = "center";
 
-                        if ((0.299 * color.r + 0.587 * color.g + 0.114 * color.b) > 255 / 2) {
-                            ctx.fillStyle = `rgb(0,0,0)`;
-                        } else {
-                            ctx.fillStyle = `rgb(255,255,255)`;
+                        let foregroundColor = foreground(paletteEntry.color);
+                        ctx.fillStyle = `rgb(${foregroundColor.r},${foregroundColor.g},${foregroundColor.b})`;
+                        
+                        let referenceText = paletteEntry.ref;
+                        if (project.exportConfiguration.useSymbols) {
+                            referenceText = paletteEntry.symbol
+                            if (project.paletteConfiguration.palettes.length > 1) {
+                                referenceText = paletteEntry.prefix + referenceText;
+                            }
                         }
-                        ctx.fillText(paletteEntry.ref, beadX + beadSize / 2, beadY + beadSize / 2);
+                        ctx.fillText(referenceText, beadX + beadSize / 2, beadY + beadSize / 2);
                     }
                 } else {
                     ctx.fillStyle = "rgb(0,0,0)";
