@@ -25,14 +25,15 @@ import { ExportConfiguration } from './model/configuration/export-configuration.
 const BEAD_SIZE_PX = 10;
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  selector: "app-root",
+  templateUrl: "./app.component.html",
+  styleUrls: ["./app.component.scss"],
 })
 export class AppComponent {
-  @ViewChild('source', { static: true }) imgTag: ElementRef;
-  @ViewChild('canvasContainer', { static: true }) canvasContainerTag: ElementRef;
-  @ViewChild('preview', { static: true }) previewTag: ElementRef;
+  @ViewChild("source", { static: true }) imgTag: ElementRef;
+  @ViewChild("canvasContainer", { static: true })
+  canvasContainerTag: ElementRef;
+  @ViewChild("preview", { static: true }) previewTag: ElementRef;
 
   availableRenderers: Renderer[];
   renderer: Renderer;
@@ -46,8 +47,13 @@ export class AppComponent {
 
   constructor(private paletteService: PaletteService) {
     // Rendering technology
-    this.availableRenderers = [new CanvasWebGLRenderer(), new Canvas2dRenderer()];
-    this.renderer = _.find(this.availableRenderers, renderer => renderer.isSupported());
+    this.availableRenderers = [
+      new CanvasWebGLRenderer(),
+      new Canvas2dRenderer(),
+    ];
+    this.renderer = _.find(this.availableRenderers, (renderer) =>
+      renderer.isSupported()
+    );
     if (!this.renderer) {
       alert("Sorry but your browser seems to not support required features.");
     }
@@ -55,9 +61,11 @@ export class AppComponent {
     // Init
     this.usage = new Map();
     this.beadSize = BEAD_SIZE_PX;
+    this.scaler = new FitScreenScaler();
+    this.loading = false;
 
     // Default
-    paletteService.getAll().subscribe(allPalette => {
+    paletteService.getAll().subscribe((allPalette) => {
       this.project = new Project(
         new PaletteConfiguration([allPalette[0]]),
         new BoardConfiguration(),
@@ -67,18 +75,14 @@ export class AppComponent {
         new RendererConfiguration(),
         new ExportConfiguration()
       );
-    })
-
-    this.scaler = new FitScreenScaler();
-    this.loading = false;
-
+    });
   }
 
   _beadify = _.debounce(() => {
     this.loading = true;
-    new Observable(subscriber => {
+    new Observable((subscriber) => {
       setTimeout(() => {
-        const canvasContainer = this.canvasContainerTag.nativeElement
+        const canvasContainer = this.canvasContainerTag.nativeElement;
 
         // clear previous canvas if any
         while (canvasContainer.firstChild) {
@@ -86,23 +90,48 @@ export class AppComponent {
         }
 
         const canvas = document.createElement("canvas");
-        canvas.width = this.project.boardConfiguration.nbBoardWidth * this.project.boardConfiguration.board.nbBeadPerRow;
-        canvas.height = this.project.boardConfiguration.nbBoardHeight * this.project.boardConfiguration.board.nbBeadPerRow;
+        canvas.width =
+          this.project.boardConfiguration.nbBoardWidth *
+          this.project.boardConfiguration.board.nbBeadPerRow;
+        canvas.height =
+          this.project.boardConfiguration.nbBoardHeight *
+          this.project.boardConfiguration.board.nbBeadPerRow;
 
         canvasContainer.appendChild(canvas);
 
-        const drawingPosition = drawImageInsideCanvas(canvas, this.imgTag.nativeElement, this.project.rendererConfiguration);
-        this.reducedColor = reduceColor(canvas, this.project, drawingPosition).data;
-        this.usage = computeUsage(this.reducedColor, this.project.paletteConfiguration.palettes);
+        const drawingPosition = drawImageInsideCanvas(
+          canvas,
+          this.imgTag.nativeElement,
+          this.project.rendererConfiguration
+        );
+        this.reducedColor = reduceColor(
+          canvas,
+          this.project,
+          drawingPosition
+        ).data;
+        this.usage = computeUsage(
+          this.reducedColor,
+          this.project.paletteConfiguration.palettes
+        );
         this.renderer.destroy();
-        this.renderer.initContainer(this.previewTag.nativeElement, canvas.width, canvas.height, BEAD_SIZE_PX);
+        this.renderer.initContainer(
+          this.previewTag.nativeElement,
+          canvas.width,
+          canvas.height,
+          BEAD_SIZE_PX
+        );
         this.computeAspectRatio();
-        this.renderer.render(this.reducedColor, canvas.width, canvas.height, BEAD_SIZE_PX, this.project);
+        this.renderer.render(
+          this.reducedColor,
+          canvas.width,
+          canvas.height,
+          BEAD_SIZE_PX,
+          this.project
+        );
         subscriber.next();
-      })
-    })
-      .subscribe(() => this.loading = false);
-  }, 250)
+      });
+    }).subscribe(() => (this.loading = false));
+  }, 250);
 
   beadify(project: Project) {
     if (!project.imageSrc) {
@@ -111,7 +140,7 @@ export class AppComponent {
 
     if (this.imgTag.nativeElement.src !== project.imageSrc) {
       this.imgTag.nativeElement.src = project.imageSrc;
-      this.imgTag.nativeElement.addEventListener('load', () => {
+      this.imgTag.nativeElement.addEventListener("load", () => {
         this.project.srcWidth = this.imgTag.nativeElement.width;
         this.project.srcHeight = this.imgTag.nativeElement.height;
         this._beadify();
@@ -121,10 +150,13 @@ export class AppComponent {
     }
   }
 
-  @HostListener('window:resize', ['$event'])
+  @HostListener("window:resize", ["$event"])
   computeAspectRatio() {
-    this.aspectRatio = this.scaler.compute(this.project, this.previewTag.nativeElement.parentElement.clientWidth, this.previewTag.nativeElement.parentElement.clientHeight, BEAD_SIZE_PX);
+    this.aspectRatio = this.scaler.compute(
+      this.project,
+      this.previewTag.nativeElement.parentElement.clientWidth,
+      this.previewTag.nativeElement.parentElement.clientHeight,
+      BEAD_SIZE_PX
+    );
   }
-
-
 }

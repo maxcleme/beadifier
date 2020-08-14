@@ -188,6 +188,5 @@ export function foreground(color: Color): Color {
     if ((0.299 * color.r + 0.587 * color.g + 0.114 * color.b) > 255 / 2) {
         return new Color(0, 0, 0, 255);
     }
-
     return new Color(255, 255, 255, 255);
 }

@@ -1,10 +1,42 @@
 import * as jsPDF from 'jspdf';
 import * as _ from 'lodash';
 
+// Huge hack to get the font working in jsPDF, I give up doing it properly TBH
+import './RobotoMono'
+
 import { Printer } from './../printer';
 import { Project } from '../../model/project/project.model';
 import { PaletteEntry } from '../../model/palette/palette.model';
-import { getPaletteEntryByColorRef, foreground } from '../../utils/utils';
+import { foreground, getPaletteEntryByColorRef } from '../../utils/utils';
+
+class rect {
+    x: number
+    y: number
+    width: number
+    height : number
+
+    constructor(
+        x: number,
+        y: number,
+        width: number,
+        height : number,
+    ){
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+    }
+
+
+    scale(ratio_x: number, ratio_y:number = ratio_x): rect{
+        return new rect(
+            this.x + (this.width - this.width * ratio_x)/2,
+            this.y + (this.height - this.height * ratio_y)/2,
+            this.width * ratio_x,
+            this.height * ratio_y,
+        )
+    }
+}
 
 export class PdfPrinter implements Printer {
 
@@ -18,10 +50,11 @@ export class PdfPrinter implements Printer {
         const margin = 5;
 
         let doc: jsPDF = new jsPDF();
-        this.boardMapping(doc, project, margin, width, height);
-        this.usage(doc, usage, width, height, project);
-        this.beadMapping(doc, project, reducedColor, width, height, margin);
+        doc.setFont('RobotoMono');
 
+        this.boardMapping(doc, project, margin, width, height);
+        this.usage(doc, usage, width, height, margin, project);
+        this.beadMapping(doc, project, reducedColor, width, height, margin);
         doc.save(`${filename}.pdf`)
     }
 
@@ -34,63 +67,139 @@ export class PdfPrinter implements Printer {
         doc.setFontSize(fontSize);
         for (let y = 0; y < project.boardConfiguration.nbBoardHeight; y++) {
             for (let x = 0; x < project.boardConfiguration.nbBoardWidth; x++) {
-                doc.rect(x * boardSize + boardSheetWidthOffset, y * boardSize + boardSheetHeightOffset, boardSize, boardSize);
+                const container = new rect(
+                    x * boardSize + boardSheetWidthOffset, 
+                    y * boardSize + boardSheetHeightOffset, 
+                    boardSize, 
+                    boardSize
+                )
+                doc.rect(container.x, container.y, container.width, container.height);
+                
 
+                const txtContainer = container.scale(.5)
                 let text = `${y} - ${x}`;
-                let textWidth = doc.getStringUnitWidth(text) * doc.internal.getFontSize() / doc.internal.scaleFactor;
-                let textOffsetWidth = (boardSize - textWidth) / 2;
-                doc.text(x * boardSize + boardSheetWidthOffset + textOffsetWidth, +(y * boardSize + boardSheetHeightOffset + boardSize / 2 + this.fontSizeToHeightMm(fontSize)).toFixed(2), text);
+                doc.setFontSize(this.biggestFontSize(text, txtContainer))
+                doc.text(
+                    txtContainer.x + txtContainer.width / 2, 
+                    txtContainer.y + txtContainer.height / 2 + this.fontSizeToHeightMm(doc.getFontSize()) / 2,
+                    text, 
+                    {
+                        align: "center"
+                    }
+                );
             }
         }
     }
 
-    usage(doc: jsPDF, usage: Map<string, number>, width: number, height: number, project: Project) {
-        const fontSize = 12;
+    usage(doc: jsPDF, usage: Map<string, number>, width: number, height: number, margin:number, project: Project) {
         const usagePerPage = 30;
-        const usageLineHeight = 8;
-        const cellPadding = 1;
-        const maxRef = _.maxBy(Array.from(usage.keys()), key => doc.getStringUnitWidth(key));
-        const maxUsage = _.max(Array.from(usage.values()));
-        const refWidth = doc.getStringUnitWidth(maxRef) * doc.internal.getFontSize() / doc.internal.scaleFactor + cellPadding * 2;
-        const usageWidth = doc.getStringUnitWidth("" + maxUsage) * doc.internal.getFontSize() / doc.internal.scaleFactor + cellPadding * 2;
 
-        doc.setFontSize(fontSize);
+        const maxUsage = (""+_.max(Array.from(usage.values())))
+        const longestRef = _.maxBy(Array.from(usage.keys()), s => s.length)
+
+        const longestWord = maxUsage.length > longestRef.length ? maxUsage: longestRef;
+
+        const refWidth = 50;
+        const symbolWidth = project.exportConfiguration.useSymbols ? 50 : 0;
+        const usageWidth = 50;
+
+        const heightWithMargins = (height - 2 * margin) 
+        const rowHeight = heightWithMargins / usagePerPage
+
         _.chunk(Array.from(usage.entries()).sort(([k1, v1], [k2, v2]) => v2 - v1), usagePerPage).forEach(entries => {
             doc.addPage();
-            let usageSheetWidthOffset = (width - refWidth - usageWidth) / 2;
-            if (project.exportConfiguration.useSymbols) {
-                usageSheetWidthOffset = (width - (refWidth * 2) - usageWidth) / 2;
-            }
-            const usageSheetHeightOffset = (height - entries.length * usageLineHeight) / 2;
+            const usageSheetWidthOffset = (width - refWidth - usageWidth - symbolWidth) / 2;
+            const usageSheetHeightOffset = margin;
+
+            // ref column
             Array.from(entries).forEach(([k, v], idx) => {
-                const paletteEntry = getPaletteEntryByColorRef(project.paletteConfiguration.palettes, k);
-                doc.setFillColor(paletteEntry.color.r, paletteEntry.color.g, paletteEntry.color.b);
+                const entry = getPaletteEntryByColorRef(project.paletteConfiguration.palettes, ""+k);
+                let bg = entry.color;
+                let fg = foreground(bg);
+                doc.setFillColor(bg.r, bg.g, bg.b);
+                doc.setTextColor(fg.r, fg.g, fg.b);
 
-	            doc.rect(usageSheetWidthOffset, usageLineHeight * idx + usageSheetHeightOffset, refWidth, usageLineHeight, 'FD');
-                doc.rect(usageSheetWidthOffset + refWidth, usageLineHeight * idx + usageSheetHeightOffset, usageWidth, usageLineHeight, 'FD');
+                const container = new rect(
+                    usageSheetWidthOffset, 
+                    rowHeight * idx + usageSheetHeightOffset, 
+                    refWidth, 
+                    rowHeight
+                )
+                doc.rect(container.x, container.y, container.width, container.height, 'FD');
 
-                let foregroundColor = foreground(paletteEntry.color);
-                doc.setTextColor(foregroundColor.r, foregroundColor.g, foregroundColor.b);
-                doc.text(usageSheetWidthOffset + cellPadding, usageLineHeight * idx + usageSheetHeightOffset + usageLineHeight / 2 + this.fontSizeToHeightMm(fontSize) / 2, k);
-	    
-	            if ( project.exportConfiguration.useSymbols) {
-                    doc.setFillColor(paletteEntry.color.r, paletteEntry.color.g, paletteEntry.color.b);
-                    doc.rect(usageSheetWidthOffset + refWidth + usageWidth, usageLineHeight * idx + usageSheetHeightOffset, usageWidth, usageLineHeight, 'FD');
-                }
-
-                let textWidth = doc.getStringUnitWidth("" + v) * doc.internal.getFontSize() / doc.internal.scaleFactor;
-                doc.text(usageSheetWidthOffset + refWidth + (usageWidth / 2) - (textWidth / 2), usageLineHeight * idx + usageSheetHeightOffset + usageLineHeight / 2 + this.fontSizeToHeightMm(fontSize) / 2, "" + v);
-		
-                if ( project.exportConfiguration.useSymbols) {
-                    let symbolText = paletteEntry.symbol;
-                    if (project.paletteConfiguration.palettes.length > 1) {
-                        symbolText = paletteEntry.prefix + symbolText;
+                const txtContainer = container.scale(.9, .8)
+                let text = k;
+                doc.setFontSize(this.biggestFontSize(longestWord, txtContainer))
+                doc.text(
+                    txtContainer.x + txtContainer.width / 2, 
+                    txtContainer.y + txtContainer.height / 2 + this.fontSizeToHeightMm(doc.getFontSize()) / 2,
+                    text, 
+                    {
+                        align: "center"
                     }
-                    let symbolWidth = doc.getStringUnitWidth(symbolText) * doc.internal.getFontSize() / doc.internal.scaleFactor;
-                    doc.text(usageSheetWidthOffset + refWidth + usageWidth + usageWidth / 2 - symbolWidth / 2, usageLineHeight * idx + usageSheetHeightOffset + usageLineHeight / 2 + this.fontSizeToHeightMm(fontSize) / 2, "" + symbolText);
-                }
+                );
             });
-        })
+
+            if (project.exportConfiguration.useSymbols) {
+                // symbol column
+                Array.from(entries).forEach(([k, v], idx) => {
+                    const entry = getPaletteEntryByColorRef(project.paletteConfiguration.palettes, ""+k);
+                    let bg = entry.color;
+                    let fg = foreground(bg);
+                    doc.setFillColor(bg.r, bg.g, bg.b);
+                    doc.setTextColor(fg.r, fg.g, fg.b);
+
+                    const container = new rect(
+                        usageSheetWidthOffset + refWidth, 
+                        rowHeight * idx + usageSheetHeightOffset, 
+                        symbolWidth, 
+                        rowHeight
+                    )
+                    doc.rect(container.x, container.y, container.width, container.height, 'FD');
+    
+                    const txtContainer = container.scale(.9, .8)
+                    let text = (project.paletteConfiguration.palettes.length  > 1? entry.prefix : '') + entry.symbol;
+                    doc.setFontSize(this.biggestFontSize(longestWord, txtContainer))
+                    doc.text(
+                        txtContainer.x + txtContainer.width / 2, 
+                        txtContainer.y + txtContainer.height / 2 + this.fontSizeToHeightMm(doc.getFontSize()) / 2,
+                        text, 
+                        {
+                            align: "center"
+                        }
+                    );
+                });
+            }
+
+            // usage column
+            Array.from(entries).forEach(([k, v], idx) => {
+                const entry = getPaletteEntryByColorRef(project.paletteConfiguration.palettes, ""+k);
+                let bg = entry.color;
+                let fg = foreground(bg);
+                doc.setFillColor(bg.r, bg.g, bg.b);
+                doc.setTextColor(fg.r, fg.g, fg.b);
+
+                const container = new rect(
+                    usageSheetWidthOffset + refWidth + symbolWidth, 
+                    rowHeight * idx + usageSheetHeightOffset, 
+                    usageWidth, 
+                    rowHeight
+                )
+                doc.rect(container.x, container.y, container.width, container.height, 'FD');
+
+                const txtContainer = container.scale(.9, .8)
+                let text = "" + v;
+                doc.setFontSize(this.biggestFontSize(longestWord, txtContainer))
+                doc.text(
+                    txtContainer.x + txtContainer.width / 2, 
+                    txtContainer.y + txtContainer.height / 2 + this.fontSizeToHeightMm(doc.getFontSize()) / 2,
+                    text, 
+                    {
+                        align: "center"
+                    }
+                );
+            });
+        });
     }
 
     beadMapping(doc: jsPDF, project: Project, reducedColor: Uint8ClampedArray, width: number, height: number, margin: number) {
@@ -106,10 +215,6 @@ export class PdfPrinter implements Printer {
                 let textOffset = (doc.internal.pageSize.width - textWidth) / 2;
                 doc.text(textOffset, margin * 2, text);
 
-                doc.setFontSize(project.boardConfiguration.board.exportedFontSize);
-                if (project.exportConfiguration.useSymbols) {
-                    doc.setFontSize(project.boardConfiguration.board.exportedSymbolSize);
-                }
                 for (let y = 0; y < project.boardConfiguration.board.nbBeadPerRow; y++) {
                     for (let x = 0; x < project.boardConfiguration.board.nbBeadPerRow; x++) {
                         doc.rect(x * beadSize + margin, y * beadSize + beadSheetOffset, beadSize, beadSize);
@@ -121,29 +226,31 @@ export class PdfPrinter implements Printer {
                                 && entry.color.a == reducedColor[4 * ((y + i * project.boardConfiguration.board.nbBeadPerRow) * project.boardConfiguration.board.nbBeadPerRow * project.boardConfiguration.nbBoardWidth + x + j * project.boardConfiguration.board.nbBeadPerRow) + 3];
                         });
                         if (paletteEntry) {
-                            text = paletteEntry.ref;
-                            if (project.exportConfiguration.useSymbols) {
-                                text = paletteEntry.symbol;
-                                if (project.paletteConfiguration.palettes.length > 1) {
-                                    text = paletteEntry.prefix + text;
-                                }
-                            }
-                            let textWidth = doc.getStringUnitWidth(text) * doc.internal.getFontSize() / doc.internal.scaleFactor;
-                            let textOffsetWidth = (beadSize - textWidth) / 2;
                             doc.setFillColor(paletteEntry.color.r, paletteEntry.color.g, paletteEntry.color.b);
-			    
-			                if (project.exportConfiguration.useSymbols) {
-			                     doc.rect(x * beadSize + margin + beadSize * .1, y * beadSize + beadSheetOffset + beadSize * 0.1, beadSize - 2 * beadSize * .1, beadSize - 2 * beadSize * 0.1, 'FD');
-
-                                let foregroundColor = foreground(paletteEntry.color);
-                                doc.setTextColor(foregroundColor.r, foregroundColor.g, foregroundColor.b);
-
-                                doc.text(x * beadSize + margin + textOffsetWidth, +(y * beadSize + beadSheetOffset + (beadSize / 2 + (this.fontSizeToHeightMm(project.boardConfiguration.board.exportedFontSize) / 2)) + beadSize * 0.1).toFixed(2), text);
-                                doc.setTextColor(0, 0, 0);
-                            } else {
-                                doc.rect(x * beadSize + margin + beadSize * .1, y * beadSize + beadSheetOffset + beadSize * .6, beadSize - 2 * beadSize * .1, beadSize * .3, 'FD');
-                                doc.text(x * beadSize + margin + textOffsetWidth, +(y * beadSize + beadSheetOffset + (beadSize - project.boardConfiguration.board.exportedFontSize * 0.35) / 1.5).toFixed(2), text);
+                            const container = new rect(
+                                x * beadSize + margin, 
+                                y * beadSize + beadSheetOffset, 
+                                beadSize, 
+                                beadSize
+                            )
+                            doc.rect(container.x, container.y, container.width, container.height, 'FD');
+            
+                            const txtContainer = container.scale(.8)
+                            let text = paletteEntry.ref;
+                            if (project.exportConfiguration.useSymbols) {
+                                text = (project.paletteConfiguration.palettes.length > 1 ? paletteEntry.prefix : '') + paletteEntry.symbol;
                             }
+                            doc.setFontSize(this.biggestFontSize(text, txtContainer))
+                            let fg = foreground(paletteEntry.color)
+                            doc.setTextColor(fg.r, fg.g, fg.b)
+                            doc.text(
+                                txtContainer.x + txtContainer.width / 2, 
+                                txtContainer.y + txtContainer.height / 2 + this.fontSizeToHeightMm(doc.getFontSize()) / 2,
+                                text, 
+                                {
+                                    align: "center"
+                                }
+                            );
                         } else {
                             doc.line(x * beadSize + margin, y * beadSize + beadSheetOffset, x * beadSize + margin + beadSize, y * beadSize + beadSheetOffset + beadSize);
                         }
@@ -153,8 +260,20 @@ export class PdfPrinter implements Printer {
         }
     }
 
+
+    // Welcome to realm of magic values, works only for RobotoMono :S
     fontSizeToHeightMm(fontSize: number) {
-        return (fontSize * 0.35) / 1.5;
+        return (fontSize * 0.3527777778) / 1.5;
+    }
+    biggestFontSize(text:string,  r: rect): number {
+        const biggestForWidth = r.width / (text.length * 0.60009765625 /  (72/25.6))
+        const expectedHeight = (biggestForWidth * 0.3527777778) / 1.15
+
+        if (expectedHeight <= r.height) {
+            return biggestForWidth
+        }
+
+        return biggestForWidth * r.height / expectedHeight
     }
 
 }

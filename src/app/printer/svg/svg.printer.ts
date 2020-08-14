@@ -7,6 +7,45 @@ import { PaletteEntry } from '../../model/palette/palette.model';
 import { Color } from '../../model/color/color.model';
 import { foreground, getPaletteEntryByColorRef } from '../../utils/utils';
 
+import { defsStyle } from './RobotoMono'
+
+class rect {
+    x: number
+    y: number
+    width: number
+    height : number
+
+    constructor(
+        x: number,
+        y: number,
+        width: number,
+        height : number,
+    ){
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+    }
+
+
+    scale(ratio_x: number, ratio_y:number = ratio_x): rect{
+        return new rect(
+            this.x + (this.width - this.width * ratio_x)/2,
+            this.y + (this.height - this.height * ratio_y)/2,
+            this.width * ratio_x,
+            this.height * ratio_y,
+        )
+    }
+
+    centerX(): number {
+        return this.x + this.width / 2;
+    }
+
+    centerY(): number {
+        return this.y + this.height / 2;
+    }
+}
+
 export class SvgPrinter implements Printer {
 
     name(): string {
@@ -26,66 +65,97 @@ export class SvgPrinter implements Printer {
         const inventoryMargin = 100;
         const inventoryTabMargin = 5;
         const inventoryTabHeight = 60;
-        const inventoryTabNameWidth = 60;
-        const inventoryTabCountWidth = 100;
-        let inventoryWidth = inventoryTabNameWidth + inventoryTabCountWidth + 3 * inventoryTabMargin;
-        const inventoryHeight = usage.size * (inventoryTabHeight + inventoryTabMargin) + inventoryTabMargin;
 
-        const inventoryTabSymbolWidth = 60;
-        if (project.exportConfiguration.useSymbols) {
-            inventoryWidth += inventoryTabSymbolWidth + inventoryTabMargin;
-        }
+        const inventoryTabNameWidth = 150;
+        const inventoryTabSymbolWidth = (project.exportConfiguration.useSymbols ? 150 : 0);
+        const inventoryTabCountWidth = 150;
+        const inventoryWidth = inventoryTabNameWidth + inventoryTabSymbolWidth + inventoryTabCountWidth + (project.exportConfiguration.useSymbols ? 4 : 3) * inventoryTabMargin;
+
+        const inventoryHeight = usage.size * (inventoryTabHeight + inventoryTabMargin) + inventoryTabMargin;
 
         // @ts-ignore
         const ctx = new C2S(
             patternWidth + inventoryMargin + inventoryWidth,
             Math.max(patternHeight, inventoryHeight)
         );
+        ctx.textBaseline = "middle";
+        ctx.textAlign = "center";
         ctx.fillStyle = 'rgb(255,255,255)'
         ctx.fillRect(0, 0, patternWidth + inventoryMargin + inventoryWidth, Math.max(patternHeight, inventoryHeight));
 
-        ctx.fillStyle = 'rgb(0,0,0)';
+
+        const maxUsage = (""+_.max(Array.from(usage.values())))
+        const longestRef = _.maxBy(Array.from(usage.keys()), s => s.length)
+
+        const longestWord = maxUsage.length > longestRef.length ? maxUsage: longestRef;
 
         // inventory table
-        for (let x = 0; x < usage.size + 1; x++) {
-            const offset = x * (inventoryTabMargin + inventoryTabHeight);
-            ctx.fillRect(patternWidth + inventoryMargin, offset, inventoryWidth, inventoryTabMargin);
-        }
-        ctx.fillRect(patternWidth + inventoryMargin, 0, inventoryTabMargin, usage.size * (inventoryTabHeight + inventoryTabMargin) + inventoryTabMargin);
-        ctx.fillRect(patternWidth + inventoryMargin + inventoryTabMargin + inventoryTabNameWidth, 0, inventoryTabMargin, usage.size * (inventoryTabHeight + inventoryTabMargin) + inventoryTabMargin);
-        ctx.fillRect(patternWidth + inventoryMargin + 2 * inventoryTabMargin + inventoryTabNameWidth + inventoryTabCountWidth, 0, inventoryTabMargin, usage.size * (inventoryTabHeight + inventoryTabMargin) + inventoryTabMargin);
-
-        if (project.exportConfiguration.useSymbols) {
-            ctx.fillRect(patternWidth + inventoryMargin + 3 * inventoryTabMargin + inventoryTabNameWidth + inventoryTabCountWidth + inventoryTabSymbolWidth, 0, inventoryTabMargin, usage.size * (inventoryTabHeight + inventoryTabMargin) + inventoryTabMargin);
-        }
-
-        // inventory values
         let y = 0
+        ctx.fillStyle = `rgb(0,0,0)`;
+        ctx.fillRect(
+            patternWidth + inventoryMargin, 
+            0, 
+            inventoryWidth, 
+            inventoryHeight 
+        )
         Array.from(usage.entries()).sort(([k1, v1], [k2, v2]) => v2 - v1).forEach(([k, v]) => {
-            ctx.font = "14px Roboto";
-            ctx.textBaseline = "middle";
-            ctx.textAlign = "center";
-
-            const paletteEntry = getPaletteEntryByColorRef(project.paletteConfiguration.palettes, k);
-            ctx.fillStyle = `rgb(${paletteEntry.color.r},${paletteEntry.color.g},${paletteEntry.color.b})`;
-            ctx.fillRect(patternWidth + inventoryMargin + inventoryTabMargin, y * (inventoryTabMargin + inventoryTabHeight) + inventoryTabMargin, inventoryTabNameWidth, inventoryTabHeight);
-            ctx.fillRect(patternWidth + inventoryMargin + 2 * inventoryTabMargin + inventoryTabNameWidth, y * (inventoryTabMargin + inventoryTabHeight) + inventoryTabMargin, inventoryTabCountWidth, inventoryTabHeight);
-            ctx.fillRect(patternWidth + inventoryMargin + 3 * inventoryTabMargin + inventoryTabNameWidth + inventoryTabCountWidth, y * (inventoryTabMargin + inventoryTabHeight) + inventoryTabMargin, inventoryTabSymbolWidth, inventoryTabHeight);
-
-            let foregroundColor = foreground(paletteEntry.color);
-            ctx.fillStyle = `rgb(${foregroundColor.r},${foregroundColor.g},${foregroundColor.b})`;
-            ctx.fillText(k, patternWidth + inventoryMargin + inventoryTabMargin + inventoryTabNameWidth / 2, y * (inventoryTabMargin + inventoryTabHeight) + inventoryTabMargin + inventoryTabHeight / 2);
-            ctx.fillText(v, patternWidth + inventoryMargin + 2 * inventoryTabMargin + inventoryTabNameWidth + inventoryTabCountWidth / 2, y * (inventoryTabMargin + inventoryTabHeight) + inventoryTabMargin + inventoryTabHeight / 2);
-            
+            const entry = getPaletteEntryByColorRef(project.paletteConfiguration.palettes, k);
+            let bg = entry.color;
+            let fg = foreground(bg);
+            ctx.fillStyle = `rgb(${bg.r}, ${bg.g}, ${bg.b})`;
+            ctx.fillRect(
+                patternWidth + inventoryTabMargin + inventoryMargin, 
+                inventoryTabMargin + y * ( inventoryTabHeight + inventoryTabMargin ), 
+                inventoryTabNameWidth, 
+                inventoryTabHeight 
+            )
             if (project.exportConfiguration.useSymbols) {
-                let text = paletteEntry.symbol
-                if (project.paletteConfiguration.palettes.length > 1) {
-                    text = paletteEntry.prefix + text;
-                }
-
-                ctx.fillText(text, patternWidth + inventoryMargin + 3 * inventoryTabMargin + inventoryTabNameWidth + inventoryTabCountWidth + inventoryTabSymbolWidth / 2, y * (inventoryTabMargin + inventoryTabHeight) + inventoryTabMargin + inventoryTabHeight / 2);
+                ctx.fillRect(
+                    patternWidth + 2 * inventoryTabMargin + inventoryMargin + inventoryTabCountWidth, 
+                    inventoryTabMargin + y * ( inventoryTabHeight + inventoryTabMargin ), 
+                    inventoryTabNameWidth, 
+                    inventoryTabHeight 
+                )
             }
-            y++;
+            ctx.fillRect(
+                patternWidth + (project.exportConfiguration.useSymbols ? 3 : 2) * inventoryTabMargin + inventoryMargin + inventoryTabCountWidth + inventoryTabSymbolWidth, 
+                inventoryTabMargin + y * ( inventoryTabHeight + inventoryTabMargin ), 
+                inventoryTabNameWidth, 
+                inventoryTabHeight 
+            )
+
+            ctx.fillStyle = `rgb(${fg.r}, ${fg.g}, ${fg.b})`;
+            const txtContainerName = new rect(
+                patternWidth + inventoryMargin + inventoryTabMargin,
+                y * (inventoryTabMargin + inventoryTabHeight) + inventoryTabMargin,
+                inventoryTabNameWidth,
+                inventoryTabHeight,
+            ).scale(.7);
+            ctx.font = `${this.biggestFontSize(longestWord, txtContainerName)}pt Roboto Mono`;
+            ctx.fillText(k, txtContainerName.centerX(), txtContainerName.centerY());
+
+            if (project.exportConfiguration.useSymbols) {
+                let text = (project.paletteConfiguration.palettes.length > 1 ? entry.prefix : '') + entry.symbol; 
+                const txtContainerName = new rect(
+                    patternWidth + inventoryMargin + 2 * inventoryTabMargin + inventoryTabNameWidth,
+                    y * (inventoryTabMargin + inventoryTabHeight) + inventoryTabMargin,
+                    inventoryTabNameWidth,
+                    inventoryTabHeight,
+                ).scale(.7);
+                ctx.font = `${this.biggestFontSize(longestWord, txtContainerName)}pt Roboto Mono`;
+                ctx.fillText(text, txtContainerName.centerX(), txtContainerName.centerY());
+            }
+
+            const txtContainerCount = new rect(
+                patternWidth + inventoryMargin + (project.exportConfiguration.useSymbols ? 3 : 2) * inventoryTabMargin + inventoryTabNameWidth + inventoryTabSymbolWidth,
+                y * (inventoryTabMargin + inventoryTabHeight) + inventoryTabMargin,
+                inventoryTabCountWidth,
+                inventoryTabHeight,
+            ).scale(.7);
+            ctx.font = `${this.biggestFontSize(longestWord, txtContainerCount)}pt Roboto Mono`;
+            ctx.fillText(""+v, txtContainerCount.centerX(), txtContainerCount.centerY());
+
+            y++
         });
 
         ctx.fillStyle = 'rgb(0,0,0)';
@@ -94,13 +164,14 @@ export class SvgPrinter implements Printer {
         for (let x = 0; x < project.boardConfiguration.nbBoardWidth + 1; x++) {
             const offset = x * (boardMargin + project.boardConfiguration.board.nbBeadPerRow * beadSize + (1 + project.boardConfiguration.board.nbBeadPerRow) * beadMargin);
             ctx.fillRect(offset, 0, boardMargin, boardMargin + project.boardConfiguration.nbBoardHeight * (boardMargin + project.boardConfiguration.board.nbBeadPerRow * beadSize + (project.boardConfiguration.board.nbBeadPerRow + 1) * beadMargin));
-        }
+        }   
         for (let y = 0; y < project.boardConfiguration.nbBoardHeight + 1; y++) {
             const offset = y * (boardMargin + project.boardConfiguration.board.nbBeadPerRow * beadSize + (1 + project.boardConfiguration.board.nbBeadPerRow) * beadMargin);
             ctx.fillRect(0, offset, boardMargin + project.boardConfiguration.nbBoardWidth * (boardMargin + project.boardConfiguration.board.nbBeadPerRow * beadSize + (project.boardConfiguration.board.nbBeadPerRow + 1) * beadMargin), boardMargin);
         }
 
         // pattern
+
         for (let y = 0; y < height; y++) {
             for (let x = 0; x < width; x++) {
                 let color = new Color(
@@ -113,20 +184,26 @@ export class SvgPrinter implements Printer {
                 const beadX = x * (beadSize + beadMargin) + beadMargin + boardMargin + (beadMargin + boardMargin) * (Math.floor(x / project.boardConfiguration.board.nbBeadPerRow));
                 const beadY = y * (beadSize + beadMargin) + beadMargin + boardMargin + (beadMargin + boardMargin) * (Math.floor(y / project.boardConfiguration.board.nbBeadPerRow));
 
+                const container = new rect(beadX, beadY, beadSize, beadSize)
                 if (color.a === 255) {
                     ctx.fillStyle = `rgb(${color.r}, ${color.g}, ${color.b})`;
-                    ctx.fillRect(beadX, beadY, beadSize, beadSize);
+                    ctx.fillRect(container.x, container.y, container.width, container.height);
 
                     let paletteEntry: PaletteEntry = _.find(_.flatten(project.paletteConfiguration.palettes.map(p => p.entries)), entry => {
                         return entry.color.r === color.r && entry.color.g === color.g && entry.color.b === color.b;
                     });
                     if (paletteEntry) {
-                        ctx.font = "14px Roboto";
-                        ctx.textBaseline = "middle";
-                        ctx.textAlign = "center";
+                        let bg = paletteEntry.color;
+                        let fg = foreground(bg);
+                        ctx.fillStyle = `rgb(${fg.r}, ${fg.g}, ${fg.b})`;
 
-                        let foregroundColor = foreground(paletteEntry.color);
-                        ctx.fillStyle = `rgb(${foregroundColor.r},${foregroundColor.g},${foregroundColor.b})`;
+                        const txtContainer = container.scale(.7)
+                        let text = paletteEntry.ref
+                        if (project.exportConfiguration.useSymbols) {
+                            text = (project.paletteConfiguration.palettes.length > 1 ? paletteEntry.prefix : '') + paletteEntry.symbol;
+                        }
+                        ctx.font = `${this.biggestFontSize(text, txtContainer)}pt Roboto Mono`;
+                        ctx.fillText(text, txtContainer.centerX(), txtContainer.centerY());
                         
                         let referenceText = paletteEntry.ref;
                         if (project.exportConfiguration.useSymbols) {
@@ -139,7 +216,7 @@ export class SvgPrinter implements Printer {
                     }
                 } else {
                     ctx.fillStyle = "rgb(0,0,0)";
-                    ctx.fillRect(beadX, beadY, beadSize, beadSize);
+                    ctx.fillRect(container.x, container.y, container.width, container.height);
                     ctx.fillStyle = "rgb(255,255,255)";
                     ctx.fillRect(beadX + 1, beadY + 1, beadSize - 2 * 1, beadSize - 2 * 1);
 
@@ -157,7 +234,14 @@ export class SvgPrinter implements Printer {
             }
         }
 
-        return ctx.getSvg();
+        // add custom <defs> in order to embded font reference
+        // not the best way to do, but at least the font is embed 
+        // and computation regarding font size with monospace font still work outside this app
+        const defs = document.createElement("defs")
+        defs.innerHTML = defsStyle
+        const svg = ctx.getSvg()
+        svg.insertBefore(defs, svg.firstChild); 
+        return svg;
     } 
 
     print(reducedColor: Uint8ClampedArray, usage: Map<string, number>, project: Project, filename: string) {
@@ -170,5 +254,16 @@ export class SvgPrinter implements Printer {
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
+    }
+
+
+    // Welcome to realm of magic values, works only for RobotoMono :S
+    biggestFontSize(text:string,  r: rect): number {
+        const biggestForWidth = (r.width / text.length) / 0.959136962890625
+        const expectedHeight = (biggestForWidth * 0.959136962890625)
+        if (expectedHeight <= r.height) {
+            return biggestForWidth
+        }
+        return biggestForWidth * r.height / expectedHeight
     }
 }
