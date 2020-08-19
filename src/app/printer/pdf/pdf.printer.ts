@@ -1,8 +1,8 @@
-import * as jsPDF from 'jspdf';
+import * as jsPDF from "jspdf";
 import * as _ from 'lodash';
 
 // Huge hack to get the font working in jsPDF, I give up doing it properly TBH
-import './RobotoMono'
+import './MonoFont'
 
 import { Printer } from './../printer';
 import { Project } from '../../model/project/project.model';
@@ -50,12 +50,13 @@ export class PdfPrinter implements Printer {
         const margin = 5;
 
         let doc: jsPDF = new jsPDF();
-        doc.setFont('RobotoMono');
+        doc.setFont('MonoFont');
 
         this.boardMapping(doc, project, margin, width, height);
         this.usage(doc, usage, width, height, margin, project);
         this.beadMapping(doc, project, reducedColor, width, height, margin);
         doc.save(`${filename}.pdf`)
+
     }
 
     boardMapping(doc: jsPDF, project: Project, margin: number, width: number, height: number) {
@@ -80,9 +81,9 @@ export class PdfPrinter implements Printer {
                 let text = `${y} - ${x}`;
                 doc.setFontSize(this.biggestFontSize(text, txtContainer))
                 doc.text(
+                    text,
                     txtContainer.x + txtContainer.width / 2, 
                     txtContainer.y + txtContainer.height / 2 + this.fontSizeToHeightMm(doc.getFontSize()) / 2,
-                    text, 
                     {
                         align: "center"
                     }
@@ -127,13 +128,13 @@ export class PdfPrinter implements Printer {
                 )
                 doc.rect(container.x, container.y, container.width, container.height, 'FD');
 
-                const txtContainer = container.scale(.9, .8)
+                const txtContainer = container.scale(.7)
                 let text = k;
                 doc.setFontSize(this.biggestFontSize(longestWord, txtContainer))
                 doc.text(
+                    text, 
                     txtContainer.x + txtContainer.width / 2, 
                     txtContainer.y + txtContainer.height / 2 + this.fontSizeToHeightMm(doc.getFontSize()) / 2,
-                    text, 
                     {
                         align: "center"
                     }
@@ -157,13 +158,13 @@ export class PdfPrinter implements Printer {
                     )
                     doc.rect(container.x, container.y, container.width, container.height, 'FD');
     
-                    const txtContainer = container.scale(.9, .8)
+                    const txtContainer = container.scale(.7)
                     let text = (project.paletteConfiguration.palettes.length  > 1? entry.prefix : '') + entry.symbol;
                     doc.setFontSize(this.biggestFontSize(longestWord, txtContainer))
                     doc.text(
+                        text, 
                         txtContainer.x + txtContainer.width / 2, 
                         txtContainer.y + txtContainer.height / 2 + this.fontSizeToHeightMm(doc.getFontSize()) / 2,
-                        text, 
                         {
                             align: "center"
                         }
@@ -187,13 +188,13 @@ export class PdfPrinter implements Printer {
                 )
                 doc.rect(container.x, container.y, container.width, container.height, 'FD');
 
-                const txtContainer = container.scale(.9, .8)
+                const txtContainer = container.scale(.7)
                 let text = "" + v;
                 doc.setFontSize(this.biggestFontSize(longestWord, txtContainer))
                 doc.text(
+                    text, 
                     txtContainer.x + txtContainer.width / 2, 
                     txtContainer.y + txtContainer.height / 2 + this.fontSizeToHeightMm(doc.getFontSize()) / 2,
-                    text, 
                     {
                         align: "center"
                     }
@@ -213,7 +214,7 @@ export class PdfPrinter implements Printer {
                 let text = `${i} - ${j}`;
                 let textWidth = doc.getStringUnitWidth(text) * doc.internal.getFontSize() / doc.internal.scaleFactor;
                 let textOffset = (doc.internal.pageSize.width - textWidth) / 2;
-                doc.text(textOffset, margin * 2, text);
+                doc.text(text, textOffset, margin * 2);
 
                 for (let y = 0; y < project.boardConfiguration.board.nbBeadPerRow; y++) {
                     for (let x = 0; x < project.boardConfiguration.board.nbBeadPerRow; x++) {
@@ -244,9 +245,9 @@ export class PdfPrinter implements Printer {
                             let fg = foreground(paletteEntry.color)
                             doc.setTextColor(fg.r, fg.g, fg.b)
                             doc.text(
+                                text, 
                                 txtContainer.x + txtContainer.width / 2, 
                                 txtContainer.y + txtContainer.height / 2 + this.fontSizeToHeightMm(doc.getFontSize()) / 2,
-                                text, 
                                 {
                                     align: "center"
                                 }
@@ -261,19 +262,19 @@ export class PdfPrinter implements Printer {
     }
 
 
-    // Welcome to realm of magic values, works only for RobotoMono :S
+    // Welcome to realm of magic values, works only for current font
     fontSizeToHeightMm(fontSize: number) {
-        return (fontSize * 0.3527777778) / 1.5;
+        return (fontSize * 0.3527777778) / 1.80;
     }
     biggestFontSize(text:string,  r: rect): number {
-        const biggestForWidth = r.width / (text.length * 0.60009765625 /  (72/25.6))
-        const expectedHeight = (biggestForWidth * 0.3527777778) / 1.15
+        const biggestForWidth = r.width / (text.length * 0.60009765625 /  (72/25.6));
+        const expectedHeight = (biggestForWidth * 0.3527777778) / 1.15;
 
         if (expectedHeight <= r.height) {
-            return biggestForWidth
+            return biggestForWidth;
         }
 
-        return biggestForWidth * r.height / expectedHeight
+        return biggestForWidth * r.height / expectedHeight;
     }
 
 }
