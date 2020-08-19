@@ -7,7 +7,7 @@ import { PaletteEntry } from '../../model/palette/palette.model';
 import { Color } from '../../model/color/color.model';
 import { foreground, getPaletteEntryByColorRef } from '../../utils/utils';
 
-import { defsStyle } from './RobotoMono'
+import { defsStyle } from './MonoFont'
 
 class rect {
     x: number
@@ -131,7 +131,7 @@ export class SvgPrinter implements Printer {
                 inventoryTabNameWidth,
                 inventoryTabHeight,
             ).scale(.7);
-            ctx.font = `${this.biggestFontSize(longestWord, txtContainerName)}pt Roboto Mono`;
+            ctx.font = `${this.biggestFontSize(longestWord, txtContainerName)}pt MonoFont`;
             ctx.fillText(k, txtContainerName.centerX(), txtContainerName.centerY());
 
             if (project.exportConfiguration.useSymbols) {
@@ -142,7 +142,7 @@ export class SvgPrinter implements Printer {
                     inventoryTabNameWidth,
                     inventoryTabHeight,
                 ).scale(.7);
-                ctx.font = `${this.biggestFontSize(longestWord, txtContainerName)}pt Roboto Mono`;
+                ctx.font = `${this.biggestFontSize(longestWord, txtContainerName)}pt MonoFont`;
                 ctx.fillText(text, txtContainerName.centerX(), txtContainerName.centerY());
             }
 
@@ -152,7 +152,7 @@ export class SvgPrinter implements Printer {
                 inventoryTabCountWidth,
                 inventoryTabHeight,
             ).scale(.7);
-            ctx.font = `${this.biggestFontSize(longestWord, txtContainerCount)}pt Roboto Mono`;
+            ctx.font = `${this.biggestFontSize(longestWord, txtContainerCount)}pt MonoFont`;
             ctx.fillText(""+v, txtContainerCount.centerX(), txtContainerCount.centerY());
 
             y++
@@ -202,7 +202,7 @@ export class SvgPrinter implements Printer {
                         if (project.exportConfiguration.useSymbols) {
                             text = (project.paletteConfiguration.palettes.length > 1 ? paletteEntry.prefix : '') + paletteEntry.symbol;
                         }
-                        ctx.font = `${this.biggestFontSize(text, txtContainer)}pt Roboto Mono`;
+                        ctx.font = `${this.biggestFontSize(text, txtContainer)}pt MonoFont`;
                         ctx.fillText(text, txtContainer.centerX(), txtContainer.centerY());
                         
                         let referenceText = paletteEntry.ref;
@@ -257,7 +257,7 @@ export class SvgPrinter implements Printer {
     }
 
 
-    // Welcome to realm of magic values, works only for RobotoMono :S
+    // Welcome to realm of magic values, works only for current font
     biggestFontSize(text:string,  r: rect): number {
         const biggestForWidth = (r.width / text.length) / 0.959136962890625
         const expectedHeight = (biggestForWidth * 0.959136962890625)
