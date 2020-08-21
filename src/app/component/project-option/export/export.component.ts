@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Project } from '../../../model/project/project.model';
+import { ExportConfiguration } from '../../../model/configuration/export-configuration.model';
 import { Printer } from '../../../printer/printer';
 import { PdfPrinter } from '../../../printer/pdf/pdf.printer';
 import { SvgPrinter } from '../../../printer/svg/svg.printer';
@@ -13,6 +14,7 @@ import { XlsxPrinter } from '../../../printer/xlsx/xlsx.printer';
     styleUrls: ['./export.component.scss']
 })
 export class ExportComponent {
+    @Input() configuration: ExportConfiguration;
     @Input() project: Project;
     @Input() usage: Map<string, number>;
     @Input() reducedColor: Uint8ClampedArray;
