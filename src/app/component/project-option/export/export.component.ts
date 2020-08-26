@@ -6,6 +6,7 @@ import { PdfPrinter } from '../../../printer/pdf/pdf.printer';
 import { SvgPrinter } from '../../../printer/svg/svg.printer';
 import { PngPrinter } from '../../../printer/png/png.printer';
 import { JpgPrinter } from '../../../printer/jpg/jpg.printer';
+import { XlsxPrinter } from '../../../printer/xlsx/xlsx.printer';
 
 @Component({
     selector: 'export',
@@ -26,8 +27,9 @@ export class ExportComponent {
             new PdfPrinter(),
             new SvgPrinter(),
             new PngPrinter(),
-            new JpgPrinter()
-        ]
+            new JpgPrinter(),
+            new XlsxPrinter(),
+        ];
         this.printer = this.availablePrinters[0];
     }
 
