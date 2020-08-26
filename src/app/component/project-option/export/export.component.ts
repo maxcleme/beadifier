@@ -28,8 +28,8 @@ export class ExportComponent {
             new SvgPrinter(),
             new PngPrinter(),
             new JpgPrinter(),
-            new XlsxPrinter()
-        ]
+            new XlsxPrinter(),
+        ];
         this.printer = this.availablePrinters[0];
     }
 
