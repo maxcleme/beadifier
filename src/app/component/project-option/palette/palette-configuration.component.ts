@@ -6,9 +6,9 @@ import { PaletteConfiguration } from '../../../model/configuration/palette-confi
 import { Palette } from '../../../model/palette/palette.model';
 
 @Component({
-    selector: 'palette-configuration',
+    selector: 'app-palette-configuration',
     templateUrl: './palette-configuration.component.html',
-    styleUrls: ['./palette-configuration.component.scss']
+    styleUrls: ['./palette-configuration.component.scss'],
 })
 export class PaletteConfigurationComponent {
     @Input() configuration: PaletteConfiguration;
@@ -23,15 +23,17 @@ export class PaletteConfigurationComponent {
     }
 
     toggleAll(e) {
-        this.configuration.palettes.forEach(p => p.entries.forEach(entry => entry.enabled = e.checked));
+        this.configuration.palettes.forEach((p) =>
+            p.entries.forEach((entry) => (entry.enabled = e.checked))
+        );
         this.callback();
     }
 
     paletteEquality(o1: Palette, o2: Palette) {
-        return o1.name == o2.name;
+        return o1.name === o2.name;
     }
 
     callback() {
-        this.onChange.emit(this.configuration)
+        this.onChange.emit(this.configuration);
     }
 }

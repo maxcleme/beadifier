@@ -1,22 +1,36 @@
 <div style="padding-bottom: 1em">
-  <div fxLayout="row wrap" fxLayoutAlign="space-between start">
-    <div>
-      <mat-slide-toggle [(ngModel)]="configuration.useSymbols" name="use symbols">Use Symbols </mat-slide-toggle>
+    <div fxLayout="row wrap" fxLayoutAlign="space-between start">
+        <div>
+            <mat-slide-toggle
+                [(ngModel)]="configuration.useSymbols"
+                name="use symbols"
+                >Use Symbols
+            </mat-slide-toggle>
+        </div>
     </div>
-  </div>
 </div>
 
 <div fxLayout="row wrap" fxLayoutAlign="space-between start">
-  <div>
-    <mat-form-field>
-      <mat-select aria-label="format" placeholder="Format" [(ngModel)]="printer" name="printer">
-        <mat-option *ngFor="let printer of availablePrinters" [value]="printer">
-          {{ printer.name() }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
-  <div>
-    <button aria-label="export" mat-raised-button (click)="export()">Export</button>
-  </div>
+    <div>
+        <mat-form-field>
+            <mat-select
+                aria-label="format"
+                placeholder="Format"
+                [(ngModel)]="printer"
+                name="printer"
+            >
+                <mat-option
+                    *ngFor="let printer of availablePrinters"
+                    [value]="printer"
+                >
+                    {{ printer.name() }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <div>
+        <button aria-label="export" mat-raised-button (click)="export()">
+            Export
+        </button>
+    </div>
 </div>

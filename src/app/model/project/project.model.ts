@@ -12,12 +12,12 @@ export class Project {
     srcHeight: number;
 
     boardConfiguration: BoardConfiguration;
-    paletteConfiguration: PaletteConfiguration
+    paletteConfiguration: PaletteConfiguration;
     matchingConfiguration: MatchingConfiguration;
-    ditheringConfiguration: DitheringConfiguration
-    imageConfiguration: ImageConfiguration
-    rendererConfiguration: RendererConfiguration
-    exportConfiguration: ExportConfiguration
+    ditheringConfiguration: DitheringConfiguration;
+    imageConfiguration: ImageConfiguration;
+    rendererConfiguration: RendererConfiguration;
+    exportConfiguration: ExportConfiguration;
 
     constructor(
         paletteConfiguration: PaletteConfiguration,

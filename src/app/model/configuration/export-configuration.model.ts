@@ -1,5 +1,5 @@
 export class ExportConfiguration {
-    useSymbols: boolean
+    useSymbols: boolean;
 
     constructor() {
         this.useSymbols = false;

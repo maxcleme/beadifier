@@ -7,4 +7,4 @@ export const defsStyle = `
     font-style:normal;
 }
 </style>
-`
+`;

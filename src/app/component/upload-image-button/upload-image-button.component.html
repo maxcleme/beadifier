@@ -1,2 +1,16 @@
-<button aria-label="image chooser" type="button" mat-raised-button (click)="triggerInput()">Select image...</button>
-<input #input ngModel type="file" name="filename" accept="image/gif, image/jpeg, image/png" (change)="readImage($event)">
+<button
+    aria-label="image chooser"
+    type="button"
+    mat-raised-button
+    (click)="triggerInput()"
+>
+    Select image...
+</button>
+<input
+    #input
+    ngModel
+    type="file"
+    name="filename"
+    accept="image/gif, image/jpeg, image/png"
+    (change)="readImage($event)"
+/>
