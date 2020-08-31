@@ -1,12 +1,12 @@
 export class ImageConfiguration {
-    filters: string[]
+    filters: string[];
 
     constructor() {
         this.filters = [];
     }
 
     add(filter: string) {
-        this.filters.push(filter)
+        this.filters.push(filter);
     }
 
     clear() {
@@ -14,6 +14,6 @@ export class ImageConfiguration {
     }
 
     css() {
-        return this.filters.join(" ")
+        return this.filters.join(' ');
     }
 }

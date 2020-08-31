@@ -9,9 +9,9 @@ import { JpgPrinter } from '../../../printer/jpg/jpg.printer';
 import { XlsxPrinter } from '../../../printer/xlsx/xlsx.printer';
 
 @Component({
-    selector: 'export',
+    selector: 'app-export',
     templateUrl: './export.component.html',
-    styleUrls: ['./export.component.scss']
+    styleUrls: ['./export.component.scss'],
 })
 export class ExportComponent {
     @Input() configuration: ExportConfiguration;
@@ -34,6 +34,11 @@ export class ExportComponent {
     }
 
     export() {
-        this.printer.print(this.reducedColor, this.usage, this.project, `beadifier_${this.project.boardConfiguration.nbBoardWidth}x${this.project.boardConfiguration.nbBoardHeight}`);
+        this.printer.print(
+            this.reducedColor,
+            this.usage,
+            this.project,
+            `beadifier_${this.project.boardConfiguration.nbBoardWidth}x${this.project.boardConfiguration.nbBoardHeight}`
+        );
     }
 }

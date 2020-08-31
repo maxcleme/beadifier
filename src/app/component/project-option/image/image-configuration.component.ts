@@ -9,9 +9,9 @@ const DEFAULT_BRIGHTNESS = 100;
 const DEFAULT_GRAYSCALE = 0;
 
 @Component({
-    selector: 'image-configuration',
+    selector: 'app-image-configuration',
     templateUrl: './image-configuration.component.html',
-    styleUrls: ['./image-configuration.component.scss']
+    styleUrls: ['./image-configuration.component.scss'],
 })
 export class ImageConfigurationComponent {
     @Input() configuration: ImageConfiguration;
@@ -33,8 +33,8 @@ export class ImageConfigurationComponent {
 
     callback() {
         this.configuration.clear();
-        _.values(this.imgSettings).forEach(f => this.configuration.add(f));
-        this.onChange.emit(this.configuration)
+        _.values(this.imgSettings).forEach((f) => this.configuration.add(f));
+        this.onChange.emit(this.configuration);
     }
 
     setGrayscale() {
@@ -76,6 +76,4 @@ export class ImageConfigurationComponent {
         this.saturation = DEFAULT_SATURATION;
         this.setSaturation();
     }
-
-
 }

@@ -1,34 +1,58 @@
 <div fxLayout="column" fxLayoutAlign="start">
-  <div class="mat-subheading-2">Image</div>
-  <div flexLayout="row" fxLayoutGap="1em" fxLayoutAlign="start center">
-    <span fxFlex="20%">Brightness</span>
-    <mat-slider (change)="setBrightness()" min="0" max="200" step="1" [(value)]="brightness">
-    </mat-slider>
-    <button class="mat-icon-button" (click)="resetBrightness()">
-      <mat-icon>loop</mat-icon>
-    </button>
-  </div>
-  <div flexLayout="row" fxLayoutGap="1em" fxLayoutAlign="start center">
-    <span fxFlex="20%">Contrast</span>
-    <mat-slider (change)="setContrast()" min="0" max="200" step="1" [(value)]="contrast"></mat-slider>
-    <button class="mat-icon-button" (click)="resetContrast()">
-      <mat-icon>loop</mat-icon>
-    </button>
-  </div>
-  <div flexLayout="row" fxLayoutGap="1em" fxLayoutAlign="start center">
-    <span fxFlex="20%">Saturation</span>
-    <mat-slider (change)="setSaturation()" min="0" max="200" step="1" [(value)]="saturation">
-    </mat-slider>
-    <button class="mat-icon-button" (click)="resetSaturation()">
-      <mat-icon>loop</mat-icon>
-    </button>
-  </div>
-  <div flexLayout="row" fxLayoutGap="1em" fxLayoutAlign="start center">
-    <span fxFlex="20%">Grayscale</span>
-    <mat-slider (change)="setGrayscale()" min="0" max="100" step="1" [(value)]="grayscale">
-    </mat-slider>
-    <button class="mat-icon-button" (click)="resetGrayscale()">
-      <mat-icon>loop</mat-icon>
-    </button>
-  </div>
+    <div class="mat-subheading-2">Image</div>
+    <div flexLayout="row" fxLayoutGap="1em" fxLayoutAlign="start center">
+        <span fxFlex="20%">Brightness</span>
+        <mat-slider
+            (change)="setBrightness()"
+            min="0"
+            max="200"
+            step="1"
+            [(value)]="brightness"
+        >
+        </mat-slider>
+        <button class="mat-icon-button" (click)="resetBrightness()">
+            <mat-icon>loop</mat-icon>
+        </button>
+    </div>
+    <div flexLayout="row" fxLayoutGap="1em" fxLayoutAlign="start center">
+        <span fxFlex="20%">Contrast</span>
+        <mat-slider
+            (change)="setContrast()"
+            min="0"
+            max="200"
+            step="1"
+            [(value)]="contrast"
+        ></mat-slider>
+        <button class="mat-icon-button" (click)="resetContrast()">
+            <mat-icon>loop</mat-icon>
+        </button>
+    </div>
+    <div flexLayout="row" fxLayoutGap="1em" fxLayoutAlign="start center">
+        <span fxFlex="20%">Saturation</span>
+        <mat-slider
+            (change)="setSaturation()"
+            min="0"
+            max="200"
+            step="1"
+            [(value)]="saturation"
+        >
+        </mat-slider>
+        <button class="mat-icon-button" (click)="resetSaturation()">
+            <mat-icon>loop</mat-icon>
+        </button>
+    </div>
+    <div flexLayout="row" fxLayoutGap="1em" fxLayoutAlign="start center">
+        <span fxFlex="20%">Grayscale</span>
+        <mat-slider
+            (change)="setGrayscale()"
+            min="0"
+            max="100"
+            step="1"
+            [(value)]="grayscale"
+        >
+        </mat-slider>
+        <button class="mat-icon-button" (click)="resetGrayscale()">
+            <mat-icon>loop</mat-icon>
+        </button>
+    </div>
 </div>

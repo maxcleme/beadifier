@@ -5,6 +5,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --open",
+    "format": "prettier --write \"./src/app/**/*.(ts|html|scss|json|js)\"",
+    "lint": "ng lint --fix",
     "build": "ng build",
     "build:prod": "ng build --prod=true"
   },
@@ -64,6 +66,7 @@
     "less-loader": "^4.0.5",
     "postcss-loader": "^3.0.0",
     "postcss-url": "^8.0.0",
+    "prettier": "^2.1.1",
     "protractor": "^5.1.2",
     "raw-loader": "^0.5.1",
     "sass-loader": "^6.0.3",

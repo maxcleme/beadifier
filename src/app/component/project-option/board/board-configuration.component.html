@@ -1,18 +1,38 @@
 <div fxLayout="row wrap" fxFlex="100%" fxLayoutAlign="start start">
-  <div fxFlex="100%" fxLayoutAlign="space-between start">
-    <div>
-      <mat-form-field>
-        <mat-select aria-label="board" placeholder="Board type" [(ngModel)]="configuration.board" name="board"
-          (selectionChange)="callback()">
-          <mat-option *ngFor="let board of availableBoards" [value]="board">
-            {{board.name}} ({{board.nbBeadPerRow}}x{{board.nbBeadPerRow}})
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+    <div fxFlex="100%" fxLayoutAlign="space-between start">
+        <div>
+            <mat-form-field>
+                <mat-select
+                    aria-label="board"
+                    placeholder="Board type"
+                    [(ngModel)]="configuration.board"
+                    name="board"
+                    (selectionChange)="callback()"
+                >
+                    <mat-option
+                        *ngFor="let board of availableBoards"
+                        [value]="board"
+                    >
+                        {{ board.name }} ({{ board.nbBeadPerRow }}x{{
+                            board.nbBeadPerRow
+                        }})
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <button
+            aria-label="maximize"
+            mat-raised-button
+            (click)="maximize()"
+            [disabled]="!srcWidth || !srcHeight"
+        >
+            Maximize
+        </button>
     </div>
-    <button aria-label="maximize" mat-raised-button (click)="maximize()" [disabled]="!srcWidth || !srcHeight">Maximize</button>
-  </div>
-  <div>
-    <board-size [configuration]="configuration" (onBoardSizeChange)="callback()"></board-size>
-  </div>
+    <div>
+        <app-board-size
+            [configuration]="configuration"
+            (onBoardSizeChange)="callback()"
+        ></app-board-size>
+    </div>
 </div>

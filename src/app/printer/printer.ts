@@ -1,6 +1,11 @@
-import { Project } from "../model/project/project.model";
+import { Project } from '../model/project/project.model';
 
 export interface Printer {
     name(): string;
-    print(reducedColor: Uint8ClampedArray, usage: Map<string, number>, project: Project, filename: string);
+    print(
+        reducedColor: Uint8ClampedArray,
+        usage: Map<string, number>,
+        project: Project,
+        filename: string
+    );
 }

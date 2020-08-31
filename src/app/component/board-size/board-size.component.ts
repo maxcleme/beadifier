@@ -1,16 +1,18 @@
-import { Component, Input, EventEmitter, Output } from "@angular/core";
+import { Component, Input, EventEmitter, Output } from '@angular/core';
 
 import * as _ from 'lodash';
 import { BoardConfiguration } from '../../model/configuration/board-configuration.model';
 
 @Component({
-    selector: 'board-size',
+    selector: 'app-board-size',
     templateUrl: './board-size.component.html',
-    styleUrls: ['./board-size.component.scss']
+    styleUrls: ['./board-size.component.scss'],
 })
 export class BoardSizeComponent {
-    @Input("configuration") configuration: BoardConfiguration;
-    @Output("onBoardSizeChange") onBoardSizeChange = new EventEmitter<BoardConfiguration>();
+    @Input() configuration: BoardConfiguration;
+    @Output() onBoardSizeChange = new EventEmitter<
+        BoardConfiguration
+    >();
 
     generateRange(to) {
         return _.range(0, to);

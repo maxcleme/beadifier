@@ -5,7 +5,13 @@ export class AugmentedProgram {
     pMatrixUniform: any;
     mvMatrixUniform: any;
 
-    constructor(program, vertexPositionAttribute, vertexColorUniform, pMatrixUniform, mvMatrixUniform) {
+    constructor(
+        program,
+        vertexPositionAttribute,
+        vertexColorUniform,
+        pMatrixUniform,
+        mvMatrixUniform
+    ) {
         this.program = program;
         this.vertexPositionAttribute = vertexPositionAttribute;
         this.vertexColorUniform = vertexColorUniform;
