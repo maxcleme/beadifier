@@ -4,22 +4,21 @@ import { DitheringConfiguration } from '../../../model/configuration/dithering-c
 const DEFAULT_HARDNESS = 1;
 
 @Component({
-    selector: 'dithering-configuration',
+    selector: 'app-dithering-configuration',
     templateUrl: './dithering-configuration.component.html',
-    styleUrls: ['./dithering-configuration.component.scss']
+    styleUrls: ['./dithering-configuration.component.scss'],
 })
 export class DitheringConfigurationComponent {
     @Input() configuration: DitheringConfiguration;
     @Output() onChange = new EventEmitter<DitheringConfiguration>();
 
-    constructor() {
-    }
+    constructor() {}
 
     callback() {
-        this.onChange.emit(this.configuration)
+        this.onChange.emit(this.configuration);
     }
 
-    resetHardness(){
-        this.configuration.hardness = DEFAULT_HARDNESS; 
+    resetHardness() {
+        this.configuration.hardness = DEFAULT_HARDNESS;
     }
 }

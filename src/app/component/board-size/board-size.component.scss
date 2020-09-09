@@ -1,22 +1,22 @@
 :host {
-  .btn-small {
-    width: 33px !important;
-    min-width: 33px !important;
-    height: 33px !important;
-    min-height: 33px !important;
-    padding: 3px !important;
-    margin: 3px !important;
-    line-height: 25px !important;
-  }
+    .btn-small {
+        width: 33px !important;
+        min-width: 33px !important;
+        height: 33px !important;
+        min-height: 33px !important;
+        padding: 3px !important;
+        margin: 3px !important;
+        line-height: 25px !important;
+    }
 
-  .board {
-    border: 1px solid black;
-    background-color: pink;
-  }
+    .board {
+        border: 1px solid black;
+        background-color: pink;
+    }
 
-  .btn-container {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-  }
+    .btn-container {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+    }
 }

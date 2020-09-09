@@ -5,9 +5,9 @@ import { MatchingConfiguration } from '../../../model/configuration/matching-con
 import { Matching, MATCHINGS } from '../../../model/matching/matching.model';
 
 @Component({
-    selector: 'matching-configuration',
+    selector: 'app-matching-configuration',
     templateUrl: './matching-configuration.component.html',
-    styleUrls: ['./matching-configuration.component.scss']
+    styleUrls: ['./matching-configuration.component.scss'],
 })
 export class MatchingConfigurationComponent {
     @Input() configuration: MatchingConfiguration;
@@ -20,6 +20,6 @@ export class MatchingConfigurationComponent {
     }
 
     callback() {
-        this.onChange.emit(this.configuration)
+        this.onChange.emit(this.configuration);
     }
 }

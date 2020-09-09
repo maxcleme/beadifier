@@ -1,25 +1,66 @@
-<div [ngStyle]="{'width.px': (configuration.nbBoardWidth + 1)*40}">
-    <mat-grid-list [cols]="configuration.nbBoardWidth + 1" gutterSize="3" rowHeight="40px">
-        <mat-grid-tile *ngFor="let test of generateRange(configuration.nbBoardWidth)" [colspan]="1" [rowspan]="1" class="board">
+<div [ngStyle]="{ 'width.px': (configuration.nbBoardWidth + 1) * 40 }">
+    <mat-grid-list
+        [cols]="configuration.nbBoardWidth + 1"
+        gutterSize="3"
+        rowHeight="40px"
+    >
+        <mat-grid-tile
+            *ngFor="let test of generateRange(configuration.nbBoardWidth)"
+            [colspan]="1"
+            [rowspan]="1"
+            class="board"
+        >
         </mat-grid-tile>
         <mat-grid-tile [colspan]="1" [rowspan]="configuration.nbBoardHeight">
             <div class="btn-container">
-                <button aria-label="remove row" class="btn-small" mat-raised-button (click)="decreaseNbBoardHeight()" *ngIf="configuration.nbBoardHeight != 1">
+                <button
+                    aria-label="remove row"
+                    class="btn-small"
+                    mat-raised-button
+                    (click)="decreaseNbBoardHeight()"
+                    *ngIf="configuration.nbBoardHeight != 1"
+                >
                     <mat-icon>keyboard_arrow_up</mat-icon>
                 </button>
-                <button aria-label="add row" class="btn-small" mat-raised-button (click)="increaseNbBoardHeight()">
+                <button
+                    aria-label="add row"
+                    class="btn-small"
+                    mat-raised-button
+                    (click)="increaseNbBoardHeight()"
+                >
                     <mat-icon>keyboard_arrow_down</mat-icon>
                 </button>
             </div>
         </mat-grid-tile>
-        <mat-grid-tile *ngFor="let test of generateRange(configuration.nbBoardWidth * (configuration.nbBoardHeight-1))" [colspan]="1" [rowspan]="1" class="board">
+        <mat-grid-tile
+            *ngFor="
+                let test of generateRange(
+                    configuration.nbBoardWidth *
+                        (configuration.nbBoardHeight - 1)
+                )
+            "
+            [colspan]="1"
+            [rowspan]="1"
+            class="board"
+        >
         </mat-grid-tile>
         <mat-grid-tile [colspan]="configuration.nbBoardWidth" [rowspan]="1">
             <div class="btn-container">
-                <button aria-label="remove column" class="btn-small" mat-raised-button (click)="decreaseNbBoardWidth()" *ngIf="configuration.nbBoardWidth != 1">
+                <button
+                    aria-label="remove column"
+                    class="btn-small"
+                    mat-raised-button
+                    (click)="decreaseNbBoardWidth()"
+                    *ngIf="configuration.nbBoardWidth != 1"
+                >
                     <mat-icon>keyboard_arrow_left</mat-icon>
                 </button>
-                <button aria-label="add column" class="btn-small" mat-raised-button (click)="increaseNbBoardWidth()">
+                <button
+                    aria-label="add column"
+                    class="btn-small"
+                    mat-raised-button
+                    (click)="increaseNbBoardWidth()"
+                >
                     <mat-icon>keyboard_arrow_right</mat-icon>
                 </button>
             </div>

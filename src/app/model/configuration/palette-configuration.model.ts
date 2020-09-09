@@ -1,7 +1,7 @@
 import { Palette } from '../palette/palette.model';
 
 export class PaletteConfiguration {
-    palettes: Palette[]
+    palettes: Palette[];
 
     constructor(palettes: Palette[]) {
         this.palettes = palettes;
