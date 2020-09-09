@@ -5,9 +5,9 @@ import { BoardConfiguration } from '../../../model/configuration/board-configura
 import { Board, BOARDS } from '../../../model/board/board.model';
 
 @Component({
-    selector: 'board-configuration',
+    selector: 'app-board-configuration',
     templateUrl: './board-configuration.component.html',
-    styleUrls: ['./board-configuration.component.scss']
+    styleUrls: ['./board-configuration.component.scss'],
 })
 export class BoardConfigurationComponent {
     @Input() configuration: BoardConfiguration;
@@ -22,14 +22,17 @@ export class BoardConfigurationComponent {
         this.availableBoards = _.values(BOARDS);
     }
 
-    maximize(){
-        this.configuration.nbBoardWidth = Math.ceil(this.srcWidth / this.configuration.board.nbBeadPerRow) 
-        this.configuration.nbBoardHeight = Math.ceil(this.srcHeight / this.configuration.board.nbBeadPerRow)
+    maximize() {
+        this.configuration.nbBoardWidth = Math.ceil(
+            this.srcWidth / this.configuration.board.nbBeadPerRow
+        );
+        this.configuration.nbBoardHeight = Math.ceil(
+            this.srcHeight / this.configuration.board.nbBeadPerRow
+        );
         this.callback();
     }
 
     callback() {
-        this.onChange.emit(this.configuration)
+        this.onChange.emit(this.configuration);
     }
-
 }

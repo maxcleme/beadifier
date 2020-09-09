@@ -6,27 +6,27 @@ import { PaletteEntry } from '../../model/palette/palette.model';
 import * as _ from 'lodash';
 
 @Component({
-  selector: 'project-option',
-  templateUrl: './project-option.component.html',
-  styleUrls: ['./project-option.component.scss']
+    selector: 'app-project-option',
+    templateUrl: './project-option.component.html',
+    styleUrls: ['./project-option.component.scss'],
 })
 export class ProjectOptionComponent {
-  @Input() project: Project;
-  @Input() usage: Map<PaletteEntry, number>;
-  @Input() reducedColor: Uint8ClampedArray;
-  @Output() onLoad = new EventEmitter<Project>();
+    @Input() project: Project;
+    @Input() usage: Map<PaletteEntry, number>;
+    @Input() reducedColor: Uint8ClampedArray;
+    @Output() onLoad = new EventEmitter<Project>();
 
-  onLoadingImageCallback(src) {
-    this.project.imageSrc = src;
-    this.callback();
-  }
+    onLoadingImageCallback(src) {
+        this.project.imageSrc = src;
+        this.callback();
+    }
 
-  callback() {
-    this.onLoad.emit(this.project);
-  }
+    callback() {
+        this.onLoad.emit(this.project);
+    }
 
-  preventSubmit(e: Event) {
-    e.preventDefault();
-    return false;
-  }
+    preventSubmit(e: Event) {
+        e.preventDefault();
+        return false;
+    }
 }

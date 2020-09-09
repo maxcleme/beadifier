@@ -11,21 +11,21 @@ export class Color {
         this.a = a;
     }
 
-    add(c: Color) : Color {
+    add(c: Color): Color {
         this.r += c.r;
         this.g += c.g;
         this.b += c.b;
         return this;
     }
 
-    sub(c: Color) : Color {
+    sub(c: Color): Color {
         this.r -= c.r;
         this.g -= c.g;
         this.b -= c.b;
         return this;
     }
 
-    mult(s: number) : Color{
+    mult(s: number): Color {
         this.r *= s;
         this.g *= s;
         this.b *= s;

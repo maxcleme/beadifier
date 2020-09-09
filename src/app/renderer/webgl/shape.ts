@@ -1,4 +1,4 @@
-import { AugmentedBuffer } from "./augmented-buffer";
+import { AugmentedBuffer } from './augmented-buffer';
 
 export class Shape {
     drawingMode: number;

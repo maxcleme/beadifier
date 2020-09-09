@@ -1,4 +1,4 @@
-import { Color } from "./../color/color.model";
+import { Color } from './../color/color.model';
 
 export class Palette {
     name: string;
@@ -13,8 +13,10 @@ export class Palette {
 export class PaletteEntry {
     name: string;
     ref: string;
+    symbol: string;
     color: Color;
-    enabled: boolean = true;
+    prefix: string;
+    enabled = true;
 
     constructor(name, color) {
         this.name = name;

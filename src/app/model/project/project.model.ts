@@ -4,6 +4,7 @@ import { MatchingConfiguration } from '../configuration/matching-configuration.m
 import { DitheringConfiguration } from '../configuration/dithering-configuration.model';
 import { ImageConfiguration } from '../configuration/image-configuration.model';
 import { RendererConfiguration } from '../configuration/renderer-configuration.model';
+import { ExportConfiguration } from '../configuration/export-configuration.model';
 
 export class Project {
     imageSrc: string;
@@ -11,11 +12,12 @@ export class Project {
     srcHeight: number;
 
     boardConfiguration: BoardConfiguration;
-    paletteConfiguration: PaletteConfiguration
+    paletteConfiguration: PaletteConfiguration;
     matchingConfiguration: MatchingConfiguration;
-    ditheringConfiguration: DitheringConfiguration
-    imageConfiguration: ImageConfiguration
-    rendererConfiguration: RendererConfiguration
+    ditheringConfiguration: DitheringConfiguration;
+    imageConfiguration: ImageConfiguration;
+    rendererConfiguration: RendererConfiguration;
+    exportConfiguration: ExportConfiguration;
 
     constructor(
         paletteConfiguration: PaletteConfiguration,
@@ -23,7 +25,8 @@ export class Project {
         matchingConfiguration: MatchingConfiguration,
         imageConfiguration: ImageConfiguration,
         ditheringConfiguration: DitheringConfiguration,
-        rendererConfiguration: RendererConfiguration
+        rendererConfiguration: RendererConfiguration,
+        exportConfiguration: ExportConfiguration
     ) {
         this.paletteConfiguration = paletteConfiguration;
         this.boardConfiguration = boardConfiguration;
@@ -31,5 +34,6 @@ export class Project {
         this.imageConfiguration = imageConfiguration;
         this.ditheringConfiguration = ditheringConfiguration;
         this.rendererConfiguration = rendererConfiguration;
+        this.exportConfiguration = exportConfiguration;
     }
 }

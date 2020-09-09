@@ -1,84 +1,165 @@
-<mat-tab-group dynamicHeight>
-  <mat-tab label="Configuration">
-    <div class="example-small-box mat-elevation-z4">
-      <form (submit)="preventSubmit($event)">
-        <div style="padding:1em;" fxLayout="row" fxLayoutAlign="space-between wrap">
-          <div fxLayout="column" fxLayoutGap="1em" fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="33%" fxFlex.lg="33%"
-            fxFlex.xl="33%">
-            <div>
-              <upload-image-button (onLoad)="onLoadingImageCallback($event)"></upload-image-button>
-            </div>
-          </div>
+<mat-tab-group dynamicHeight [selectedIndex]="0">
+    <mat-tab label="Configuration">
+        <div class="example-small-box mat-elevation-z4">
+            <form (submit)="preventSubmit($event)">
+                <div
+                    style="padding: 1em"
+                    fxLayout="row"
+                    fxLayoutAlign="space-between wrap"
+                >
+                    <div
+                        fxLayout="column"
+                        fxLayoutGap="1em"
+                        fxFlex.xs="100%"
+                        fxFlex.sm="100%"
+                        fxFlex.md="33%"
+                        fxFlex.lg="33%"
+                        fxFlex.xl="33%"
+                    >
+                        <div>
+                            <app-upload-image-button
+                                (onLoad)="onLoadingImageCallback($event)"
+                            ></app-upload-image-button>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
-      </form>
-    </div>
-  </mat-tab>
+    </mat-tab>
 
-  <mat-tab label="Boards">
-    <div class="example-large-box mat-elevation-z4">
-      <form (submit)="preventSubmit($event)">
-        <div style="padding:1em;" fxLayout="row wrap" fxLayoutAlign="space-between start">
-          <board-configuration [configuration]="project.boardConfiguration" [srcWidth]="project.srcWidth" [srcHeight]="project.srcHeight" (onChange)="callback()">
-          </board-configuration>
+    <mat-tab label="Boards">
+        <div class="example-large-box mat-elevation-z4">
+            <form (submit)="preventSubmit($event)">
+                <div
+                    style="padding: 1em"
+                    fxLayout="row wrap"
+                    fxLayoutAlign="space-between start"
+                >
+                    <app-board-configuration
+                        [configuration]="project.boardConfiguration"
+                        [srcWidth]="project.srcWidth"
+                        [srcHeight]="project.srcHeight"
+                        (onChange)="callback()"
+                    >
+                    </app-board-configuration>
+                </div>
+            </form>
         </div>
-      </form>
-    </div>
-  </mat-tab>
+    </mat-tab>
 
-  <mat-tab label="Palettes">
-    <div class="example-large-box mat-elevation-z4">
-      <form (submit)="preventSubmit($event)">
-        <div style="padding:1em;" fxLayout="row wrap" fxLayoutAlign="space-between start">
-          <palette-configuration [configuration]="project.paletteConfiguration" (onChange)="callback()">
-          </palette-configuration>
+    <mat-tab label="Palettes">
+        <div class="example-large-box mat-elevation-z4">
+            <form (submit)="preventSubmit($event)">
+                <div
+                    style="padding: 1em"
+                    fxLayout="row wrap"
+                    fxLayoutAlign="space-between start"
+                >
+                    <app-palette-configuration
+                        [configuration]="project.paletteConfiguration"
+                        (onChange)="callback()"
+                    >
+                    </app-palette-configuration>
+                </div>
+            </form>
         </div>
-      </form>
-    </div>
-  </mat-tab>
+    </mat-tab>
 
-  <mat-tab label="Advanced">
-    <div class="example-large-box mat-elevation-z4">
-      <form (submit)="preventSubmit($event)">
-        <div style="padding:1em;" fxLayout="row wrap" fxLayoutAlign="space-between start">
-          <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="50%" fxFlex.lg="33%" fxFlex.xl="25%">
-            <image-configuration [configuration]="project.imageConfiguration" (onChange)="callback()">
-            </image-configuration>
-          </div>
-          <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="50%" fxFlex.lg="33%" fxFlex.xl="25%">
-            <dithering-configuration [configuration]="project.ditheringConfiguration" (onChange)="callback()">
-            </dithering-configuration>
-          </div>
-          <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="50%" fxFlex.lg="33%" fxFlex.xl="25%">
-            <matching-configuration [configuration]="project.matchingConfiguration" (onChange)="callback()">
-            </matching-configuration>
-          </div>
-          <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="50%" fxFlex.lg="33%" fxFlex.xl="25%">
-            <renderer-configuration [configuration]="project.rendererConfiguration" (onChange)="callback()">
-            </renderer-configuration>
-          </div>
+    <mat-tab label="Advanced">
+        <div class="example-large-box mat-elevation-z4">
+            <form (submit)="preventSubmit($event)">
+                <div
+                    style="padding: 1em"
+                    fxLayout="row wrap"
+                    fxLayoutAlign="space-between start"
+                >
+                    <div
+                        fxFlex.xs="100%"
+                        fxFlex.sm="100%"
+                        fxFlex.md="50%"
+                        fxFlex.lg="33%"
+                        fxFlex.xl="25%"
+                    >
+                        <app-image-configuration
+                            [configuration]="project.imageConfiguration"
+                            (onChange)="callback()"
+                        >
+                        </app-image-configuration>
+                    </div>
+                    <div
+                        fxFlex.xs="100%"
+                        fxFlex.sm="100%"
+                        fxFlex.md="50%"
+                        fxFlex.lg="33%"
+                        fxFlex.xl="25%"
+                    >
+                        <app-dithering-configuration
+                            [configuration]="project.ditheringConfiguration"
+                            (onChange)="callback()"
+                        >
+                        </app-dithering-configuration>
+                    </div>
+                    <div
+                        fxFlex.xs="100%"
+                        fxFlex.sm="100%"
+                        fxFlex.md="50%"
+                        fxFlex.lg="33%"
+                        fxFlex.xl="25%"
+                    >
+                        <app-matching-configuration
+                            [configuration]="project.matchingConfiguration"
+                            (onChange)="callback()"
+                        >
+                        </app-matching-configuration>
+                    </div>
+                    <div
+                        fxFlex.xs="100%"
+                        fxFlex.sm="100%"
+                        fxFlex.md="50%"
+                        fxFlex.lg="33%"
+                        fxFlex.xl="25%"
+                    >
+                        <app-renderer-configuration
+                            [configuration]="project.rendererConfiguration"
+                            (onChange)="callback()"
+                        >
+                        </app-renderer-configuration>
+                    </div>
+                </div>
+            </form>
         </div>
-      </form>
-    </div>
-  </mat-tab>
+    </mat-tab>
 
-  <mat-tab label="Usage" [disabled]="!project.imageSrc">
-    <div class="example-large-box mat-elevation-z4">
-      <form (submit)="preventSubmit($event)">
-        <div style="padding:1em;" fxLayout="row wrap" fxLayoutAlign="space-between start">
-          <bead-usage [usage]="usage" [palettes]="project.paletteConfiguration.palettes" (onPaletteChange)="callback()"></bead-usage>
+    <mat-tab label="Usage" [disabled]="!project.imageSrc">
+        <div class="example-large-box mat-elevation-z4">
+            <form (submit)="preventSubmit($event)">
+                <div
+                    style="padding: 1em"
+                    fxLayout="row wrap"
+                    fxLayoutAlign="space-between start"
+                >
+                    <app-bead-usage
+                        [usage]="usage"
+                        [palettes]="project.paletteConfiguration.palettes"
+                        (onPaletteChange)="callback()"
+                    ></app-bead-usage>
+                </div>
+            </form>
         </div>
-      </form>
-    </div>
-  </mat-tab>
+    </mat-tab>
 
-  <mat-tab label="Save & Export" [disabled]="!project.imageSrc">
-    <div class="example-large-box mat-elevation-z4">
-      <form (submit)="preventSubmit($event)">
-        <div style="padding:1em;" fxLayout="row wrap" fxLayoutAlign="space-between start">
-          <export [project]="project" [usage]="usage" [reducedColor]="reducedColor"></export>
+    <mat-tab label="Save & Export" [disabled]="!project.imageSrc">
+        <div class="example-large-box mat-elevation-z4">
+            <form (submit)="preventSubmit($event)">
+                <div style="padding: 1em">
+                    <app-export
+                        [project]="project"
+                        [usage]="usage"
+                        [reducedColor]="reducedColor"
+                        [configuration]="project.exportConfiguration"
+                    ></app-export>
+                </div>
+            </form>
         </div>
-      </form>
-    </div>
-  </mat-tab>
-
+    </mat-tab>
 </mat-tab-group>

@@ -1,26 +1,59 @@
 <div fxLayout="column" fxLayoutGap="1em">
-  <div>
-    <mat-form-field>
-      <mat-select multiple aria-label="palettes" placeholder="Palettes" [(ngModel)]="configuration.palettes"
-        name="palettes" (selectionChange)="callback()" [compareWith]="paletteEquality">
-        <mat-option *ngFor="let palette of availablePalettes | async" [value]="palette">
-          {{palette.name}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
-  <div fxLayout="row wrap">
-    <mat-slide-toggle [checked]="enableAllPaletteEntry" (change)="toggleAll($event)">All</mat-slide-toggle>
-  </div>
-  <div fxLayout="row wrap" *ngFor="let palette of configuration.palettes" fxLayoutAlign="start center">
-    <div fxFlex.xs="50%" fxFlex.sm="33%" fxFlex.md="25%" fxFlex.lg="20%" fxFlex.xl="14.28%"
-      *ngFor="let entry of palette.entries">
-      <palette-entry [entry]="entry" (onToggleCallback)="callback()"></palette-entry>
+    <div>
+        <mat-form-field>
+            <mat-select
+                multiple
+                aria-label="palettes"
+                placeholder="Palettes"
+                [(ngModel)]="configuration.palettes"
+                name="palettes"
+                (selectionChange)="callback()"
+                [compareWith]="paletteEquality"
+            >
+                <mat-option
+                    *ngFor="let palette of availablePalettes | async"
+                    [value]="palette"
+                >
+                    {{ palette.name }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
     </div>
-    <mat-divider style="margin-top: 1em;" [inset]="true"></mat-divider>
-  </div>
-  <div fxLayout="row wrap" fxLayoutAlign="center center">
-    <div class="mat-small mat-caption">Something wrong about colors ? Please fill an <a
-        href="https://github.com/maxcleme/beadcolors/issues/new" target="blank">issue</a>.</div>
-  </div>
+    <div fxLayout="row wrap">
+        <mat-slide-toggle
+            [checked]="enableAllPaletteEntry"
+            (change)="toggleAll($event)"
+            >All</mat-slide-toggle
+        >
+    </div>
+    <div
+        fxLayout="row wrap"
+        *ngFor="let palette of configuration.palettes"
+        fxLayoutAlign="start center"
+    >
+        <div
+            fxFlex.xs="50%"
+            fxFlex.sm="33%"
+            fxFlex.md="25%"
+            fxFlex.lg="20%"
+            fxFlex.xl="14.28%"
+            *ngFor="let entry of palette.entries"
+        >
+            <app-palette-entry
+                [entry]="entry"
+                (onToggleCallback)="callback()"
+            ></app-palette-entry>
+        </div>
+        <mat-divider style="margin-top: 1em" [inset]="true"></mat-divider>
+    </div>
+    <div fxLayout="row wrap" fxLayoutAlign="center center">
+        <div class="mat-small mat-caption">
+            Something wrong about colors ? Please fill an
+            <a
+                href="https://github.com/maxcleme/beadcolors/issues/new"
+                target="blank"
+                >issue</a
+            >.
+        </div>
+    </div>
 </div>

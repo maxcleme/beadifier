@@ -1,7 +1,7 @@
 export class RendererConfiguration {
-    center: boolean
-    fit: boolean
-    showGrid: boolean
+    center: boolean;
+    fit: boolean;
+    showGrid: boolean;
 
     constructor() {
         this.center = true;

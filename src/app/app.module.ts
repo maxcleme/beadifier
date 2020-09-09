@@ -4,12 +4,11 @@ import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
-import { ServiceWorkerModule } from '@angular/service-worker'
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 import { NtkmeButtonModule } from '@ctrl/ngx-github-buttons';
 
 import { MaterialModule } from './app.material.module';
-
 
 import { AppComponent } from './app.component';
 import { ProjectOptionComponent } from './component/project-option/project-option.component';
@@ -30,37 +29,37 @@ import { PaletteService } from './palette/palette.service';
 import { environment } from './../environments/environment';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    ProjectOptionComponent,
-    UploadImageButtonComponent,
-    BeadUsageComponent,
-    BoardSizeComponent,
-    PaletteEntryComponent,
-    BoardConfigurationComponent,
-    PaletteConfigurationComponent,
-    ImageConfigurationComponent,
-    DitheringConfigurationComponent,
-    MatchingConfigurationComponent,
-    RendererConfigurationComponent,
-    ExportComponent
-  ],
-  imports: [
-    BrowserModule,
-    HttpClientModule,
-    BrowserAnimationsModule,
-    FlexLayoutModule,
+    declarations: [
+        AppComponent,
+        ProjectOptionComponent,
+        UploadImageButtonComponent,
+        BeadUsageComponent,
+        BoardSizeComponent,
+        PaletteEntryComponent,
+        BoardConfigurationComponent,
+        PaletteConfigurationComponent,
+        ImageConfigurationComponent,
+        DitheringConfigurationComponent,
+        MatchingConfigurationComponent,
+        RendererConfigurationComponent,
+        ExportComponent,
+    ],
+    imports: [
+        BrowserModule,
+        HttpClientModule,
+        BrowserAnimationsModule,
+        FlexLayoutModule,
 
-    FormsModule,
-    MaterialModule,
+        FormsModule,
+        MaterialModule,
 
-    NtkmeButtonModule,
+        NtkmeButtonModule,
 
-    ServiceWorkerModule.register("/ngsw-worker.js",
-      { enabled: environment.production }
-    )
-  ],
-  providers: [PaletteService],
-  bootstrap: [AppComponent]
+        ServiceWorkerModule.register('/ngsw-worker.js', {
+            enabled: environment.production,
+        }),
+    ],
+    providers: [PaletteService],
+    bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
