@@ -298,6 +298,7 @@ export class PdfPrinter implements Printer {
                     doc.internal.scaleFactor;
                 const textOffset =
                     (doc.internal.pageSize.width - textWidth) / 2;
+                doc.setTextColor(0, 0, 0);
                 doc.text(text, textOffset, margin * 2);
 
                 for (
