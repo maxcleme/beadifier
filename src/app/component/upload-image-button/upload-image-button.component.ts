@@ -1,11 +1,11 @@
 import {
     Component,
-    OnInit,
     ViewChild,
     ElementRef,
     Output,
     EventEmitter,
 } from '@angular/core';
+import { LoadImage } from '../../model/image/load-image.model';
 
 @Component({
     selector: 'app-upload-image-button',
@@ -13,7 +13,7 @@ import {
     styleUrls: ['./upload-image-button.component.scss'],
 })
 export class UploadImageButtonComponent {
-    @Output() onLoad = new EventEmitter<String>();
+    @Output() onLoad = new EventEmitter<LoadImage>();
 
     @ViewChild('input', { static: true }) input: ElementRef;
 
@@ -29,7 +29,13 @@ export class UploadImageButtonComponent {
             const reader = new FileReader();
             reader.addEventListener('load', (e) => {
                 if (this.onLoad) {
-                    this.onLoad.emit((e.target as any).result);
+                    this.onLoad.emit({
+                        name: this.input.nativeElement.files[0].name.replace(
+                            /\.[^/.]+$/,
+                            ''
+                        ),
+                        src: (e.target as any).result,
+                    });
                 }
             });
             reader.readAsDataURL(this.input.nativeElement.files[0]);

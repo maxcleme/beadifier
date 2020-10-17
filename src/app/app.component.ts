@@ -139,12 +139,12 @@ export class AppComponent {
     }, 250);
 
     beadify(project: Project) {
-        if (!project.imageSrc) {
+        if (!project.image) {
             return;
         }
 
-        if (this.imgTag.nativeElement.src !== project.imageSrc) {
-            this.imgTag.nativeElement.src = project.imageSrc;
+        if (this.imgTag.nativeElement.src !== project.image.src) {
+            this.imgTag.nativeElement.src = project.image.src;
             this.imgTag.nativeElement.addEventListener('load', () => {
                 this.project.srcWidth = this.imgTag.nativeElement.width;
                 this.project.srcHeight = this.imgTag.nativeElement.height;

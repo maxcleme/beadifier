@@ -10,9 +10,7 @@ import { BoardConfiguration } from '../../model/configuration/board-configuratio
 })
 export class BoardSizeComponent {
     @Input() configuration: BoardConfiguration;
-    @Output() onBoardSizeChange = new EventEmitter<
-        BoardConfiguration
-    >();
+    @Output() onBoardSizeChange = new EventEmitter<BoardConfiguration>();
 
     generateRange(to) {
         return _.range(0, to);
