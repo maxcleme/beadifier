@@ -4,6 +4,6 @@ export class DitheringConfiguration {
 
     constructor() {
         this.enable = false;
-        this.hardness = 1;
+        this.hardness = 100;
     }
 }

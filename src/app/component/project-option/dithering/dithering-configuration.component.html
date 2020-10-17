@@ -9,12 +9,23 @@
         </mat-slide-toggle>
     </div>
     <div flexLayout="row" fxLayoutGap="1em" fxLayoutAlign="start center">
-        <span fxFlex="20%">Hardness</span>
+        <mat-form-field fxFlex="15%">
+            <input
+                type="number"
+                matInput
+                (change)="callback()"
+                [(ngModel)]="configuration.hardness"
+                placeholder="Hardness"
+                [value]="configuration.hardness"
+                matAutosize="true"
+            />
+            <span matSuffix>%</span>
+        </mat-form-field>
         <mat-slider
             (change)="callback()"
             min="0"
-            max="1"
-            step="0.01"
+            max="100"
+            step="1"
             [(value)]="configuration.hardness"
         >
         </mat-slider>

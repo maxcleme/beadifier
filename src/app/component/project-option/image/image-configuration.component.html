@@ -1,7 +1,18 @@
 <div fxLayout="column" fxLayoutAlign="start">
     <div class="mat-subheading-2">Image</div>
     <div flexLayout="row" fxLayoutGap="1em" fxLayoutAlign="start center">
-        <span fxFlex="20%">Brightness</span>
+        <mat-form-field fxFlex="15%">
+            <input
+                type="number"
+                matInput
+                (change)="setBrightness()"
+                [(ngModel)]="brightness"
+                placeholder="Brightness"
+                [value]="brightness"
+                matAutosize="true"
+            />
+            <span matSuffix>%</span>
+        </mat-form-field>
         <mat-slider
             (change)="setBrightness()"
             min="0"
@@ -15,7 +26,18 @@
         </button>
     </div>
     <div flexLayout="row" fxLayoutGap="1em" fxLayoutAlign="start center">
-        <span fxFlex="20%">Contrast</span>
+        <mat-form-field fxFlex="15%">
+            <input
+                type="number"
+                matInput
+                (change)="setContrast()"
+                [(ngModel)]="contrast"
+                placeholder="Contrast"
+                [value]="contrast"
+                matAutosize="true"
+            />
+            <span matSuffix>%</span>
+        </mat-form-field>
         <mat-slider
             (change)="setContrast()"
             min="0"
@@ -28,7 +50,18 @@
         </button>
     </div>
     <div flexLayout="row" fxLayoutGap="1em" fxLayoutAlign="start center">
-        <span fxFlex="20%">Saturation</span>
+        <mat-form-field fxFlex="15%">
+            <input
+                type="number"
+                matInput
+                (change)="setSaturation()"
+                [(ngModel)]="saturation"
+                placeholder="Saturation"
+                [value]="saturation"
+                matAutosize="true"
+            />
+            <span matSuffix>%</span>
+        </mat-form-field>
         <mat-slider
             (change)="setSaturation()"
             min="0"
@@ -42,7 +75,18 @@
         </button>
     </div>
     <div flexLayout="row" fxLayoutGap="1em" fxLayoutAlign="start center">
-        <span fxFlex="20%">Grayscale</span>
+        <mat-form-field fxFlex="15%">
+            <input
+                type="number"
+                matInput
+                (change)="setGrayscale()"
+                [(ngModel)]="grayscale"
+                placeholder="Grayscale"
+                [value]="grayscale"
+                matAutosize="true"
+            />
+            <span matSuffix>%</span>
+        </mat-form-field>
         <mat-slider
             (change)="setGrayscale()"
             min="0"

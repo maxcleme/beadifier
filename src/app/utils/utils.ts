@@ -127,7 +127,8 @@ export function reduceColor(
                             y,
                             get(imageData, canvas, x + 1, y).add(
                                 quantError.mult(
-                                    (project.ditheringConfiguration.hardness *
+                                    ((project.ditheringConfiguration.hardness /
+                                        100) *
                                         7) /
                                         16
                                 )
@@ -142,7 +143,8 @@ export function reduceColor(
                             y + 1,
                             get(imageData, canvas, x - 1, y + 1).add(
                                 quantError.mult(
-                                    (project.ditheringConfiguration.hardness *
+                                    ((project.ditheringConfiguration.hardness /
+                                        100) *
                                         3) /
                                         16
                                 )
@@ -157,7 +159,8 @@ export function reduceColor(
                             y + 1,
                             get(imageData, canvas, x, y + 1).add(
                                 quantError.mult(
-                                    (project.ditheringConfiguration.hardness *
+                                    ((project.ditheringConfiguration.hardness /
+                                        100) *
                                         5) /
                                         16
                                 )
@@ -172,7 +175,8 @@ export function reduceColor(
                             y + 1,
                             get(imageData, canvas, x + 1, y + 1).add(
                                 quantError.mult(
-                                    (project.ditheringConfiguration.hardness *
+                                    ((project.ditheringConfiguration.hardness /
+                                        100) *
                                         1) /
                                         16
                                 )

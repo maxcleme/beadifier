@@ -1,7 +1,7 @@
 import { Component, Input, EventEmitter, Output } from '@angular/core';
 import { DitheringConfiguration } from '../../../model/configuration/dithering-configuration.model';
 
-const DEFAULT_HARDNESS = 1;
+const DEFAULT_HARDNESS = 100;
 
 @Component({
     selector: 'app-dithering-configuration',
