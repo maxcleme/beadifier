@@ -27,7 +27,7 @@
         </div>
     </mat-tab>
 
-    <mat-tab label="Boards">
+    <mat-tab label="Boards" [disabled]="!project.image">
         <div class="example-large-box mat-elevation-z4">
             <form (submit)="preventSubmit($event)">
                 <div
@@ -47,7 +47,7 @@
         </div>
     </mat-tab>
 
-    <mat-tab label="Palettes">
+    <mat-tab label="Palettes" [disabled]="!project.image">
         <div class="example-large-box mat-elevation-z4">
             <form (submit)="preventSubmit($event)">
                 <div
@@ -65,7 +65,7 @@
         </div>
     </mat-tab>
 
-    <mat-tab label="Advanced">
+    <mat-tab label="Advanced" [disabled]="!project.image">
         <div class="example-large-box mat-elevation-z4">
             <form (submit)="preventSubmit($event)">
                 <div
