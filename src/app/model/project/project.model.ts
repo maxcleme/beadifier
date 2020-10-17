@@ -5,9 +5,10 @@ import { DitheringConfiguration } from '../configuration/dithering-configuration
 import { ImageConfiguration } from '../configuration/image-configuration.model';
 import { RendererConfiguration } from '../configuration/renderer-configuration.model';
 import { ExportConfiguration } from '../configuration/export-configuration.model';
+import { LoadImage } from '../image/load-image.model';
 
 export class Project {
-    imageSrc: string;
+    image: LoadImage;
     srcWidth: number;
     srcHeight: number;
 

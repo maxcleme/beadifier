@@ -118,8 +118,8 @@
                                     }"
                                 >
                                     <img
-                                        *ngIf="project"
-                                        [src]="project.imageSrc"
+                                        *ngIf="project && project.image"
+                                        [src]="project.image.src"
                                         [ngStyle]="{
                                             height: project
                                                 .rendererConfiguration.center

@@ -38,7 +38,7 @@ export class ExportComponent {
             this.reducedColor,
             this.usage,
             this.project,
-            `beadifier_${this.project.boardConfiguration.nbBoardWidth}x${this.project.boardConfiguration.nbBoardHeight}`
+            this.project.image.name
         );
     }
 }

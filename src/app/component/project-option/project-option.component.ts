@@ -16,8 +16,8 @@ export class ProjectOptionComponent {
     @Input() reducedColor: Uint8ClampedArray;
     @Output() onLoad = new EventEmitter<Project>();
 
-    onLoadingImageCallback(src) {
-        this.project.imageSrc = src;
+    onLoadingImageCallback(image) {
+        this.project.image = image;
         this.callback();
     }
 

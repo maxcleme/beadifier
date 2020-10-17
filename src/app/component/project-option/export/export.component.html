@@ -1,3 +1,15 @@
+<div fxLayout="row wrap" fxLayoutAlign="space-between start">
+    <mat-form-field class="example-full-width">
+        <mat-label>Name</mat-label>
+        <input
+            matInput
+            [(ngModel)]="project.image.name"
+            placeholder="Exported file name"
+            value="beadifier"
+        />
+    </mat-form-field>
+</div>
+
 <div style="padding-bottom: 1em">
     <div fxLayout="row wrap" fxLayoutAlign="space-between start">
         <div>
@@ -28,6 +40,9 @@
             </mat-select>
         </mat-form-field>
     </div>
+</div>
+
+<div fxLayout="row wrap" fxLayoutAlign="space-between start">
     <div>
         <button aria-label="export" mat-raised-button (click)="export()">
             Export

@@ -130,7 +130,7 @@
         </div>
     </mat-tab>
 
-    <mat-tab label="Usage" [disabled]="!project.imageSrc">
+    <mat-tab label="Usage" [disabled]="!project.image">
         <div class="example-large-box mat-elevation-z4">
             <form (submit)="preventSubmit($event)">
                 <div
@@ -148,7 +148,7 @@
         </div>
     </mat-tab>
 
-    <mat-tab label="Save & Export" [disabled]="!project.imageSrc">
+    <mat-tab label="Save & Export" [disabled]="!project.image">
         <div class="example-large-box mat-elevation-z4">
             <form (submit)="preventSubmit($event)">
                 <div style="padding: 1em">
