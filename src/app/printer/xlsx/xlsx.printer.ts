@@ -8,6 +8,38 @@ import { ColorToHex } from '../../model/color/hex.model';
 import { Color } from '../../model/color/color.model';
 import { foreground, getPaletteEntryByColorRef } from '../../utils/utils';
 
+const cellBorderStyle = { style: 'thin', color: { argb: 'FFFFFFFF' } };
+const emptyCellBorderStyle = {
+    style: 'thin',
+    color: { argb: 'FF000000' },
+};
+const boardBorderStyle = {
+    style: 'thick',
+    color: { argb: '00000000' },
+};
+const border = {
+    top: cellBorderStyle,
+    left: cellBorderStyle,
+    bottom: cellBorderStyle,
+    right: cellBorderStyle,
+};
+const emptyBorder = {
+    diagonal: {
+        up: true,
+        down: true,
+        style: 'thin',
+        color: { argb: 'FF000000' },
+    },
+    top: emptyCellBorderStyle,
+    left: emptyCellBorderStyle,
+    bottom: emptyCellBorderStyle,
+    right: emptyCellBorderStyle,
+};
+const alignment = {
+    vertical: 'middle',
+    horizontal: 'center',
+};
+
 export class XlsxPrinter implements Printer {
     name(): string {
         return 'XLSX (Beta)';
@@ -24,31 +56,10 @@ export class XlsxPrinter implements Printer {
             project.boardConfiguration.nbBoardWidth *
             project.boardConfiguration.board.nbBeadPerRow;
 
-        const border = {
-            top: { style: 'thin', color: { argb: 'FFFFFFFF' } },
-            left: { style: 'thin', color: { argb: 'FFFFFFFF' } },
-            bottom: { style: 'thin', color: { argb: 'FFFFFFFF' } },
-            right: { style: 'thin', color: { argb: 'FFFFFFFF' } },
-        };
-        const emptyBorder = {
-            diagonal: {
-                up: true,
-                down: true,
-                style: 'thin',
-                color: { argb: 'FF000000' },
-            },
-            top: { style: 'thin', color: { argb: 'FF000000' } },
-            left: { style: 'thin', color: { argb: 'FF000000' } },
-            bottom: { style: 'thin', color: { argb: 'FF000000' } },
-            right: { style: 'thin', color: { argb: 'FF000000' } },
-        };
-        const alignment = {
-            vertical: 'middle',
-            horizontal: 'center',
-        };
         for (let y = 0; y < height; y++) {
             const row = worksheet.getRow(y + 1);
             for (let x = 0; x < width; x++) {
+                const cell = row.getCell(x + 1);
                 const color = new Color(
                     reducedColor[y * width * 4 + x * 4],
                     reducedColor[y * width * 4 + x * 4 + 1],
@@ -85,24 +96,56 @@ export class XlsxPrinter implements Printer {
                                 ? paletteEntry.prefix
                                 : '') + paletteEntry.symbol;
                     }
-                    row.getCell(x + 1).value = text;
-                    row.getCell(x + 1).font = {
+                    cell.value = text;
+                    cell.font = {
                         color: {
                             argb: fg,
                         },
                     };
-                    row.getCell(x + 1).fill = {
+                    cell.fill = {
                         type: 'pattern',
                         pattern: 'solid',
                         fgColor: {
                             argb: bg,
                         },
                     };
-                    row.getCell(x + 1).border = border;
+                    cell.border = border;
                 } else {
-                    row.getCell(x + 1).border = emptyBorder;
+                    cell.border = emptyBorder;
                 }
-                row.getCell(x + 1).alignment = alignment;
+                cell.alignment = alignment;
+
+                if (y === 0) {
+                    cell.border = {
+                        ...cell.border,
+                        top: boardBorderStyle,
+                    };
+                }
+
+                if (x === 0) {
+                    cell.border = {
+                        ...cell.border,
+                        left: boardBorderStyle,
+                    };
+                }
+                if (
+                    (y + 1) % project.boardConfiguration.board.nbBeadPerRow ===
+                    0
+                ) {
+                    cell.border = {
+                        ...cell.border,
+                        bottom: boardBorderStyle,
+                    };
+                }
+                if (
+                    (x + 1) % project.boardConfiguration.board.nbBeadPerRow ===
+                    0
+                ) {
+                    cell.border = {
+                        ...cell.border,
+                        right: boardBorderStyle,
+                    };
+                }
             }
         }
 
@@ -117,17 +160,6 @@ export class XlsxPrinter implements Printer {
         const refIdx = 1;
         const symbolIdx = project.exportConfiguration.useSymbols ? 2 : -1;
         const countIdx = project.exportConfiguration.useSymbols ? 3 : 2;
-
-        const border = {
-            top: { style: 'thin', color: { argb: 'FFFFFFFF' } },
-            left: { style: 'thin', color: { argb: 'FFFFFFFF' } },
-            bottom: { style: 'thin', color: { argb: 'FFFFFFFF' } },
-            right: { style: 'thin', color: { argb: 'FFFFFFFF' } },
-        };
-        const alignment = {
-            vertical: 'middle',
-            horizontal: 'center',
-        };
 
         Array.from(usage.entries())
             .sort(([k1, v1], [k2, v2]) => v2 - v1)
