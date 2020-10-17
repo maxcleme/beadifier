@@ -153,6 +153,7 @@
             <form (submit)="preventSubmit($event)">
                 <div style="padding: 1em">
                     <app-export
+                        *ngIf="project.image"
                         [project]="project"
                         [usage]="usage"
                         [reducedColor]="reducedColor"
