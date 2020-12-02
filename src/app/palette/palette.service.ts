@@ -28,7 +28,10 @@ export class PaletteService {
             this.loadPalette('artkal_r', 'R', 'Artkal R-5MM'),
             this.loadPalette('artkal_s', 'S', 'Artkal S-5MM'),
             this.loadPalette('perler', 'P').pipe(map(this.perlerTransform)),
-            this.loadPalette('perler_mini', 'M', 'Perler Mini').pipe(
+            this.loadPalette('perler_mini', 'P', 'Perler Mini').pipe(
+                map(this.perlerTransform)
+            ),
+            this.loadPalette('perler_caps', 'P', 'Perler Caps').pipe(
                 map(this.perlerTransform)
             ),
             this.loadPalette('diamondDotz', 'D', 'Diamond Dotz'),
