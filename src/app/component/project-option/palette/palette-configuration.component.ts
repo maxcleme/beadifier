@@ -15,17 +15,23 @@ export class PaletteConfigurationComponent {
     @Output() onChange = new EventEmitter<PaletteConfiguration>();
 
     availablePalettes: Observable<Palette[]>;
-    enableAllPaletteEntry: boolean;
+    enableAllPaletteEntry: Map<string, boolean>;
 
     constructor(private paletteService: PaletteService) {
         this.availablePalettes = paletteService.getAll();
-        this.enableAllPaletteEntry = true;
+        this.enableAllPaletteEntry = new Map();
+
+        this.availablePalettes.subscribe((palettes) =>
+            palettes.forEach((p) => (this.enableAllPaletteEntry[p.name] = true))
+        );
     }
 
-    toggleAll(e) {
-        this.configuration.palettes.forEach((p) =>
-            p.entries.forEach((entry) => (entry.enabled = e.checked))
-        );
+    toggleAll(e, name) {
+        this.configuration.palettes.forEach((p) => {
+            if (p.name === name) {
+                p.entries.forEach((entry) => (entry.enabled = e.checked));
+            }
+        });
         this.callback();
     }
 
