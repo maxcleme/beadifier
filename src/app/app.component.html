@@ -81,6 +81,7 @@
                                 <div
                                     fxFlex="50%"
                                     [ngStyle]="{
+                                        overflow: 'auto hidden',
                                         height:
                                             aspectRatio *
                                                 project.boardConfiguration.board
@@ -95,6 +96,8 @@
                                         #preview
                                         class="renderer"
                                         [ngStyle]="{
+                                            'will-change': 'transform',
+                                            'transform-origin': '0% 0%',
                                             transform:
                                                 'scale(' +
                                                 aspectRatio +
