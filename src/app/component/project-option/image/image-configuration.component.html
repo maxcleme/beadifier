@@ -5,7 +5,7 @@
             <input
                 type="number"
                 matInput
-                (change)="setBrightness()"
+                (input)="setBrightness()"
                 [(ngModel)]="brightness"
                 placeholder="Brightness"
                 [value]="brightness"
@@ -30,7 +30,7 @@
             <input
                 type="number"
                 matInput
-                (change)="setContrast()"
+                (input)="setContrast()"
                 [(ngModel)]="contrast"
                 placeholder="Contrast"
                 [value]="contrast"
@@ -54,7 +54,7 @@
             <input
                 type="number"
                 matInput
-                (change)="setSaturation()"
+                (input)="setSaturation()"
                 [(ngModel)]="saturation"
                 placeholder="Saturation"
                 [value]="saturation"
@@ -79,7 +79,7 @@
             <input
                 type="number"
                 matInput
-                (change)="setGrayscale()"
+                (input)="setGrayscale()"
                 [(ngModel)]="grayscale"
                 placeholder="Grayscale"
                 [value]="grayscale"
