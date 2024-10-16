@@ -65,10 +65,10 @@
           },
           "configurations": {
             "production": {
-              "browserTarget": "beadifier:build:production"
+              "buildTarget": "beadifier:build:production"
             },
             "development": {
-              "browserTarget": "beadifier:build:development"
+              "buildTarget": "beadifier:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -76,7 +76,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "beadifier:build"
+            "buildTarget": "beadifier:build"
           }
         }
       }
