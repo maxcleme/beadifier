@@ -30,7 +30,7 @@
 
     <div data-layout="row" data-layout-align="center" *ngIf="project">
         <div data-flex="90">
-            <mat-card>
+            <mat-card appearance="outlined">
                 <mat-card-content>
                     <app-project-option
                         [project]="project"
@@ -47,7 +47,7 @@
     <div [ngStyle]="{ visibility: reducedColor ? 'visible' : 'hidden' }">
         <div data-layout="row" data-layout-align="center">
             <div data-flex="90">
-                <mat-card>
+                <mat-card appearance="outlined">
                     <mat-card-content>
                         <div data-layout="column wrap" data-layout-gap="1em">
                             <div
@@ -58,14 +58,14 @@
                             >
                                 <div
                                     data-flex="50"
-                                    class="mat-subheading-2"
+                                    class="mat-subtitle-1"
                                     style="text-align: center"
                                 >
                                     Pattern
                                 </div>
                                 <div
                                     data-flex="50"
-                                    class="mat-subheading-2"
+                                    class="mat-subtitle-1"
                                     style="text-align: center"
                                 >
                                     Source
