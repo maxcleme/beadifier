@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
@@ -27,8 +27,7 @@ import { PaletteService } from './palette/palette.service';
 
 import { environment } from './../environments/environment';
 
-@NgModule({
-    declarations: [
+@NgModule({ declarations: [
         AppComponent,
         ProjectOptionComponent,
         UploadImageButtonComponent,
@@ -43,22 +42,12 @@ import { environment } from './../environments/environment';
         RendererConfigurationComponent,
         ExportComponent,
     ],
-    imports: [
-        BrowserModule,
-        HttpClientModule,
+    bootstrap: [AppComponent], imports: [BrowserModule,
         BrowserAnimationsModule,
-  
-
         FormsModule,
         MaterialModule,
-
         NtkmeButtonModule,
-
         ServiceWorkerModule.register('/ngsw-worker.js', {
             enabled: environment.production,
-        }),
-    ],
-    providers: [PaletteService],
-    bootstrap: [AppComponent],
-})
+        })], providers: [PaletteService, provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule {}
