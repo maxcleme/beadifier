@@ -133,7 +133,7 @@
   dependencies:
     tslib "^2.3.0"
 
-"@angular/cdk@^12.0.0", "@angular/cdk@^12.2.13", "@angular/cdk@12.2.13":
+"@angular/cdk@^12.2.13", "@angular/cdk@^13.0.0", "@angular/cdk@12.2.13":
   version "12.2.13"
   resolved "https://registry.npmjs.org/@angular/cdk/-/cdk-12.2.13.tgz"
   integrity sha512-zSKRhECyFqhingIeyRInIyTvYErt4gWo+x5DQr0b7YLUbU8DZSwWnG4w76Ke2s4U8T7ry1jpJBHoX/e8YBpGMg==
@@ -167,7 +167,7 @@
     symbol-observable "4.0.0"
     uuid "8.3.2"
 
-"@angular/common@^12.0.0 || ^13.0.0-0", "@angular/common@^13.4.0", "@angular/common@>=12.0.0", "@angular/common@>=8.0.0", "@angular/common@13.4.0":
+"@angular/common@^12.0.0 || ^13.0.0-0", "@angular/common@^13.0.0", "@angular/common@^13.4.0", "@angular/common@>=8.0.0", "@angular/common@13.4.0":
   version "13.4.0"
   resolved "https://registry.npmjs.org/@angular/common/-/common-13.4.0.tgz"
   integrity sha512-DHbPqRaxW7GmnkxqZaaasgC5OaFTeTBrmr7MJUsqsSGePHWuJYWU4QS3Fn86zd/VESJgBGmq2aCDEUmzfjnRQA==
@@ -202,7 +202,7 @@
   resolved "https://registry.npmjs.org/@angular/compiler/-/compiler-9.0.0.tgz"
   integrity sha512-ctjwuntPfZZT2mNj2NDIVu51t9cvbhl/16epc5xEwyzyDt76pX9UgwvY+MbXrf/C/FWwdtmNtfP698BKI+9leQ==
 
-"@angular/core@^12.0.0 || ^13.0.0-0", "@angular/core@^13.4.0", "@angular/core@>=12.0.0", "@angular/core@>=8.0.0", "@angular/core@13.4.0":
+"@angular/core@^12.0.0 || ^13.0.0-0", "@angular/core@^13.0.0", "@angular/core@^13.4.0", "@angular/core@>=8.0.0", "@angular/core@13.4.0":
   version "13.4.0"
   resolved "https://registry.npmjs.org/@angular/core/-/core-13.4.0.tgz"
   integrity sha512-RE9KL7pRj+3lkJjdSR2uKmqiG0gqjnoVCMbSLG93pWrmzNIhElmlkiDaK39aMHGl836dc68Usv9CEisyVnRqHQ==
@@ -214,12 +214,12 @@
   resolved "https://registry.npmjs.org/@angular/core/-/core-9.0.0.tgz"
   integrity sha512-6Pxgsrf0qF9iFFqmIcWmjJGkkCaCm6V5QNnxMy2KloO3SDq6QuMVRbN9RtC8Urmo25LP+eZ6ZgYqFYpdD8Hd9w==
 
-"@angular/flex-layout@^12.0.0-beta.34":
-  version "12.0.0-beta.35"
-  resolved "https://registry.npmjs.org/@angular/flex-layout/-/flex-layout-12.0.0-beta.35.tgz"
-  integrity sha512-nPi2MGDFuCacwWHqxF/G7lUJd2X99HbLjjUvKXnyLwyCIVgH1sfS52su2wYbVYWJRqAVAB2/VMlrtW8Khr8hDA==
+"@angular/flex-layout@^13.0.0-beta.38":
+  version "13.0.0-beta.38"
+  resolved "https://registry.npmjs.org/@angular/flex-layout/-/flex-layout-13.0.0-beta.38.tgz"
+  integrity sha512-kcWb7CcoHbvw7fjo/knizWVmSSmvaTnr8v1ML6zOdxu1PK9UPPOcOS8RTm6fy61zoC2LABivP1/6Z2jF5XfpdQ==
   dependencies:
-    tslib "^2.1.0"
+    tslib "^2.3.0"
 
 "@angular/forms@^12.0.0 || ^13.0.0-0", "@angular/forms@^13.4.0":
   version "13.4.0"
@@ -247,7 +247,7 @@
   dependencies:
     tslib "^2.3.0"
 
-"@angular/platform-browser@^13.4.0", "@angular/platform-browser@>=12.0.0", "@angular/platform-browser@13.4.0":
+"@angular/platform-browser@^13.0.0", "@angular/platform-browser@^13.4.0", "@angular/platform-browser@13.4.0":
   version "13.4.0"
   resolved "https://registry.npmjs.org/@angular/platform-browser/-/platform-browser-13.4.0.tgz"
   integrity sha512-kq4TpdkSS0Z/7ToFzWhyBbh4Ai1uOKFVdL9/TAm19dLnYNIInrN3KYW6GRxZ+pkJJA9Vkq4NtgcxysQ42VFotA==
@@ -9600,7 +9600,7 @@ run-parallel@^1.1.9:
   dependencies:
     queue-microtask "^1.2.2"
 
-"rxjs@^6.0.0 || ^7.0.0", rxjs@^6.5.3, "rxjs@^6.5.3 || ^7.0.0", "rxjs@^6.5.3 || ^7.4.0", rxjs@^6.5.5, rxjs@6.6.7:
+rxjs@^6.5.3, "rxjs@^6.5.3 || ^7.0.0", "rxjs@^6.5.3 || ^7.4.0", rxjs@^6.5.5, rxjs@6.6.7:
   version "6.6.7"
   resolved "https://registry.npmjs.org/rxjs/-/rxjs-6.6.7.tgz"
   integrity sha512-hTdwr+7yYNIT5n4AMYp85KA6yw2Va0FLa3Rguvbpa4W3I5xynaBZo41cM3XM+4Q6fRMj3sBYIR1VAmZMXYJvRQ==
