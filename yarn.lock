@@ -165,7 +165,7 @@
     uuid "8.3.2"
     yargs "17.5.1"
 
-"@angular/common@^14.0.0", "@angular/common@^14.0.0 || ^15.0.0", "@angular/common@^14.3.0", "@angular/common@>=12.0.0-0", "@angular/common@14.3.0":
+"@angular/common@^14.0.0", "@angular/common@^14.0.0 || ^15.0.0", "@angular/common@^14.3.0", "@angular/common@>=14.0.0-0", "@angular/common@14.3.0":
   version "14.3.0"
   resolved "https://registry.npmjs.org/@angular/common/-/common-14.3.0.tgz"
   integrity sha512-pV9oyG3JhGWeQ+TFB0Qub6a1VZWMNZ6/7zEopvYivdqa5yDLLDSBRWb6P80RuONXyGnM1pa7l5nYopX+r/23GQ==
@@ -200,7 +200,7 @@
   resolved "https://registry.npmjs.org/@angular/compiler/-/compiler-9.0.0.tgz"
   integrity sha512-ctjwuntPfZZT2mNj2NDIVu51t9cvbhl/16epc5xEwyzyDt76pX9UgwvY+MbXrf/C/FWwdtmNtfP698BKI+9leQ==
 
-"@angular/core@^14.0.0", "@angular/core@^14.0.0 || ^15.0.0", "@angular/core@^14.3.0", "@angular/core@>=12.0.0-0", "@angular/core@14.3.0":
+"@angular/core@^14.0.0", "@angular/core@^14.0.0 || ^15.0.0", "@angular/core@^14.3.0", "@angular/core@>=14.0.0-0", "@angular/core@14.3.0":
   version "14.3.0"
   resolved "https://registry.npmjs.org/@angular/core/-/core-14.3.0.tgz"
   integrity sha512-wYiwItc0Uyn4FWZ/OAx/Ubp2/WrD3EgUJ476y1XI7yATGPF8n9Ld5iCXT08HOvc4eBcYlDfh90kTXR6/MfhzdQ==
@@ -1288,10 +1288,10 @@
   resolved "https://registry.npmjs.org/@csstools/selector-specificity/-/selector-specificity-2.2.0.tgz"
   integrity sha512-+OJ9konv95ClSTOJCmMZqpd5+YGsB2S+x6w3E1oaM8UuR5j8nTNHYSz8c9BEPGDOCMQYIEEGlVPj/VY64iTbGw==
 
-"@ctrl/ngx-github-buttons@^7.1.0":
-  version "7.1.0"
-  resolved "https://registry.npmjs.org/@ctrl/ngx-github-buttons/-/ngx-github-buttons-7.1.0.tgz"
-  integrity sha512-QrChK428XzVRgNNdQ8DaUi6+B2cIq8DOKs7/k5G3/w/K9QP89oCkoea2xaBUmcQAV1wNM8w3LY2YuPPWdcKrqA==
+"@ctrl/ngx-github-buttons@^8.0.0":
+  version "8.0.0"
+  resolved "https://registry.npmjs.org/@ctrl/ngx-github-buttons/-/ngx-github-buttons-8.0.0.tgz"
+  integrity sha512-0YOT7DbC+Yu0BfxRQAvq2S56Q30fCzv/aUbU1taw65cbzD3XAR/c1BzaU29JVQnQMHjpddXacf4qH2oiN1TeTw==
   dependencies:
     tslib "^2.3.0"
 
