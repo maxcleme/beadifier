@@ -167,7 +167,7 @@
     symbol-observable "4.0.0"
     uuid "8.3.2"
 
-"@angular/common@^13.0.0", "@angular/common@^13.0.0 || ^14.0.0-0", "@angular/common@^13.4.0", "@angular/common@>=8.0.0", "@angular/common@13.4.0":
+"@angular/common@^13.0.0", "@angular/common@^13.0.0 || ^14.0.0-0", "@angular/common@^13.4.0", "@angular/common@>=12.0.0-0", "@angular/common@13.4.0":
   version "13.4.0"
   resolved "https://registry.npmjs.org/@angular/common/-/common-13.4.0.tgz"
   integrity sha512-DHbPqRaxW7GmnkxqZaaasgC5OaFTeTBrmr7MJUsqsSGePHWuJYWU4QS3Fn86zd/VESJgBGmq2aCDEUmzfjnRQA==
@@ -202,7 +202,7 @@
   resolved "https://registry.npmjs.org/@angular/compiler/-/compiler-9.0.0.tgz"
   integrity sha512-ctjwuntPfZZT2mNj2NDIVu51t9cvbhl/16epc5xEwyzyDt76pX9UgwvY+MbXrf/C/FWwdtmNtfP698BKI+9leQ==
 
-"@angular/core@^13.0.0", "@angular/core@^13.0.0 || ^14.0.0-0", "@angular/core@^13.4.0", "@angular/core@>=8.0.0", "@angular/core@13.4.0":
+"@angular/core@^13.0.0", "@angular/core@^13.0.0 || ^14.0.0-0", "@angular/core@^13.4.0", "@angular/core@>=12.0.0-0", "@angular/core@13.4.0":
   version "13.4.0"
   resolved "https://registry.npmjs.org/@angular/core/-/core-13.4.0.tgz"
   integrity sha512-RE9KL7pRj+3lkJjdSR2uKmqiG0gqjnoVCMbSLG93pWrmzNIhElmlkiDaK39aMHGl836dc68Usv9CEisyVnRqHQ==
@@ -1208,12 +1208,12 @@
   resolved "https://registry.npmjs.org/@csstools/selector-specificity/-/selector-specificity-2.2.0.tgz"
   integrity sha512-+OJ9konv95ClSTOJCmMZqpd5+YGsB2S+x6w3E1oaM8UuR5j8nTNHYSz8c9BEPGDOCMQYIEEGlVPj/VY64iTbGw==
 
-"@ctrl/ngx-github-buttons@^3.0.0":
-  version "3.2.8"
-  resolved "https://registry.npmjs.org/@ctrl/ngx-github-buttons/-/ngx-github-buttons-3.2.8.tgz"
-  integrity sha512-uS+qzalbgz9gJOP4DFsl0IB9fZCJ44j9Mxasn+lDVRLAKvfONSiwKDKz7FavrIFPLRktNRyW1bZetMFYPQnYDA==
+"@ctrl/ngx-github-buttons@^7.1.0":
+  version "7.1.0"
+  resolved "https://registry.npmjs.org/@ctrl/ngx-github-buttons/-/ngx-github-buttons-7.1.0.tgz"
+  integrity sha512-QrChK428XzVRgNNdQ8DaUi6+B2cIq8DOKs7/k5G3/w/K9QP89oCkoea2xaBUmcQAV1wNM8w3LY2YuPPWdcKrqA==
   dependencies:
-    tslib "^1.9.0"
+    tslib "^2.3.0"
 
 "@discoveryjs/json-ext@0.5.6":
   version "0.5.6"
