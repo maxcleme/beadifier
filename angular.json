@@ -55,20 +55,24 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ]
-            }
+            },
+            "development": {}
           },
-          "defaultConfiguration": ""
+          "defaultConfiguration": "production"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "beadifier:build"
           },
           "configurations": {
             "production": {
               "browserTarget": "beadifier:build:production"
+            },
+            "development": {
+              "browserTarget": "beadifier:build:development"
             }
-          }
+          },
+          "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
