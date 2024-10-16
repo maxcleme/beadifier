@@ -1,4 +1,4 @@
-<div fxLayout="column" fxLayoutGap="1em">
+<div data-layout="column" data-layout-gap="1em">
     <div>
         <mat-form-field>
             <mat-select
@@ -20,11 +20,11 @@
         </mat-form-field>
     </div>
     <div
-        fxLayout="row wrap"
+        data-layout="row wrap"
         *ngFor="let palette of configuration.palettes"
-        fxLayoutAlign="start center"
+        data-layout-align="start center"
     >
-        <div fxLayout="row wrap" fxFlex="100%" style="margin-bottom: 1em">
+        <div data-layout="row wrap" data-flex="100" style="margin-bottom: 1em">
             <mat-slide-toggle
                 [checked]="enableAllPaletteEntry[palette.name]"
                 (change)="toggleAll($event, palette.name)"
@@ -32,11 +32,11 @@
             >
         </div>
         <div
-            fxFlex.xs="50%"
-            fxFlex.sm="33%"
-            fxFlex.md="25%"
-            fxFlex.lg="20%"
-            fxFlex.xl="14.28%"
+            data-flex-xs="50"
+            data-flex-sm="33"
+            data-flex-md="25"
+            data-flex-lg="20"
+            data-flex-xl="14.28"
             *ngFor="let entry of palette.entries"
         >
             <app-palette-entry
@@ -46,7 +46,7 @@
         </div>
         <mat-divider style="margin-top: 1em" [inset]="true"></mat-divider>
     </div>
-    <div fxLayout="row wrap" fxLayoutAlign="center center">
+    <div data-layout="row wrap" data-layout-align="center center">
         <div class="mat-small mat-caption">
             Something wrong about colors ? Please fill an
             <a

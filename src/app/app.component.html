@@ -1,13 +1,13 @@
-<div class="mat-typography" fxLayout="column" fxLayoutGap="1em">
-    <div fxLayout="row">
+<div class="mat-typography" data-layout="column" data-layout-gap="1em">
+    <div data-layout="row">
         <ntkme-github-button user="maxcleme" type="follow">
         </ntkme-github-button>
         <ntkme-github-button user="maxcleme" repo="beadifier" type="issue">
         </ntkme-github-button>
     </div>
-    <div fxLayout="row" fxLayoutAlign="center">
+    <div data-layout="row" data-layout-align="center">
         <div class="banner-container">
-            <div fxLayout="row" fxLayoutAlign="center">
+            <div data-layout="row" data-layout-align="center">
                 <img alt="banner" src="/assets/banner.png" width="100%" />
             </div>
         </div>
@@ -28,8 +28,8 @@
         <canvas></canvas>
     </div>
 
-    <div fxLayout="row" fxLayoutAlign="center" *ngIf="project">
-        <div fxFlex="90%">
+    <div data-layout="row" data-layout-align="center" *ngIf="project">
+        <div data-flex="90">
             <mat-card>
                 <mat-card-content>
                     <app-project-option
@@ -45,26 +45,26 @@
     </div>
 
     <div [ngStyle]="{ visibility: reducedColor ? 'visible' : 'hidden' }">
-        <div fxLayout="row" fxLayoutAlign="center">
-            <div fxFlex="90%">
+        <div data-layout="row" data-layout-align="center">
+            <div data-flex="90">
                 <mat-card>
                     <mat-card-content>
-                        <div fxLayout="column wrap" fxLayoutGap="1em">
+                        <div data-layout="column wrap" data-layout-gap="1em">
                             <div
-                                fxLayout="row"
-                                fxFlex="100%"
-                                fxLayoutGap="1em"
-                                fxLayoutAlign="center center"
+                                data-layout="row"
+                                data-flex="100"
+                                data-layout-gap="1em"
+                                data-layout-align="center center"
                             >
                                 <div
-                                    fxFlex="50%"
+                                    data-flex="50"
                                     class="mat-subheading-2"
                                     style="text-align: center"
                                 >
                                     Pattern
                                 </div>
                                 <div
-                                    fxFlex="50%"
+                                    data-flex="50"
                                     class="mat-subheading-2"
                                     style="text-align: center"
                                 >
@@ -72,14 +72,14 @@
                                 </div>
                             </div>
                             <div
-                                fxLayout="row"
-                                fxFlex="100%"
-                                fxLayoutGap="1em"
-                                fxLayoutAlign="center center"
+                                data-layout="row"
+                                data-flex="100"
+                                data-layout-gap="1em"
+                                data-layout-align="center center"
                                 style="width: 100%"
                             >
                                 <div
-                                    fxFlex="50%"
+                                    data-flex="50"
                                     [ngStyle]="{
                                         overflow: 'auto hidden',
                                         height:
@@ -108,7 +108,7 @@
                                     ></div>
                                 </div>
                                 <div
-                                    fxFlex="50"
+                                    data-flex="50"
                                     [ngStyle]="{
                                         height:
                                             aspectRatio *

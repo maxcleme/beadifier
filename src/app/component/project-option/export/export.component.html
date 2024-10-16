@@ -1,4 +1,4 @@
-<div fxLayout="row wrap" fxLayoutAlign="space-between start">
+<div data-layout="row wrap" data-layout-align="space-between start">
     <mat-form-field class="example-full-width">
         <mat-label>Name</mat-label>
         <input
@@ -11,7 +11,7 @@
 </div>
 
 <div style="padding-bottom: 1em">
-    <div fxLayout="row wrap" fxLayoutAlign="space-between start">
+    <div data-layout="row wrap" data-layout-align="space-between start">
         <div>
             <mat-slide-toggle
                 [(ngModel)]="configuration.useSymbols"
@@ -22,7 +22,7 @@
     </div>
 </div>
 
-<div fxLayout="row wrap" fxLayoutAlign="space-between start">
+<div data-layout="row wrap" data-layout-align="space-between start">
     <div>
         <mat-form-field>
             <mat-select
@@ -42,7 +42,7 @@
     </div>
 </div>
 
-<div fxLayout="row wrap" fxLayoutAlign="space-between start">
+<div data-layout="row wrap" data-layout-align="space-between start">
     <div>
         <button aria-label="export" mat-raised-button (click)="export()">
             Export
