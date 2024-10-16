@@ -82,7 +82,6 @@
       }
     }
   },
-  "defaultProject": "beadifier",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",
