@@ -29,7 +29,6 @@
     "@types/chart.js": "^2.6.8",
     "canvas2svg": "^1.0.16",
     "chart.js": "^2.7.0",
-    "core-js": "^2.4.1",
     "exceljs": "^4.1.1",
     "gl-matrix": "^2.4.0",
     "jspdf": "^1.4.0",
