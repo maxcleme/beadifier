@@ -1,7 +1,7 @@
 import { Palette, PaletteEntry } from '../model/palette/palette.model';
 import { Color } from '../model/color/color.model';
 
-import * as _ from 'lodash';
+import * as ld from 'lodash';
 import { Matching } from '../model/matching/matching.model';
 import { Project } from '../model/project/project.model';
 import { RendererConfiguration } from '../model/configuration/renderer-configuration.model';
@@ -223,8 +223,8 @@ export function getClosestPaletteEntry(
     color: Color,
     matching: Matching
 ): PaletteEntry {
-    return _.minBy(
-        _.flatten(palettes.map((p) => p.entries)).filter(
+    return ld.minBy(
+        ld.flatten(palettes.map((p) => p.entries)).filter(
             (paletteEntry) => paletteEntry.enabled
         ),
         (paletteEntry) => matching.delta(paletteEntry.color, color)
@@ -250,7 +250,7 @@ export function computeUsage(
     palettes: Palette[]
 ): Map<string, number> {
     const usage = new Map<string, number>();
-    _.chunk(colors, 4)
+    ld.chunk(colors, 4)
         .map(
             (component) =>
                 new Color(
@@ -261,8 +261,8 @@ export function computeUsage(
                 )
         )
         .forEach((color) => {
-            const entry: PaletteEntry = _.find(
-                _.flatten(palettes.map((p) => p.entries)),
+            const entry: PaletteEntry = ld.find(
+                ld.flatten(palettes.map((p) => p.entries)),
                 (e) =>
                     e.color.r === color.r &&
                     e.color.g === color.g &&
@@ -277,7 +277,7 @@ export function computeUsage(
 }
 
 export function countBeads(usage: Map<string, number>): number {
-    return Array.from(usage.values()).reduce(_.add, 0);
+    return Array.from(usage.values()).reduce(ld.add, 0);
 }
 
 export function hasUsageUnderPercent(
@@ -286,7 +286,7 @@ export function hasUsageUnderPercent(
 ) {
     const total = countBeads(usage);
     const lowerBound = total * (percent / 100);
-    return _.find(Array.from(usage.values()), (v) => v < lowerBound);
+    return ld.find(Array.from(usage.values()), (v) => v < lowerBound);
 }
 
 export function removeColorUnderPercent(
@@ -299,9 +299,8 @@ export function removeColorUnderPercent(
     Array.from(usage.entries())
         .filter(([k, v]) => v < lowerBound)
         .forEach(([k, v]) => {
-            _(palettes)
-                .map((p) => p.entries)
-                .flatten()
+            palettes
+                .flatMap((p) => p.entries)
                 .filter((e) => e.ref === k)
                 .forEach((e) => {
                     e.enabled = false;
@@ -313,9 +312,9 @@ export function getPaletteEntryByColorRef(
     palettes: Palette[],
     ref: string
 ): PaletteEntry {
-    const paletteList = _.flatten(palettes.map((p) => p.entries));
-    return _.minBy(
-        _.filter(paletteList, (paletteEntry) => {
+    const paletteList = ld.flatten(palettes.map((p) => p.entries));
+    return ld.minBy(
+        ld.filter(paletteList, (paletteEntry) => {
             return paletteEntry.enabled && paletteEntry.ref === ref;
         })
     );

@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import * as ld from 'lodash';
 
 import { Observable } from 'rxjs';
 import { Component, ViewChild, ElementRef, HostListener } from '@angular/core';
@@ -54,7 +54,7 @@ export class AppComponent {
             new CanvasWebGLRenderer(),
             new Canvas2dRenderer(),
         ];
-        this.renderer = _.find(this.availableRenderers, (renderer) =>
+        this.renderer = this.availableRenderers.find((renderer) =>
             renderer.isSupported()
         );
         if (!this.renderer) {
@@ -83,7 +83,7 @@ export class AppComponent {
         });
     }
 
-    _beadify = _.debounce(() => {
+    _beadify = ld.debounce(() => {
         this.loading = true;
         new Observable((subscriber) => {
             setTimeout(() => {

@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import * as ld from 'lodash';
 
 import { Component, Input, EventEmitter, Output } from '@angular/core';
 import { ImageConfiguration } from '../../../model/configuration/image-configuration.model';
@@ -33,7 +33,7 @@ export class ImageConfigurationComponent {
 
     callback() {
         this.configuration.clear();
-        _.values(this.imgSettings).forEach((f) => this.configuration.add(f));
+        ld.values(this.imgSettings).forEach((f) => this.configuration.add(f));
         this.onChange.emit(this.configuration);
     }
 

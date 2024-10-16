@@ -1,5 +1,5 @@
 import * as jsPDF from 'jspdf';
-import * as _ from 'lodash';
+import * as ld from 'lodash';
 
 // Huge hack to get the font working in jsPDF, I give up doing it properly TBH
 import './MonoFont';
@@ -116,8 +116,8 @@ export class PdfPrinter implements Printer {
     ) {
         const usagePerPage = 30;
 
-        const maxUsage = '' + _.max(Array.from(usage.values()));
-        const longestRef = _.maxBy(Array.from(usage.keys()), (s) => s.length);
+        const maxUsage = '' + ld.max(Array.from(usage.values()));
+        const longestRef = ld.maxBy(Array.from(usage.keys()), (s) => s.length);
 
         const longestWord =
             maxUsage.length > longestRef.length ? maxUsage : longestRef;
@@ -129,7 +129,7 @@ export class PdfPrinter implements Printer {
         const heightWithMargins = height - 2 * margin;
         const rowHeight = heightWithMargins / usagePerPage;
 
-        _.chunk(
+        ld.chunk(
             Array.from(usage.entries()).sort(([k1, v1], [k2, v2]) => v2 - v1),
             usagePerPage
         ).forEach((entries) => {
@@ -318,8 +318,8 @@ export class PdfPrinter implements Printer {
                             beadSize
                         );
 
-                        const paletteEntry: PaletteEntry = _.find(
-                            _.flatten(
+                        const paletteEntry: PaletteEntry = ld.find(
+                            ld.flatten(
                                 project.paletteConfiguration.palettes.map(
                                     (p) => p.entries
                                 )

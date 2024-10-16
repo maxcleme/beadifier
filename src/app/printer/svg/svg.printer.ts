@@ -1,5 +1,5 @@
 import 'canvas2svg';
-import * as _ from 'lodash';
+import * as ld from 'lodash';
 
 import { Printer } from '../printer';
 import { Project } from '../../model/project/project.model';
@@ -106,8 +106,8 @@ export class SvgPrinter implements Printer {
             Math.max(patternHeight, inventoryHeight)
         );
 
-        const maxUsage = '' + _.max(Array.from(usage.values()));
-        const longestRef = _.maxBy(Array.from(usage.keys()), (s) => s.length);
+        const maxUsage = '' + ld.max(Array.from(usage.values()));
+        const longestRef = ld.maxBy(Array.from(usage.keys()), (s) => s.length);
 
         const longestWord =
             maxUsage.length > longestRef.length ? maxUsage : longestRef;
@@ -316,8 +316,8 @@ export class SvgPrinter implements Printer {
                         container.height
                     );
 
-                    const paletteEntry: PaletteEntry = _.find(
-                        _.flatten(
+                    const paletteEntry: PaletteEntry = ld.find(
+                        ld.flatten(
                             project.paletteConfiguration.palettes.map(
                                 (p) => p.entries
                             )

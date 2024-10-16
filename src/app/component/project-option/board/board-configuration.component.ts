@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import * as ld from 'lodash';
 
 import { Component, Input, EventEmitter, Output } from '@angular/core';
 import { BoardConfiguration } from '../../../model/configuration/board-configuration.model';
@@ -19,7 +19,7 @@ export class BoardConfigurationComponent {
     availableBoards: Board[];
 
     constructor() {
-        this.availableBoards = _.values(BOARDS);
+        this.availableBoards = ld.values(BOARDS);
     }
 
     maximize() {

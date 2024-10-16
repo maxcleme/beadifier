@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import * as ld from 'lodash';
 
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { MatchingConfiguration } from '../../../model/configuration/matching-configuration.model';
@@ -16,7 +16,7 @@ export class MatchingConfigurationComponent {
     availableMatchings: Matching[];
 
     constructor() {
-        this.availableMatchings = _.values(MATCHINGS);
+        this.availableMatchings = ld.values(MATCHINGS);
     }
 
     callback() {

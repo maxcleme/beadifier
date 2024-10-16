@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import * as ld from 'lodash';
 import * as Excel from 'exceljs/dist/exceljs';
 
 import { Printer } from '../printer';
@@ -67,8 +67,8 @@ export class XlsxPrinter implements Printer {
                     reducedColor[y * width * 4 + x * 4 + 3]
                 );
 
-                const paletteEntry: PaletteEntry = _.find(
-                    _.flatten(
+                const paletteEntry: PaletteEntry = ld.find(
+                    ld.flatten(
                         project.paletteConfiguration.palettes.map(
                             (p) => p.entries
                         )

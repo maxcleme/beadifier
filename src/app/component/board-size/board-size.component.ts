@@ -1,6 +1,6 @@
 import { Component, Input, EventEmitter, Output } from '@angular/core';
 
-import * as _ from 'lodash';
+import * as ld from 'lodash';
 import { BoardConfiguration } from '../../model/configuration/board-configuration.model';
 
 @Component({
@@ -13,7 +13,7 @@ export class BoardSizeComponent {
     @Output() onBoardSizeChange = new EventEmitter<BoardConfiguration>();
 
     generateRange(to) {
-        return _.range(0, to);
+        return ld.range(0, to);
     }
 
     increaseNbBoardWidth() {

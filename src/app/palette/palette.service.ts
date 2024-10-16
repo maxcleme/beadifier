@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { Palette, PaletteEntry } from '../model/palette/palette.model';
 
-import * as _ from 'lodash';
+import * as ld from 'lodash';
 import { Observable, of, forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Color } from '../model/color/color.model';
@@ -39,10 +39,9 @@ export class PaletteService {
     }
 
     private perlerTransform(p: Palette): Palette {
-        return _.assign({}, p, {
-            entries: _(p.entries)
-                .map((entry) =>
-                    _.assign({}, entry, {
+        return ld.assign({}, p, {
+            entries: p.entries.map((entry) =>
+                    ld.assign({}, entry, {
                         ref: `P${(+entry.ref.substring(
                             entry.ref.length - 3
                         )).toLocaleString('en-US', {
@@ -51,7 +50,6 @@ export class PaletteService {
                         })}`,
                     })
                 )
-                .value(),
         });
     }
 
@@ -71,7 +69,7 @@ export class PaletteService {
             .pipe(
                 map((p) => {
                     const decoder = new TextDecoder('utf-8');
-                    const entries = _(decoder.decode(p).split('\n'))
+                    const entries = decoder.decode(p).split('\n')
                         .map((line) => line.split(','))
                         .filter((cells) => cells.length > 1)
                         .map((cells) => ({
@@ -87,9 +85,8 @@ export class PaletteService {
                             prefix: prefix,
                             enabled: true,
                         }))
-                        .value();
                     return new Palette(
-                        nameOverride || _.capitalize(name),
+                        nameOverride || ld.capitalize(name),
                         entries
                     );
                 })

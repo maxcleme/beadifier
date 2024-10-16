@@ -18,7 +18,7 @@ import {
 } from '../../utils/utils';
 
 import { Chart } from 'chart.js';
-import * as _ from 'lodash';
+import * as ld from 'lodash';
 
 @Component({
     selector: 'app-bead-usage',
@@ -82,7 +82,7 @@ export class BeadUsageComponent implements OnChanges {
                         },
                         onClick: (event) => {
                             try {
-                                this.history.push(_.cloneDeep(this.palettes));
+                                this.history.push(ld.cloneDeep(this.palettes));
                                 const ref = this.barChart.data.labels[
                                     (this.barChart.getElementsAtEvent(
                                         event
@@ -116,7 +116,7 @@ export class BeadUsageComponent implements OnChanges {
                         },
                         onClick: (event) => {
                             try {
-                                this.history.push(_.cloneDeep(this.palettes));
+                                this.history.push(ld.cloneDeep(this.palettes));
                                 const ref = this.polarChart.data.labels[
                                     (this.polarChart.getElementsAtEvent(
                                         event
@@ -141,9 +141,7 @@ export class BeadUsageComponent implements OnChanges {
     }
 
     findEntry(ref: string, palettes: Palette[]): PaletteEntry {
-        return _(palettes)
-            .map((p) => p.entries)
-            .flatten()
+        return palettes.flatMap((p) => p.entries)
             .find((e) => e.ref === ref);
     }
 
@@ -195,7 +193,7 @@ export class BeadUsageComponent implements OnChanges {
     }
 
     undo() {
-        _.assign(this.palettes, this.history.pop());
+        ld.assign(this.palettes, this.history.pop());
         this.onPaletteChange.emit();
     }
 
@@ -204,7 +202,7 @@ export class BeadUsageComponent implements OnChanges {
         usage: Map<string, number>,
         palettes: Palette[]
     ) {
-        this.history.push(_.cloneDeep(this.palettes));
+        this.history.push(ld.cloneDeep(this.palettes));
         removeColorUnderPercent(percent, usage, palettes);
         this.onPaletteChange.emit();
     }
