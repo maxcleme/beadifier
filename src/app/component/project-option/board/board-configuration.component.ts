@@ -10,9 +10,9 @@ import { Board, BOARDS } from '../../../model/board/board.model';
     styleUrls: ['./board-configuration.component.scss'],
 })
 export class BoardConfigurationComponent {
-    @Input() configuration: BoardConfiguration;
-    @Input() srcWidth: number;
-    @Input() srcHeight: number;
+    @Input({required: true}) configuration!: BoardConfiguration;
+    @Input({required:true}) srcWidth!: number;
+    @Input({required:true}) srcHeight!: number;
 
     @Output() onChange = new EventEmitter<BoardConfiguration>();
 

@@ -15,22 +15,22 @@ import { LoadImage } from '../../model/image/load-image.model';
 export class UploadImageButtonComponent {
     @Output() onLoad = new EventEmitter<LoadImage>();
 
-    @ViewChild('input', { static: true }) input: ElementRef;
+    @ViewChild('input', { static: true }) input: ElementRef | undefined;
 
     triggerInput() {
-        this.input.nativeElement.click();
+        this.input?.nativeElement.click();
     }
 
     readImage(event: Event) {
         if (
-            this.input.nativeElement.files &&
-            this.input.nativeElement.files[0]
+            this.input?.nativeElement.files &&
+            this.input?.nativeElement.files[0]
         ) {
             const reader = new FileReader();
             reader.addEventListener('load', (e) => {
                 if (this.onLoad) {
                     this.onLoad.emit({
-                        name: this.input.nativeElement.files[0].name.replace(
+                        name: this.input?.nativeElement.files[0].name.replace(
                             /\.[^/.]+$/,
                             ''
                         ),

@@ -4,6 +4,7 @@ import { Project } from '../../model/project/project.model';
 import { PaletteEntry } from '../../model/palette/palette.model';
 
 import * as _ from 'lodash';
+import { LoadImage } from '../../model/image/load-image.model';
 
 @Component({
     selector: 'app-project-option',
@@ -11,12 +12,12 @@ import * as _ from 'lodash';
     styleUrls: ['./project-option.component.scss'],
 })
 export class ProjectOptionComponent {
-    @Input() project: Project;
-    @Input() usage: Map<PaletteEntry, number>;
-    @Input() reducedColor: Uint8ClampedArray;
+    @Input({required: true}) project!: Project & {image: {name:string}};
+    @Input({required: true}) usage!: Map<string, number>;
+    @Input({required: true}) reducedColor: Uint8ClampedArray | undefined;
     @Output() onLoad = new EventEmitter<Project>();
 
-    onLoadingImageCallback(image) {
+    onLoadingImageCallback(image: LoadImage) {
         this.project.image = image;
         this.callback();
     }

@@ -26,18 +26,18 @@ import * as ld from 'lodash';
     styleUrls: ['./bead-usage.component.scss'],
 })
 export class BeadUsageComponent implements OnChanges {
-    @ViewChild('bar', { static: true }) barCanvasTag: ElementRef;
-    @ViewChild('polar', { static: true }) polarCanvasTag: ElementRef;
+    @ViewChild('bar', { static: true }) barCanvasTag: ElementRef<HTMLCanvasElement> | undefined;
+    @ViewChild('polar', { static: true }) polarCanvasTag: ElementRef<HTMLCanvasElement> | undefined;
 
-    @Input() usage: Map<string, number>;
-    @Input() palettes: Palette[];
+    @Input({required:true}) usage!: Map<string, number>;
+    @Input({required: true}) palettes!: Palette[];
 
     @Output() onPaletteChange = new EventEmitter<void>();
 
-    barChart: Chart;
-    polarChart: Chart;
+    barChart: Chart | undefined;
+    polarChart: Chart | undefined;
 
-    history: Map<string, number>[] = [];
+    history: Palette[][] = [];
     hasUsageUnderPercent = hasUsageUnderPercent;
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -46,9 +46,12 @@ export class BeadUsageComponent implements OnChanges {
             if (this.barChart) {
                 this.updateChart(this.barChart, data);
             } else {
-                const barCanvasCtx = this.barCanvasTag.nativeElement.getContext(
+                const barCanvasCtx = this.barCanvasTag?.nativeElement.getContext(
                     '2d'
                 );
+                if(!barCanvasCtx){
+                    throw new Error("Can not get 2d context from bar canvas")
+                }
                 this.barChart = new Chart(barCanvasCtx, {
                     type: 'bar',
                     data: data,
@@ -83,15 +86,21 @@ export class BeadUsageComponent implements OnChanges {
                         onClick: (event) => {
                             try {
                                 this.history.push(ld.cloneDeep(this.palettes));
-                                const ref = this.barChart.data.labels[
+                                if(!this.barChart){
+                                    throw new Error("Bar chart not defined")
+                                }
+                                const ref = this.barChart.data.labels?.[
                                     (this.barChart.getElementsAtEvent(
                                         event
                                     )[0] as any)._index
                                 ];
-                                this.findEntry(
+                                const foundEntry =this.findEntry(
                                     ref as string,
                                     this.palettes
-                                ).enabled = false;
+                                )
+                                if(foundEntry){
+                                    foundEntry.enabled = false
+                                };
                                 this.onPaletteChange.emit();
                             } catch (e) {}
                         },
@@ -102,9 +111,12 @@ export class BeadUsageComponent implements OnChanges {
             if (this.polarChart) {
                 this.updateChart(this.polarChart, data);
             } else {
-                const polarCanvasCtx = this.polarCanvasTag.nativeElement.getContext(
+                const polarCanvasCtx = this.polarCanvasTag?.nativeElement.getContext(
                     '2d'
                 );
+                if(!polarCanvasCtx){
+                    throw new Error("No 2d context on polar")
+                }
                 this.polarChart = new Chart(polarCanvasCtx, {
                     type: 'polarArea',
                     data: data,
@@ -117,15 +129,21 @@ export class BeadUsageComponent implements OnChanges {
                         onClick: (event) => {
                             try {
                                 this.history.push(ld.cloneDeep(this.palettes));
-                                const ref = this.polarChart.data.labels[
+                                if(!this.polarChart){
+                                    throw new Error("No polar chart")
+                                }
+                                const ref = this.polarChart.data.labels?.[
                                     (this.polarChart.getElementsAtEvent(
                                         event
                                     )[0] as any)._index
                                 ];
-                                this.findEntry(
+                                const entry = this.findEntry(
                                     ref as string,
                                     this.palettes
-                                ).enabled = false;
+                                )
+                                if(entry){
+                                    entry.enabled = false;
+                                }
                                 this.onPaletteChange.emit();
                             } catch (e) {}
                         },
@@ -140,7 +158,7 @@ export class BeadUsageComponent implements OnChanges {
         chart.update();
     }
 
-    findEntry(ref: string, palettes: Palette[]): PaletteEntry {
+    findEntry(ref: string, palettes: Palette[]) {
         return palettes.flatMap((p) => p.entries)
             .find((e) => e.ref === ref);
     }
@@ -150,12 +168,12 @@ export class BeadUsageComponent implements OnChanges {
         palettes: Palette[]
     ): Chart.ChartData {
         const data = {
-            labels: [],
+            labels: new Array<string>(),
             datasets: [
                 {
                     options: {},
-                    data: [],
-                    backgroundColor: [],
+                    data: new Array<number>(),
+                    backgroundColor: new Array<string>(),
                     borderColor: '#cccccc',
                     borderWidth: 1,
                 },
@@ -163,14 +181,14 @@ export class BeadUsageComponent implements OnChanges {
         };
 
         Array.from(usage.entries())
-            .sort(([k1, v1], [k2, v2]) => {
+            .sort(([k1], [k2]) => {
                 const e1 = this.findEntry(k1, palettes);
                 if (!e1) {
-                    return;
+                    return 0;
                 }
                 const e2 = this.findEntry(k2, palettes);
                 if (!e2) {
-                    return;
+                    return 0;
                 }
                 return ColorToHsl(e1.color).h - ColorToHsl(e2.color).h;
             })

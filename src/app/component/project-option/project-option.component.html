@@ -37,8 +37,8 @@
                 >
                     <app-board-configuration
                         [configuration]="project.boardConfiguration"
-                        [srcWidth]="project.srcWidth"
-                        [srcHeight]="project.srcHeight"
+                        [srcWidth]="project.srcWidth ?? 0"
+                        [srcHeight]="project.srcHeight ?? 0"
                         (onChange)="callback()"
                     >
                     </app-board-configuration>

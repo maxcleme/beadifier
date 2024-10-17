@@ -4,6 +4,7 @@ import { Component, Input, EventEmitter, Output } from '@angular/core';
 import { PaletteService } from '../../../palette/palette.service';
 import { PaletteConfiguration } from '../../../model/configuration/palette-configuration.model';
 import { Palette } from '../../../model/palette/palette.model';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 @Component({
     selector: 'app-palette-configuration',
@@ -11,7 +12,7 @@ import { Palette } from '../../../model/palette/palette.model';
     styleUrls: ['./palette-configuration.component.scss'],
 })
 export class PaletteConfigurationComponent {
-    @Input() configuration: PaletteConfiguration;
+    @Input({required: true}) configuration!: PaletteConfiguration;
     @Output() onChange = new EventEmitter<PaletteConfiguration>();
 
     availablePalettes: Observable<Palette[]>;
@@ -22,11 +23,11 @@ export class PaletteConfigurationComponent {
         this.enableAllPaletteEntry = new Map();
 
         this.availablePalettes.subscribe((palettes) =>
-            palettes.forEach((p) => (this.enableAllPaletteEntry[p.name] = true))
-        );
+            palettes.forEach((p) => (this.enableAllPaletteEntry.set(p.name,true))
+        ))
     }
 
-    toggleAll(e, name) {
+    toggleAll(e:MatSlideToggleChange , name:string) {
         this.configuration.palettes.forEach((p) => {
             if (p.name === name) {
                 p.entries.forEach((entry) => (entry.enabled = e.checked));

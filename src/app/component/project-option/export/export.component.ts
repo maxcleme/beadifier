@@ -7,6 +7,7 @@ import { SvgPrinter } from '../../../printer/svg/svg.printer';
 import { PngPrinter } from '../../../printer/png/png.printer';
 import { JpgPrinter } from '../../../printer/jpg/jpg.printer';
 import { XlsxPrinter } from '../../../printer/xlsx/xlsx.printer';
+import { PaletteEntry } from '../../../model/palette/palette.model';
 
 @Component({
     selector: 'app-export',
@@ -14,10 +15,10 @@ import { XlsxPrinter } from '../../../printer/xlsx/xlsx.printer';
     styleUrls: ['./export.component.scss'],
 })
 export class ExportComponent {
-    @Input() configuration: ExportConfiguration;
-    @Input() project: Project;
-    @Input() usage: Map<string, number>;
-    @Input() reducedColor: Uint8ClampedArray;
+    @Input({required: true}) configuration!: ExportConfiguration;
+    @Input({required:true}) project!: Project & {image: {name: string}};
+    @Input({required:true}) usage!: Map<string, number>;
+    @Input({required:true}) reducedColor: Uint8ClampedArray | undefined;
 
     availablePrinters: Printer[];
     printer: Printer;
@@ -34,11 +35,18 @@ export class ExportComponent {
     }
 
     export() {
+        const imageName = this.project.image?.name
+        if(!imageName){
+            throw new Error("No filename for export")
+        }
+        if(!this.reducedColor){
+            throw new Error("No reduced color")
+        }
         this.printer.print(
             this.reducedColor,
             this.usage,
             this.project,
-            this.project.image.name
+            imageName
         );
     }
 }

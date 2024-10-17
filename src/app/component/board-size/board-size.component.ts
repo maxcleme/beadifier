@@ -9,10 +9,10 @@ import { BoardConfiguration } from '../../model/configuration/board-configuratio
     styleUrls: ['./board-size.component.scss'],
 })
 export class BoardSizeComponent {
-    @Input() configuration: BoardConfiguration;
+    @Input({required:true}) configuration!: BoardConfiguration;
     @Output() onBoardSizeChange = new EventEmitter<BoardConfiguration>();
 
-    generateRange(to) {
+    generateRange(to: number) {
         return ld.range(0, to);
     }
 

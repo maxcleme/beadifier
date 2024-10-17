@@ -14,7 +14,7 @@ const DEFAULT_GRAYSCALE = 0;
     styleUrls: ['./image-configuration.component.scss'],
 })
 export class ImageConfigurationComponent {
-    @Input() configuration: ImageConfiguration;
+    @Input({required: true}) configuration!: ImageConfiguration;
     @Output() onChange = new EventEmitter<ImageConfiguration>();
 
     imgSettings: any;
