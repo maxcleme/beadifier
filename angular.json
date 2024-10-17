@@ -4,6 +4,7 @@
   "newProjectRoot": "projects",
   "projects": {
     "beadifier": {
+      
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -14,8 +15,11 @@
             "outputPath": {
               "base": "dist"
             },
+            "loader": {
+              ".glsl": "text"
+            },
             "index": "src/index.html",
-            "tsConfig": "src/tsconfig.app.json",
+            "tsConfig": "tsconfig.app.json",
             "polyfills": [
               "src/polyfills.ts"
             ],
@@ -61,6 +65,7 @@
         "serve": {
           "builder": "@angular/build:dev-server",
           "options": {
+          
           },
           "configurations": {
             "production": {
@@ -89,5 +94,6 @@
     "@schematics/angular:directive": {
       "prefix": "app"
     }
+
   }
 }
