@@ -80,11 +80,10 @@
                             >
                                 <div
                                     data-flex="50"
-                                    *ngIf="project && aspectRatio"
                                     [ngStyle]="{
                                         overflow: 'auto hidden',
                                         height:
-                                            aspectRatio *
+                                            (!project || !aspectRatio) ? '0px': aspectRatio *
                                                 project.boardConfiguration.board
                                                     .nbBeadPerRow *
                                                 project.boardConfiguration
@@ -110,10 +109,9 @@
                                 </div>
                                 <div
                                     data-flex="50"
-                                    *ngIf="project && aspectRatio"
                                     [ngStyle]="{
                                         height:
-                                            aspectRatio *
+                                            (!project || !aspectRatio) ? '0px': aspectRatio *
                                                 project.boardConfiguration.board
                                                     .nbBeadPerRow *
                                                 project.boardConfiguration
