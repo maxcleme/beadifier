@@ -107,7 +107,7 @@ export class SvgPrinter implements Printer {
         );
 
         const maxUsage = '' + ld.max(Array.from(usage.values()));
-        const longestRef = ld.maxBy(Array.from(usage.keys()), (s) => s.length);
+        const longestRef = ld.maxBy(Array.from(usage.keys()), (s) => s.length) ?? 'a';
 
         const longestWord =
             maxUsage.length > longestRef.length ? maxUsage : longestRef;
@@ -128,6 +128,9 @@ export class SvgPrinter implements Printer {
                     project.paletteConfiguration.palettes,
                     k
                 );
+                if(!entry){
+                    throw new Error("palette entry not found")
+                }
                 const bg = entry.color;
                 const fg = foreground(bg);
                 ctx.fillStyle = `rgb(${bg.r}, ${bg.g}, ${bg.b})`;
@@ -185,7 +188,7 @@ export class SvgPrinter implements Printer {
                     const text =
                         (project.paletteConfiguration.palettes.length > 1
                             ? entry.prefix
-                            : '') + entry.symbol;
+                            : '') + (entry.symbol ?? '');
                     txtContainerName = new Rect(
                         patternWidth +
                             inventoryMargin +
@@ -316,7 +319,7 @@ export class SvgPrinter implements Printer {
                         container.height
                     );
 
-                    const paletteEntry: PaletteEntry = ld.find(
+                    const paletteEntry = ld.find(
                         ld.flatten(
                             project.paletteConfiguration.palettes.map(
                                 (p) => p.entries
@@ -342,10 +345,10 @@ export class SvgPrinter implements Printer {
                                 (project.paletteConfiguration.palettes.length >
                                 1
                                     ? paletteEntry.prefix
-                                    : '') + paletteEntry.symbol;
+                                    : '') + (paletteEntry.symbol ?? '');
                         }
                         ctx.font = `${this.biggestFontSize(
-                            text,
+                            text ?? '',
                             txtContainer
                         )}pt MonoFont`;
                         ctx.fillText(
@@ -361,7 +364,7 @@ export class SvgPrinter implements Printer {
                                 project.paletteConfiguration.palettes.length > 1
                             ) {
                                 referenceText =
-                                    paletteEntry.prefix + referenceText;
+                                    (paletteEntry.prefix ?? '') + (referenceText ?? '');
                             }
                         }
                         ctx.fillText(
@@ -435,7 +438,7 @@ export class SvgPrinter implements Printer {
 
     // Welcome to realm of magic values, works only for current font
     biggestFontSize(text: string, r: Rect): number {
-        const biggestForWidth = r.width / text.length / 0.959136962890625;
+        const biggestForWidth = r.width / (text.length ??  1) / 0.959136962890625;
         const expectedHeight = biggestForWidth * 0.959136962890625;
         if (expectedHeight <= r.height) {
             return biggestForWidth;

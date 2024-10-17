@@ -42,12 +42,12 @@ export class PaletteService {
         return ld.assign({}, p, {
             entries: p.entries.map((entry) =>
                     ld.assign({}, entry, {
-                        ref: `P${(+entry.ref.substring(
+                        ref: entry.ref ? `P${(+entry.ref.substring(
                             entry.ref.length - 3
                         )).toLocaleString('en-US', {
                             minimumIntegerDigits: 2,
                             useGrouping: false,
-                        })}`,
+                        })}` : undefined,
                     })
                 )
         });
@@ -58,9 +58,9 @@ export class PaletteService {
         prefix: string,
         nameOverride?: string
     ): Observable<Palette> {
-        if (this.palettes.has(name)) {
-            // already loaded
-            return of(this.palettes.get(name));
+        const palette = this.palettes.get(name)
+        if (palette) {
+            return of(palette);
         }
         return this.http
             .get(`https://beadcolors.eremes.xyz/gen/v3/${name}.csv`, {
@@ -76,12 +76,12 @@ export class PaletteService {
                             ref: cells[0],
                             name: cells[1],
                             symbol: cells[2],
-                            color: {
-                                r: +cells[3],
-                                g: +cells[4],
-                                b: +cells[5],
-                                a: 255,
-                            },
+                            color: new Color(
+                                +cells[3],
+                                 +cells[4],
+                                +cells[5],
+                                 255,
+                            ),
                             prefix: prefix,
                             enabled: true,
                         }))

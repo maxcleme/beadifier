@@ -2,10 +2,11 @@ import { Renderer } from './../renderer';
 import { Color } from './../../model/color/color.model';
 import { clearNode } from './../../utils/utils';
 import { Project } from '../../model/project/project.model';
+import { ThisReceiver } from '@angular/compiler';
 
 export class Canvas2dRenderer implements Renderer {
-    container: Element;
-    canvas: HTMLCanvasElement;
+    container: Element | undefined;
+    canvas: HTMLCanvasElement | undefined;
 
     isSupported(): boolean {
         return true;
@@ -29,10 +30,16 @@ export class Canvas2dRenderer implements Renderer {
         beadSizePx: number,
         project: Project
     ) {
+        if(!this.canvas){
+            throw new Error("Container not initialized")
+        }
         this.canvas.width = imageWidth * beadSizePx;
         this.canvas.height = imageHeight * beadSizePx;
 
         const ctx = this.canvas.getContext('2d');
+        if(!ctx){
+            throw new Error("Could not get 2d context")
+        }
         ctx.fillStyle = 'rgb(229, 229, 229)';
         ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 

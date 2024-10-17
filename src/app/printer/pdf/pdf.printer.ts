@@ -1,4 +1,4 @@
-import * as jsPDF from 'jspdf';
+import {jsPDF} from 'jspdf';
 import * as ld from 'lodash';
 
 // Huge hack to get the font working in jsPDF, I give up doing it properly TBH
@@ -117,7 +117,7 @@ export class PdfPrinter implements Printer {
         const usagePerPage = 30;
 
         const maxUsage = '' + ld.max(Array.from(usage.values()));
-        const longestRef = ld.maxBy(Array.from(usage.keys()), (s) => s.length);
+        const longestRef = ld.maxBy(Array.from(usage.keys()), (s) => s.length) ?? 'a';
 
         const longestWord =
             maxUsage.length > longestRef.length ? maxUsage : longestRef;
@@ -144,6 +144,9 @@ export class PdfPrinter implements Printer {
                     project.paletteConfiguration.palettes,
                     '' + k
                 );
+                if(!entry){
+                    throw new Error("Could not find palette entry")
+                }
                 const bg = entry.color;
                 const fg = foreground(bg);
                 doc.setFillColor(bg.r, bg.g, bg.b);
@@ -187,6 +190,9 @@ export class PdfPrinter implements Printer {
                         project.paletteConfiguration.palettes,
                         '' + k
                     );
+                    if(!entry){
+                        throw new Error("Could not find palette entry")
+                    }
                     const bg = entry.color;
                     const fg = foreground(bg);
                     doc.setFillColor(bg.r, bg.g, bg.b);
@@ -210,7 +216,7 @@ export class PdfPrinter implements Printer {
                     const text =
                         (project.paletteConfiguration.palettes.length > 1
                             ? entry.prefix
-                            : '') + entry.symbol;
+                            : '') + (entry.symbol ?? '');
                     doc.setFontSize(
                         this.biggestFontSize(longestWord, txtContainer)
                     );
@@ -233,6 +239,9 @@ export class PdfPrinter implements Printer {
                     project.paletteConfiguration.palettes,
                     '' + k
                 );
+                if(!entry){
+                    throw new Error("Could not find palette entry")
+                }
                 const bg = entry.color;
                 const fg = foreground(bg);
                 doc.setFillColor(bg.r, bg.g, bg.b);
@@ -294,7 +303,7 @@ export class PdfPrinter implements Printer {
                 let text = `${i} - ${j}`;
                 const textWidth =
                     (doc.getStringUnitWidth(text) *
-                        doc.internal.getFontSize()) /
+                        doc.getFontSize()) /
                     doc.internal.scaleFactor;
                 const textOffset =
                     (doc.internal.pageSize.width - textWidth) / 2;
@@ -318,7 +327,7 @@ export class PdfPrinter implements Printer {
                             beadSize
                         );
 
-                        const paletteEntry: PaletteEntry = ld.find(
+                        const paletteEntry = ld.find(
                             ld.flatten(
                                 project.paletteConfiguration.palettes.map(
                                     (p) => p.entries
@@ -432,13 +441,13 @@ export class PdfPrinter implements Printer {
                             );
 
                             const txtContainer = container.scale(0.8);
-                            text = paletteEntry.ref;
+                            text = paletteEntry.ref ?? '';
                             if (project.exportConfiguration.useSymbols) {
                                 text =
                                     (project.paletteConfiguration.palettes
                                         .length > 1
                                         ? paletteEntry.prefix
-                                        : '') + paletteEntry.symbol;
+                                        : '') + (paletteEntry.symbol ?? '');
                             }
                             doc.setFontSize(
                                 this.biggestFontSize(text, txtContainer)

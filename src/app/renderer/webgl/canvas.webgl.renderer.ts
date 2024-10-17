@@ -8,10 +8,12 @@ import { Project } from '../../model/project/project.model';
 import { AugmentedBuffer } from './augmented-buffer';
 import { Shape } from './shape';
 import { AugmentedProgram } from './augmented-program';
+import shaderFs from './shader-fs.glsl';
+import shaderVs from './shader-vs.glsl';
 
 export class CanvasWebGLRenderer implements Renderer {
-    container: Element;
-    canvas: HTMLCanvasElement;
+    container: Element | undefined;
+    canvas: HTMLCanvasElement | undefined;
 
     isSupported(): boolean {
         const canvas = document.createElement('canvas');
@@ -44,6 +46,9 @@ export class CanvasWebGLRenderer implements Renderer {
         beadSizePx: number,
         project: Project
     ) {
+        if(!this.canvas){
+            throw new Error("initContainer have not been called")
+        }
         const gl = this.initGL(this.canvas);
         const program = this.initShaders(gl);
         const beadShape = this.initBeadShape(gl);
@@ -223,16 +228,19 @@ export class CanvasWebGLRenderer implements Renderer {
     initShaders(gl: WebGLRenderingContext): AugmentedProgram {
         const fragmentShader = this.initShader(
             gl,
-            require('raw-loader!./shader-fs.glsl'),
+            shaderFs,
             gl.FRAGMENT_SHADER
         );
         const vertexShader = this.initShader(
             gl,
-            require('raw-loader!./shader-vs.glsl'),
+            shaderVs,
             gl.VERTEX_SHADER
         );
 
         const shaderProgram = gl.createProgram();
+        if(!shaderProgram){
+            throw new Error("No shader program")
+        }
         gl.attachShader(shaderProgram, vertexShader);
         gl.attachShader(shaderProgram, fragmentShader);
         gl.linkProgram(shaderProgram);
@@ -260,11 +268,14 @@ export class CanvasWebGLRenderer implements Renderer {
         shaderType: number
     ): WebGLShader {
         const shader = gl.createShader(shaderType);
+        if(!shader){
+            throw new Error("No shader created")
+        }
         gl.shaderSource(shader, shaderSource);
         gl.compileShader(shader);
 
         if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-            throw new Error(gl.getShaderInfoLog(shader));
+            throw new Error(gl.getShaderInfoLog(shader) ?? 'no shader info log');
         }
 
         return shader;
@@ -294,7 +305,7 @@ export class CanvasWebGLRenderer implements Renderer {
         const vertexPositionBuffer = gl.createBuffer();
         const vertexColorBuffer = gl.createBuffer();
 
-        let positionVerticles = [];
+        let positionVerticles: number[] = [];
         for (let i = 0.0; i <= 360; i += 1) {
             // degrees to radians
             const j = (i * Math.PI) / 180;

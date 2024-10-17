@@ -1,5 +1,5 @@
 import * as ld from 'lodash';
-import * as Excel from 'exceljs/dist/exceljs';
+import {Alignment, Border, Borders, Fill, Workbook} from 'exceljs';
 
 import { Printer } from '../printer';
 import { Project } from '../../model/project/project.model';
@@ -8,21 +8,21 @@ import { ColorToHex } from '../../model/color/hex.model';
 import { Color } from '../../model/color/color.model';
 import { foreground, getPaletteEntryByColorRef } from '../../utils/utils';
 
-const cellBorderStyle = { style: 'thin', color: { argb: 'FFFFFFFF' } };
+const cellBorderStyle = { style: 'thin', color: { argb: 'FFFFFFFF' } } satisfies Border;
 const emptyCellBorderStyle = {
     style: 'thin',
     color: { argb: 'FF000000' },
-};
+} satisfies Border;
 const boardBorderStyle = {
     style: 'thick',
     color: { argb: '00000000' },
-};
+} satisfies Border;
 const border = {
     top: cellBorderStyle,
     left: cellBorderStyle,
     bottom: cellBorderStyle,
     right: cellBorderStyle,
-};
+} satisfies Partial<Borders>;
 const emptyBorder = {
     diagonal: {
         up: true,
@@ -34,18 +34,18 @@ const emptyBorder = {
     left: emptyCellBorderStyle,
     bottom: emptyCellBorderStyle,
     right: emptyCellBorderStyle,
-};
+} satisfies Partial<Borders>;
 const alignment = {
     vertical: 'middle',
     horizontal: 'center',
-};
+} satisfies Partial<Alignment>;
 
 export class XlsxPrinter implements Printer {
     name(): string {
         return 'XLSX (Beta)';
     }
 
-    pattern(workbook, reducedColor: Uint8ClampedArray, project: Project) {
+    pattern(workbook: Workbook, reducedColor: Uint8ClampedArray, project: Project) {
         const worksheet = workbook.addWorksheet('Pattern');
 
         // define all cells
@@ -67,7 +67,7 @@ export class XlsxPrinter implements Printer {
                     reducedColor[y * width * 4 + x * 4 + 3]
                 );
 
-                const paletteEntry: PaletteEntry = ld.find(
+                const paletteEntry = ld.find(
                     ld.flatten(
                         project.paletteConfiguration.palettes.map(
                             (p) => p.entries
@@ -94,7 +94,7 @@ export class XlsxPrinter implements Printer {
                         text =
                             (project.paletteConfiguration.palettes.length > 1
                                 ? paletteEntry.prefix
-                                : '') + paletteEntry.symbol;
+                                : '') + (paletteEntry.symbol ?? '');
                     }
                     cell.value = text;
                     cell.font = {
@@ -153,7 +153,7 @@ export class XlsxPrinter implements Printer {
         worksheet.properties.defaultColWidth = 40 / 7.025;
     }
 
-    usage(workbook, usage: Map<string, number>, project: Project) {
+    usage(workbook: Workbook, usage: Map<string, number>, project: Project) {
         const worksheet = workbook.addWorksheet('Inventory');
 
         let y = 0;
@@ -169,6 +169,9 @@ export class XlsxPrinter implements Printer {
                     project.paletteConfiguration.palettes,
                     k
                 );
+                if(!entry){
+                    throw new Error("Could not get pallette entry")
+                }
                 const fg = `FF${ColorToHex(foreground(entry.color)).substring(
                     1
                 )}`;
@@ -184,7 +187,7 @@ export class XlsxPrinter implements Printer {
                     fgColor: {
                         argb: bg,
                     },
-                };
+                } satisfies Fill;
 
                 row.getCell(refIdx).value = entry.ref;
                 row.getCell(refIdx).font = font;
@@ -196,7 +199,7 @@ export class XlsxPrinter implements Printer {
                     const text =
                         (project.paletteConfiguration.palettes.length > 1
                             ? entry.prefix
-                            : '') + entry.symbol;
+                            : '') + (entry.symbol ?? '');
                     row.getCell(symbolIdx).value = text;
                     row.getCell(symbolIdx).font = font;
                     row.getCell(symbolIdx).fill = fill;
@@ -223,7 +226,7 @@ export class XlsxPrinter implements Printer {
         project: Project,
         filename: string
     ) {
-        const workbook = new Excel.Workbook();
+        const workbook = new Workbook();
 
         this.pattern(workbook, reducedColor, project);
         this.usage(workbook, usage, project);

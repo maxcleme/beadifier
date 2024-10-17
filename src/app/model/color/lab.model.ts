@@ -1,6 +1,6 @@
 import { Color } from './color.model';
 
-export class Lab {
+export interface Lab {
     l: number;
     a: number;
     b: number;

@@ -9,8 +9,8 @@ import { LoadImage } from '../image/load-image.model';
 
 export class Project {
     image: LoadImage;
-    srcWidth: number;
-    srcHeight: number;
+    srcWidth: number | undefined;
+    srcHeight: number | undefined;
 
     boardConfiguration: BoardConfiguration;
     paletteConfiguration: PaletteConfiguration;
@@ -36,5 +36,6 @@ export class Project {
         this.ditheringConfiguration = ditheringConfiguration;
         this.rendererConfiguration = rendererConfiguration;
         this.exportConfiguration = exportConfiguration;
+        this.image = {name: '',src: null}
     }
 }

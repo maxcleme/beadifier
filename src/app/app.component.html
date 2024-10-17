@@ -80,6 +80,7 @@
                             >
                                 <div
                                     data-flex="50"
+                                    *ngIf="project && aspectRatio"
                                     [ngStyle]="{
                                         overflow: 'auto hidden',
                                         height:
@@ -109,6 +110,7 @@
                                 </div>
                                 <div
                                     data-flex="50"
+                                    *ngIf="project && aspectRatio"
                                     [ngStyle]="{
                                         height:
                                             aspectRatio *

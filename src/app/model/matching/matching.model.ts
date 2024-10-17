@@ -3,13 +3,13 @@ import { ColorToLab } from '../color/lab.model';
 
 export interface Matching {
     name: string;
-    delta(c1, c2: Color): number;
+    delta(c1:Color, c2: Color): number;
 }
 
 class Euclidean {
     name = 'Euclidean';
 
-    delta(c1, c2: Color): number {
+    delta(c1:Color, c2: Color): number {
         return Math.sqrt(
             Math.pow(c1.r - c2.r, 2) +
                 Math.pow(c1.g - c2.g, 2) +
@@ -22,7 +22,7 @@ class Euclidean {
 class DeltaECIE94 {
     name = 'DeltaE (CIE94)';
 
-    delta(ca, cb: Color): number {
+    delta(ca: Color, cb: Color): number {
         const l1 = ColorToLab(ca);
         const l2 = ColorToLab(cb);
 
@@ -50,14 +50,14 @@ class DeltaECIE94 {
 class DeltaECIE2000 {
     name = 'DeltaE (CIE2000)';
 
-    degree(radian): number {
+    degree(radian: number): number {
         return (360 * radian) / (2 * Math.PI);
     }
-    radian(degree): number {
+    radian(degree: number): number {
         return (2 * Math.PI * degree) / 360;
     }
 
-    delta(ca, cb: Color): number {
+    delta(ca: Color, cb: Color): number {
         const l1 = ColorToLab(ca);
         const l2 = ColorToLab(cb);
 

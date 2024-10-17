@@ -4,7 +4,7 @@ export class Palette {
     name: string;
     entries: PaletteEntry[];
 
-    constructor(name, entries) {
+    constructor(name:string, entries: PaletteEntry[]) {
         this.name = name;
         this.entries = entries;
     }
@@ -12,13 +12,13 @@ export class Palette {
 
 export class PaletteEntry {
     name: string;
-    ref: string;
-    symbol: string;
+    ref: string | undefined;
+    symbol: string | undefined;
     color: Color;
-    prefix: string;
+    prefix: string| undefined;
     enabled = true;
 
-    constructor(name, color) {
+    constructor(name:string, color: Color) {
         this.name = name;
         this.color = color;
     }

@@ -1,4 +1,4 @@
-import { Palette, PaletteEntry } from '../model/palette/palette.model';
+import { Palette } from '../model/palette/palette.model';
 import { Color } from '../model/color/color.model';
 
 import * as ld from 'lodash';
@@ -30,8 +30,8 @@ export class ImagePosition {
 }
 
 export function drawImageInsideCanvas(
-    canvas,
-    image,
+    canvas: HTMLCanvasElement,
+    image: HTMLImageElement,
     rendererConfiguration: RendererConfiguration
 ): ImagePosition {
     /**
@@ -78,10 +78,12 @@ export function drawImageInsideCanvas(
     const ryStart = Math.floor(yStart);
     const rrenderableWidth = Math.floor(renderableWidth);
     const rrenderableHeight = Math.floor(renderableHeight);
-
-    canvas.getContext('2d').filter = image.style.filter;
-    canvas
-        .getContext('2d')
+    const context = canvas.getContext('2d')
+    if(!context){
+        throw new Error("Could not get 2d context")
+    }
+    context.filter = image.style.filter;
+   context
         .drawImage(
             image,
             rxStart,
@@ -103,6 +105,9 @@ export function reduceColor(
     drawingPosition: ImagePosition
 ): ImageData {
     const context = canvas.getContext('2d');
+    if(!context){
+        throw new Error("Could not get canvas context")
+    }
     const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
 
     for (let y = 0; y < canvas.height; y++) {
@@ -114,6 +119,9 @@ export function reduceColor(
                     color,
                     project.matchingConfiguration.matching
                 );
+                if(!closestPaletteEntry){
+                    continue
+                }
                 set(imageData, canvas, x, y, closestPaletteEntry.color);
 
                 if (project.ditheringConfiguration.enable) {
@@ -222,7 +230,7 @@ export function getClosestPaletteEntry(
     palettes: Palette[],
     color: Color,
     matching: Matching
-): PaletteEntry {
+) {
     return ld.minBy(
         ld.flatten(palettes.map((p) => p.entries)).filter(
             (paletteEntry) => paletteEntry.enabled
@@ -237,11 +245,11 @@ export function clearNode(node: Element) {
     }
 }
 
-export function parsePalette(json): Palette {
+export function parsePalette(json: unknown): Palette {
     try {
         return JSON.parse(JSON.stringify(json));
     } catch (e) {
-        throw new Error(`Invalid palette : ${e.message}`);
+        throw new Error(`Invalid palette : ${typeof e === 'object'&&  e && 'message' in e  ? e.message: ''}`);
     }
 }
 
@@ -261,7 +269,7 @@ export function computeUsage(
                 )
         )
         .forEach((color) => {
-            const entry: PaletteEntry = ld.find(
+            const entry = ld.find(
                 ld.flatten(palettes.map((p) => p.entries)),
                 (e) =>
                     e.color.r === color.r &&
@@ -269,7 +277,7 @@ export function computeUsage(
                     e.color.b === color.b &&
                     e.color.a === color.a
             );
-            if (entry) {
+            if (entry?.ref) {
                 usage.set(entry.ref, (usage.get(entry.ref) || 0) + 1);
             }
         });
@@ -311,7 +319,7 @@ export function removeColorUnderPercent(
 export function getPaletteEntryByColorRef(
     palettes: Palette[],
     ref: string
-): PaletteEntry {
+) {
     const paletteList = ld.flatten(palettes.map((p) => p.entries));
     return ld.minBy(
         ld.filter(paletteList, (paletteEntry) => {

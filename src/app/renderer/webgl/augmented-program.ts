@@ -1,16 +1,16 @@
 export class AugmentedProgram {
     program: WebGLProgram;
-    vertexPositionAttribute: any;
-    vertexColorUniform: any;
-    pMatrixUniform: any;
-    mvMatrixUniform: any;
+    vertexPositionAttribute: GLint;
+    vertexColorUniform: WebGLUniformLocation | null;
+    pMatrixUniform: WebGLUniformLocation | null;
+    mvMatrixUniform: WebGLUniformLocation | null;
 
     constructor(
-        program,
-        vertexPositionAttribute,
-        vertexColorUniform,
-        pMatrixUniform,
-        mvMatrixUniform
+        program: WebGLProgram,
+        vertexPositionAttribute: GLint,
+        vertexColorUniform: WebGLUniformLocation | null,
+        pMatrixUniform: WebGLUniformLocation | null,
+        mvMatrixUniform: WebGLUniformLocation | null
     ) {
         this.program = program;
         this.vertexPositionAttribute = vertexPositionAttribute;

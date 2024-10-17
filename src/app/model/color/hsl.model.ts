@@ -1,6 +1,6 @@
 import { Color } from './color.model';
 
-export class Hsl {
+export interface Hsl {
     h: number;
     s: number;
     l: number;

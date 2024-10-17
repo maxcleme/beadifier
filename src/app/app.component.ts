@@ -33,18 +33,18 @@ const BEAD_SIZE_PX = 10;
     styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-    @ViewChild('source', { static: true }) imgTag: ElementRef;
+    @ViewChild('source', { static: true }) imgTag: ElementRef<HTMLImageElement> | undefined;
     @ViewChild('canvasContainer', { static: true })
-    canvasContainerTag: ElementRef;
-    @ViewChild('preview', { static: true }) previewTag: ElementRef;
+    canvasContainerTag: ElementRef | undefined;
+    @ViewChild('preview', { static: true }) previewTag: ElementRef | undefined;
 
     availableRenderers: Renderer[];
     renderer: Renderer;
-    project: Project;
+    project: Project | undefined;
     scaler: Scaler;
-    aspectRatio: number;
+    aspectRatio: number | undefined;
     usage: Map<string, number>;
-    reducedColor: Uint8ClampedArray;
+    reducedColor: Uint8ClampedArray | undefined;
     beadSize: number;
     loading: boolean;
 
@@ -54,14 +54,16 @@ export class AppComponent {
             new CanvasWebGLRenderer(),
             new Canvas2dRenderer(),
         ];
-        this.renderer = this.availableRenderers.find((renderer) =>
+        const supportedRenderer = this.availableRenderers.find((renderer) =>
             renderer.isSupported()
         );
-        if (!this.renderer) {
+        if (!supportedRenderer) {
             alert(
                 'Sorry but your browser seems to not support required features.'
             );
+            throw new Error("Could not find a supported renderer")
         }
+        this.renderer= supportedRenderer
 
         // Init
         this.usage = new Map();
@@ -87,11 +89,17 @@ export class AppComponent {
         this.loading = true;
         new Observable((subscriber) => {
             setTimeout(() => {
+                if(!this.canvasContainerTag){
+                    throw new Error("Could not find canvas container element")
+                }
                 const canvasContainer = this.canvasContainerTag.nativeElement;
 
                 // clear previous canvas if any
                 while (canvasContainer.firstChild) {
                     canvasContainer.removeChild(canvasContainer.lastChild);
+                }
+                if(!this.project){
+                    throw new Error("Project has not initialized")
                 }
 
                 const canvas = document.createElement('canvas');
@@ -103,7 +111,9 @@ export class AppComponent {
                     this.project.boardConfiguration.board.nbBeadPerRow;
 
                 canvasContainer.appendChild(canvas);
-
+                if(!this.imgTag){
+                    throw new Error("Could not find image tag")
+                }
                 const drawingPosition = drawImageInsideCanvas(
                     canvas,
                     this.imgTag.nativeElement,
@@ -119,6 +129,9 @@ export class AppComponent {
                     this.project.paletteConfiguration.palettes
                 );
                 this.renderer.destroy();
+                if(!this.previewTag){
+                    throw new Error("Could not find preview tag")
+                }
                 this.renderer.initContainer(
                     this.previewTag.nativeElement,
                     canvas.width,
@@ -142,10 +155,19 @@ export class AppComponent {
         if (!project.image) {
             return;
         }
+        if(!this.imgTag){
+            throw new Error("Could not find image tag")
+        }
 
         if (this.imgTag.nativeElement.src !== project.image.src) {
             this.imgTag.nativeElement.src = project.image.src;
             this.imgTag.nativeElement.addEventListener('load', () => {
+                if(!this.project){
+                    throw new Error("Project has not initialized")
+                }
+                if(!this.imgTag){
+                    throw new Error("Could not find image tag")
+                }
                 this.project.srcWidth = this.imgTag.nativeElement.width;
                 this.project.srcHeight = this.imgTag.nativeElement.height;
                 this._beadify();
@@ -157,6 +179,12 @@ export class AppComponent {
 
     @HostListener('window:resize', ['$event'])
     computeAspectRatio() {
+        if(!this.project){
+            return 
+        }
+        if(!this.previewTag){
+            throw new Error("Could not find preview tag")
+        }
         this.aspectRatio = this.scaler.compute(
             this.project,
             this.previewTag.nativeElement.parentElement.clientWidth,
