@@ -1,7 +1,7 @@
 export const environment = {
   production: false
 };
-
+/*
 // GA
 (function (i, s, o, g, r, a, m) {
   i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
@@ -12,3 +12,4 @@ export const environment = {
 
 (window as any).ga('create', 'UA-109027550-1', 'none');
 (window as any).ga('send', 'pageview');
+*/
