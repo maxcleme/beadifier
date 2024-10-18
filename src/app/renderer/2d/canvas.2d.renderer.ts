@@ -2,7 +2,6 @@ import { Renderer } from './../renderer';
 import { Color } from './../../model/color/color.model';
 import { clearNode } from './../../utils/utils';
 import { Project } from '../../model/project/project.model';
-import { ThisReceiver } from '@angular/compiler';
 
 export class Canvas2dRenderer implements Renderer {
     container: Element | undefined;
@@ -14,9 +13,9 @@ export class Canvas2dRenderer implements Renderer {
 
     initContainer(
         container: Element,
-        imageWidth: number,
-        imageHeight: number,
-        beadSizePx: number
+        _imageWidth: number,
+        _imageHeight: number,
+        _beadSizePx: number
     ) {
         this.container = container;
         this.canvas = container.ownerDocument.createElement('canvas');

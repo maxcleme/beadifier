@@ -13,7 +13,7 @@ import { LoadImage } from '../../model/image/load-image.model';
     styleUrls: ['./upload-image-button.component.scss'],
 })
 export class UploadImageButtonComponent {
-    @Output() onLoad = new EventEmitter<LoadImage>();
+    @Output() loadImage = new EventEmitter<LoadImage>();
 
     @ViewChild('input', { static: true }) input: ElementRef | undefined;
 
@@ -21,20 +21,20 @@ export class UploadImageButtonComponent {
         this.input?.nativeElement.click();
     }
 
-    readImage(event: Event) {
+    readImage(_event: Event) {
         if (
             this.input?.nativeElement.files &&
             this.input?.nativeElement.files[0]
         ) {
             const reader = new FileReader();
             reader.addEventListener('load', (e) => {
-                if (this.onLoad) {
-                    this.onLoad.emit({
+                if (this.loadImage) {
+                    this.loadImage.emit({
                         name: this.input?.nativeElement.files[0].name.replace(
                             /\.[^/.]+$/,
                             ''
                         ),
-                        src: (e.target as any).result,
+                        src: e.target?.result
                     });
                 }
             });

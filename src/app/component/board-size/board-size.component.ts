@@ -10,7 +10,7 @@ import { BoardConfiguration } from '../../model/configuration/board-configuratio
 })
 export class BoardSizeComponent {
     @Input({required:true}) configuration!: BoardConfiguration;
-    @Output() onBoardSizeChange = new EventEmitter<BoardConfiguration>();
+    @Output() boardSizeChange = new EventEmitter<BoardConfiguration>();
 
     generateRange(to: number) {
         return ld.range(0, to);
@@ -34,6 +34,6 @@ export class BoardSizeComponent {
     }
 
     onChangeCallback() {
-        this.onBoardSizeChange.emit();
+        this.boardSizeChange.emit();
     }
 }

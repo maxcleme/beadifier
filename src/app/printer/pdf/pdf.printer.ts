@@ -6,7 +6,6 @@ import './MonoFont';
 
 import { Printer } from './../printer';
 import { Project } from '../../model/project/project.model';
-import { PaletteEntry } from '../../model/palette/palette.model';
 import { foreground, getPaletteEntryByColorRef } from '../../utils/utils';
 
 class Rect {
@@ -130,7 +129,7 @@ export class PdfPrinter implements Printer {
         const rowHeight = heightWithMargins / usagePerPage;
 
         ld.chunk(
-            Array.from(usage.entries()).sort(([k1, v1], [k2, v2]) => v2 - v1),
+            Array.from(usage.entries()).sort(([_k1, v1], [_k2, v2]) => v2 - v1),
             usagePerPage
         ).forEach((entries) => {
             doc.addPage();
@@ -139,7 +138,7 @@ export class PdfPrinter implements Printer {
             const usageSheetHeightOffset = margin;
 
             // ref column
-            Array.from(entries).forEach(([k, v], idx) => {
+            Array.from(entries).forEach(([k, _v], idx) => {
                 const entry = getPaletteEntryByColorRef(
                     project.paletteConfiguration.palettes,
                     '' + k
@@ -185,7 +184,7 @@ export class PdfPrinter implements Printer {
 
             if (project.exportConfiguration.useSymbols) {
                 // symbol column
-                Array.from(entries).forEach(([k, v], idx) => {
+                Array.from(entries).forEach(([k, _v], idx) => {
                     const entry = getPaletteEntryByColorRef(
                         project.paletteConfiguration.palettes,
                         '' + k

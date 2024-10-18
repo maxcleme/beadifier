@@ -11,7 +11,7 @@ import { Matching, MATCHINGS } from '../../../model/matching/matching.model';
 })
 export class MatchingConfigurationComponent {
     @Input({required:true}) configuration!: MatchingConfiguration;
-    @Output() onChange = new EventEmitter<MatchingConfiguration>();
+    @Output() configurationChange = new EventEmitter<MatchingConfiguration>();
 
     availableMatchings: Matching[];
 
@@ -20,6 +20,6 @@ export class MatchingConfigurationComponent {
     }
 
     callback() {
-        this.onChange.emit(this.configuration);
+        this.configurationChange.emit(this.configuration);
     }
 }

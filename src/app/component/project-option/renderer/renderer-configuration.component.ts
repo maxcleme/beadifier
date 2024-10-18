@@ -8,11 +8,11 @@ import { RendererConfiguration } from '../../../model/configuration/renderer-con
 })
 export class RendererConfigurationComponent {
     @Input({required: true}) configuration!: RendererConfiguration;
-    @Output() onChange = new EventEmitter<RendererConfiguration>();
+    @Output() configurationChange = new EventEmitter<RendererConfiguration>();
 
-    constructor() {}
+   
 
     callback() {
-        this.onChange.emit(this.configuration);
+        this.configurationChange.emit(this.configuration);
     }
 }

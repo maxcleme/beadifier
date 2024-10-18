@@ -3,9 +3,9 @@ import * as ld from 'lodash';
 
 import { Printer } from '../printer';
 import { Project } from '../../model/project/project.model';
-import { PaletteEntry } from '../../model/palette/palette.model';
 import { Color } from '../../model/color/color.model';
 import { foreground, getPaletteEntryByColorRef } from '../../utils/utils';
+import C2S from 'canvas2svg';
 
 import { defsStyle } from './MonoFont';
 
@@ -91,7 +91,6 @@ export class SvgPrinter implements Printer {
             usage.size * (inventoryTabHeight + inventoryTabMargin) +
             inventoryTabMargin;
 
-        // @ts-ignore
         const ctx = new C2S(
             patternWidth + inventoryMargin + inventoryWidth,
             Math.max(patternHeight, inventoryHeight)
@@ -122,7 +121,7 @@ export class SvgPrinter implements Printer {
             inventoryHeight
         );
         Array.from(usage.entries())
-            .sort(([k1, v1], [k2, v2]) => v2 - v1)
+            .sort(([_k1, v1], [_k2, v2]) => v2 - v1)
             .forEach(([k, v]) => {
                 const entry = getPaletteEntryByColorRef(
                     project.paletteConfiguration.palettes,

@@ -14,7 +14,7 @@ export class BoardConfigurationComponent {
     @Input({required:true}) srcWidth!: number;
     @Input({required:true}) srcHeight!: number;
 
-    @Output() onChange = new EventEmitter<BoardConfiguration>();
+    @Output() configurationChange = new EventEmitter<BoardConfiguration>();
 
     availableBoards: Board[];
 
@@ -33,6 +33,6 @@ export class BoardConfigurationComponent {
     }
 
     callback() {
-        this.onChange.emit(this.configuration);
+        this.configurationChange.emit(this.configuration);
     }
 }

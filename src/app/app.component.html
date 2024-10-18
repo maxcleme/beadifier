@@ -14,6 +14,7 @@
     </div>
 
     <img
+        alt="source"
         #source
         [ngStyle]="{
             display: 'none',
@@ -36,7 +37,7 @@
                         [project]="project"
                         [usage]="usage"
                         [reducedColor]="reducedColor"
-                        (onLoad)="beadify($event)"
+                        (loadProject)="beadify($event)"
                     >
                     </app-project-option>
                 </mat-card-content>
@@ -122,6 +123,7 @@
                                 >
                                     <img
                                         *ngIf="project && project.image"
+                                        alt="project"
                                         [src]="project.image.src"
                                         [ngStyle]="{
                                             height: project

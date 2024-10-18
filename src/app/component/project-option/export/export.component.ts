@@ -7,7 +7,6 @@ import { SvgPrinter } from '../../../printer/svg/svg.printer';
 import { PngPrinter } from '../../../printer/png/png.printer';
 import { JpgPrinter } from '../../../printer/jpg/jpg.printer';
 import { XlsxPrinter } from '../../../printer/xlsx/xlsx.printer';
-import { PaletteEntry } from '../../../model/palette/palette.model';
 
 @Component({
     selector: 'app-export',

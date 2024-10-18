@@ -40,7 +40,7 @@ export function drawImageInsideCanvas(
 
     const imageAspectRatio = image.width / image.height;
     const canvasAspectRatio = canvas.width / canvas.height;
-    let renderableHeight, renderableWidth, xStart, yStart;
+    let renderableHeight, renderableWidth;
 
     // If image's aspect ratio is less than canvas's we fit on height
     // and place the image centrally along width
@@ -67,10 +67,10 @@ export function drawImageInsideCanvas(
             : image.width;
     }
 
-    xStart = rendererConfiguration.center
+    const xStart = rendererConfiguration.center
         ? (canvas.width - renderableWidth) / 2
         : 0;
-    yStart = rendererConfiguration.center
+    const yStart = rendererConfiguration.center
         ? (canvas.height - renderableHeight) / 2
         : 0;
 
@@ -305,8 +305,8 @@ export function removeColorUnderPercent(
     const total = countBeads(usage);
     const lowerBound = total * (percent / 100);
     Array.from(usage.entries())
-        .filter(([k, v]) => v < lowerBound)
-        .forEach(([k, v]) => {
+        .filter(([_k, v]) => v < lowerBound)
+        .forEach(([k, _v]) => {
             palettes
                 .flatMap((p) => p.entries)
                 .filter((e) => e.ref === k)

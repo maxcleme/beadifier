@@ -3,7 +3,6 @@ import {Alignment, Border, Borders, Fill, Workbook} from 'exceljs';
 
 import { Printer } from '../printer';
 import { Project } from '../../model/project/project.model';
-import { PaletteEntry } from '../../model/palette/palette.model';
 import { ColorToHex } from '../../model/color/hex.model';
 import { Color } from '../../model/color/color.model';
 import { foreground, getPaletteEntryByColorRef } from '../../utils/utils';
@@ -162,7 +161,7 @@ export class XlsxPrinter implements Printer {
         const countIdx = project.exportConfiguration.useSymbols ? 3 : 2;
 
         Array.from(usage.entries())
-            .sort(([k1, v1], [k2, v2]) => v2 - v1)
+            .sort(([_k1, v1], [_k2, v2]) => v2 - v1)
             .forEach(([k, v]) => {
                 const row = worksheet.getRow(y + 1);
                 const entry = getPaletteEntryByColorRef(

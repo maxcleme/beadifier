@@ -7,9 +7,8 @@ import {
     ElementRef,
     Output,
     EventEmitter,
-    OnInit,
 } from '@angular/core';
-import { Palette, PaletteEntry } from '../../model/palette/palette.model';
+import { Palette } from '../../model/palette/palette.model';
 import { ColorToHsl } from '../../model/color/hsl.model';
 import {
     countBeads,
@@ -32,7 +31,7 @@ export class BeadUsageComponent implements OnChanges {
     @Input({required:true}) usage!: Map<string, number>;
     @Input({required: true}) palettes!: Palette[];
 
-    @Output() onPaletteChange = new EventEmitter<void>();
+    @Output() paletteChange = new EventEmitter<void>();
 
     barChart: Chart | undefined;
     polarChart: Chart | undefined;
@@ -40,7 +39,7 @@ export class BeadUsageComponent implements OnChanges {
     history: Palette[][] = [];
     hasUsageUnderPercent = hasUsageUnderPercent;
 
-    ngOnChanges(changes: SimpleChanges): void {
+    ngOnChanges(_changes: SimpleChanges): void {
         if (this.usage.size) {
             const data = this.generateData(this.usage, this.palettes);
             if (this.barChart) {
@@ -92,7 +91,7 @@ export class BeadUsageComponent implements OnChanges {
                                 const ref = this.barChart.data.labels?.[
                                     (this.barChart.getElementsAtEvent(
                                         event
-                                    )[0] as any)._index
+                                    )[0] as {_index:number} )._index
                                 ];
                                 const foundEntry =this.findEntry(
                                     ref as string,
@@ -102,7 +101,10 @@ export class BeadUsageComponent implements OnChanges {
                                     foundEntry.enabled = false
                                 };
                                 this.onPaletteChange.emit();
-                            } catch (e) {}
+                            // eslint-disable-next-line no-empty
+                            } catch (_e) {
+                                
+                            }
                         },
                     },
                 });
@@ -135,7 +137,7 @@ export class BeadUsageComponent implements OnChanges {
                                 const ref = this.polarChart.data.labels?.[
                                     (this.polarChart.getElementsAtEvent(
                                         event
-                                    )[0] as any)._index
+                                    )[0] as {_index:number})._index
                                 ];
                                 const entry = this.findEntry(
                                     ref as string,
@@ -145,7 +147,8 @@ export class BeadUsageComponent implements OnChanges {
                                     entry.enabled = false;
                                 }
                                 this.onPaletteChange.emit();
-                            } catch (e) {}
+                            // eslint-disable-next-line no-empty
+                            } catch (_e) {}
                         },
                     },
                 });

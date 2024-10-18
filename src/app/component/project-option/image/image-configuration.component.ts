@@ -15,9 +15,9 @@ const DEFAULT_GRAYSCALE = 0;
 })
 export class ImageConfigurationComponent {
     @Input({required: true}) configuration!: ImageConfiguration;
-    @Output() onChange = new EventEmitter<ImageConfiguration>();
+    @Output() configurationChange = new EventEmitter<ImageConfiguration>();
 
-    imgSettings: any;
+    imgSettings: Partial<{grayscale:string,brightness:string,saturation:string,contrast:string}>;
     contrast: number;
     saturation: number;
     brightness: number;
@@ -34,7 +34,7 @@ export class ImageConfigurationComponent {
     callback() {
         this.configuration.clear();
         ld.values(this.imgSettings).forEach((f) => this.configuration.add(f));
-        this.onChange.emit(this.configuration);
+        this.configurationChange.emit(this.configuration);
     }
 
     setGrayscale() {

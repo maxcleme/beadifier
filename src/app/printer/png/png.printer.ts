@@ -23,9 +23,9 @@ export class PngPrinter extends SvgPrinter {
         const ctx = canvas.getContext('2d');
 
         const data = new XMLSerializer().serializeToString(svg);
-        const DOMURL: any = window.URL || window.webkitURL || window;
+        const domUrl= window.URL || window.webkitURL || window;
         const img = new Image();
-        const url = DOMURL.createObjectURL(
+        const url = domUrl.createObjectURL(
             new Blob([data], { type: 'image/svg+xml' })
         );
 
@@ -34,7 +34,7 @@ export class PngPrinter extends SvgPrinter {
                 throw new Error("Could not get 2d context")
             }
             ctx.drawImage(img, 0, 0);
-            DOMURL.revokeObjectURL(url);
+            domUrl.revokeObjectURL(url);
 
             const a = document.createElement('a');
             a.href = canvas

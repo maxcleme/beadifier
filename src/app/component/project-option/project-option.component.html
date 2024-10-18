@@ -18,7 +18,7 @@
                     >
                         <div>
                             <app-upload-image-button
-                                (onLoad)="onLoadingImageCallback($event)"
+                                (loadImage)="onLoadingImageCallback($event)"
                             ></app-upload-image-button>
                         </div>
                     </div>
@@ -39,7 +39,7 @@
                         [configuration]="project.boardConfiguration"
                         [srcWidth]="project.srcWidth ?? 0"
                         [srcHeight]="project.srcHeight ?? 0"
-                        (onChange)="callback()"
+                        (configurationChange)="callback()"
                     >
                     </app-board-configuration>
                 </div>
@@ -57,7 +57,7 @@
                 >
                     <app-palette-configuration
                         [configuration]="project.paletteConfiguration"
-                        (onChange)="callback()"
+                        (configurationChange)="callback()"
                     >
                     </app-palette-configuration>
                 </div>
@@ -82,7 +82,7 @@
                     >
                         <app-image-configuration
                             [configuration]="project.imageConfiguration"
-                            (onChange)="callback()"
+                            (configurationChange)="callback()"
                         >
                         </app-image-configuration>
                     </div>
@@ -95,7 +95,7 @@
                     >
                         <app-dithering-configuration
                             [configuration]="project.ditheringConfiguration"
-                            (onChange)="callback()"
+                            (configurationChange)="callback()"
                         >
                         </app-dithering-configuration>
                     </div>
@@ -108,7 +108,7 @@
                     >
                         <app-matching-configuration
                             [configuration]="project.matchingConfiguration"
-                            (onChange)="callback()"
+                            (configurationChange)="callback()"
                         >
                         </app-matching-configuration>
                     </div>
@@ -121,7 +121,7 @@
                     >
                         <app-renderer-configuration
                             [configuration]="project.rendererConfiguration"
-                            (onChange)="callback()"
+                            (configurationChange)="callback()"
                         >
                         </app-renderer-configuration>
                     </div>
@@ -141,7 +141,7 @@
                     <app-bead-usage
                         [usage]="usage"
                         [palettes]="project.paletteConfiguration.palettes"
-                        (onPaletteChange)="callback()"
+                        (paletteChange)="callback()"
                     ></app-bead-usage>
                 </div>
             </form>

@@ -16,7 +16,7 @@
             <button
                 aria-label="undo"
                 mat-raised-button
-                [disabled]="history.length == 0"
+                [disabled]="history.length === 0"
                 (click)="undo()"
             >
                 Undo

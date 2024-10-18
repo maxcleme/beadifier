@@ -1,5 +1,4 @@
 import { Renderer } from './../renderer';
-import { Color } from './../../model/color/color.model';
 import { clearNode } from './../../utils/utils';
 
 import { mat4, vec3 } from 'gl-matrix';
@@ -18,7 +17,7 @@ export class CanvasWebGLRenderer implements Renderer {
     isSupported(): boolean {
         const canvas = document.createElement('canvas');
         return (
-            !!(window as any).WebGLRenderingContext &&
+            !!window.WebGLRenderingContext &&
             !!(
                 canvas.getContext('webgl') ||
                 canvas.getContext('experimental-webgl')
@@ -91,8 +90,7 @@ export class CanvasWebGLRenderer implements Renderer {
 
         gl.viewport(0, 0, width * beadSizePx, height * beadSizePx);
         gl.clearColor(0.9, 0.9, 0.9, 1);
-        // tslint:disable-next-line: no-bitwise
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+               gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         const wBeadRatio = 1 / width;
         const hBeadRatio = 1 / height;
@@ -103,7 +101,6 @@ export class CanvasWebGLRenderer implements Renderer {
         for (let y = 1 - hBeadRatio; y >= -1; y -= hBeadRatio * 2) {
             for (let x = -1 + wBeadRatio; x <= 1; x += wBeadRatio * 2) {
                 // Retrieve color at this position
-                const colorVerticles = [];
                 const r = reducedColor[colorIdx++] / 255;
                 const g = reducedColor[colorIdx++] / 255;
                 const b = reducedColor[colorIdx++] / 255;

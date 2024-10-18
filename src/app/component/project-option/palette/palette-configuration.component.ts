@@ -13,7 +13,7 @@ import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 })
 export class PaletteConfigurationComponent {
     @Input({required: true}) configuration!: PaletteConfiguration;
-    @Output() onChange = new EventEmitter<PaletteConfiguration>();
+    @Output() configurationChange = new EventEmitter<PaletteConfiguration>();
 
     availablePalettes: Observable<Palette[]>;
     enableAllPaletteEntry: Map<string, boolean>;
@@ -41,6 +41,6 @@ export class PaletteConfigurationComponent {
     }
 
     callback() {
-        this.onChange.emit(this.configuration);
+        this.configurationChange.emit(this.configuration);
     }
 }

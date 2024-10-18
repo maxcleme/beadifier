@@ -8,14 +8,14 @@ import { Observable, of, forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Color } from '../model/color/color.model';
 
-const BW_PALETTE = new Palette('B&W', [
+const _BW_PALETTE = new Palette('B&W', [
     new PaletteEntry('White', new Color(255, 255, 255, 255)),
     new PaletteEntry('Black', new Color(0, 0, 0, 255)),
 ]);
 
 @Injectable()
 export class PaletteService {
-    private palettes: Map<string, Palette> = new Map();
+    private palettes = new Map<string, Palette>();
 
     constructor(private http: HttpClient) {}
 
