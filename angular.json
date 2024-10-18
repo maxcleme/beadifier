@@ -4,7 +4,6 @@
   "newProjectRoot": "projects",
   "projects": {
     "beadifier": {
-      
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -64,9 +63,7 @@
         },
         "serve": {
           "builder": "@angular/build:dev-server",
-          "options": {
-          
-          },
+          "options": {},
           "configurations": {
             "production": {
               "buildTarget": "beadifier:build:production"
@@ -82,6 +79,15 @@
           "options": {
             "buildTarget": "beadifier:build"
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
+          }
         }
       }
     }
@@ -94,6 +100,10 @@
     "@schematics/angular:directive": {
       "prefix": "app"
     }
-
+  },
+  "cli": {
+    "schematicCollections": [
+      "@angular-eslint/schematics"
+    ]
   }
 }
