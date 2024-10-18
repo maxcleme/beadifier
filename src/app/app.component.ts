@@ -162,7 +162,7 @@ export class AppComponent {
         }
 
         if (this.imgTag.nativeElement.src !== project.image.src) {
-            this.imgTag.nativeElement.src = project.image.src;
+            this.imgTag.nativeElement.src = project.image.src ?? '';
             this.imgTag.nativeElement.addEventListener('load', () => {
                 if (!this.project) {
                     throw new Error('Project has not initialized');

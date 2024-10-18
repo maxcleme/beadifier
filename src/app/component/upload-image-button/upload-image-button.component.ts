@@ -29,12 +29,13 @@ export class UploadImageButtonComponent {
             const reader = new FileReader();
             reader.addEventListener('load', (e) => {
                 if (this.loadImage) {
+                    const loadedSrc = e.target?.result
                     this.loadImage.emit({
                         name: this.input?.nativeElement.files[0].name.replace(
                             /\.[^/.]+$/,
                             '',
                         ),
-                        src: e.target?.result,
+                        src:typeof loadedSrc === 'string' ?loadedSrc :null,
                     });
                 }
             });

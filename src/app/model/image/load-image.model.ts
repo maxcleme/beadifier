@@ -1,4 +1,4 @@
 export interface LoadImage {
     name: string;
-    src: unknown;
+    src: string | null;
 }
