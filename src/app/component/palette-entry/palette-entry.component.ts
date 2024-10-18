@@ -7,7 +7,7 @@ import { PaletteEntry } from '../../model/palette/palette.model';
     styleUrls: ['./palette-entry.component.scss'],
 })
 export class PaletteEntryComponent {
-    @Input({required: true}) entry!: PaletteEntry;
+    @Input({ required: true }) entry!: PaletteEntry;
 
     @Output() toggleCallback = new EventEmitter<void>();
 

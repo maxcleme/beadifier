@@ -25,11 +25,15 @@ import * as ld from 'lodash';
     styleUrls: ['./bead-usage.component.scss'],
 })
 export class BeadUsageComponent implements OnChanges {
-    @ViewChild('bar', { static: true }) barCanvasTag: ElementRef<HTMLCanvasElement> | undefined;
-    @ViewChild('polar', { static: true }) polarCanvasTag: ElementRef<HTMLCanvasElement> | undefined;
+    @ViewChild('bar', { static: true }) barCanvasTag:
+        | ElementRef<HTMLCanvasElement>
+        | undefined;
+    @ViewChild('polar', { static: true }) polarCanvasTag:
+        | ElementRef<HTMLCanvasElement>
+        | undefined;
 
-    @Input({required:true}) usage!: Map<string, number>;
-    @Input({required: true}) palettes!: Palette[];
+    @Input({ required: true }) usage!: Map<string, number>;
+    @Input({ required: true }) palettes!: Palette[];
 
     @Output() paletteChange = new EventEmitter<void>();
 
@@ -45,11 +49,10 @@ export class BeadUsageComponent implements OnChanges {
             if (this.barChart) {
                 this.updateChart(this.barChart, data);
             } else {
-                const barCanvasCtx = this.barCanvasTag?.nativeElement.getContext(
-                    '2d'
-                );
-                if(!barCanvasCtx){
-                    throw new Error("Can not get 2d context from bar canvas")
+                const barCanvasCtx =
+                    this.barCanvasTag?.nativeElement.getContext('2d');
+                if (!barCanvasCtx) {
+                    throw new Error('Can not get 2d context from bar canvas');
                 }
                 this.barChart = new Chart(barCanvasCtx, {
                     type: 'bar',
@@ -85,26 +88,27 @@ export class BeadUsageComponent implements OnChanges {
                         onClick: (event) => {
                             try {
                                 this.history.push(ld.cloneDeep(this.palettes));
-                                if(!this.barChart){
-                                    throw new Error("Bar chart not defined")
+                                if (!this.barChart) {
+                                    throw new Error('Bar chart not defined');
                                 }
-                                const ref = this.barChart.data.labels?.[
-                                    (this.barChart.getElementsAtEvent(
-                                        event
-                                    )[0] as {_index:number} )._index
-                                ];
-                                const foundEntry =this.findEntry(
+                                const ref =
+                                    this.barChart.data.labels?.[
+                                        (
+                                            this.barChart.getElementsAtEvent(
+                                                event,
+                                            )[0] as { _index: number }
+                                        )._index
+                                    ];
+                                const foundEntry = this.findEntry(
                                     ref as string,
-                                    this.palettes
-                                )
-                                if(foundEntry){
-                                    foundEntry.enabled = false
-                                };
-                                this.onPaletteChange.emit();
-                            // eslint-disable-next-line no-empty
-                            } catch (_e) {
-                                
-                            }
+                                    this.palettes,
+                                );
+                                if (foundEntry) {
+                                    foundEntry.enabled = false;
+                                }
+                                this.paletteChange.emit();
+                                // eslint-disable-next-line no-empty
+                            } catch (_e) {}
                         },
                     },
                 });
@@ -113,11 +117,10 @@ export class BeadUsageComponent implements OnChanges {
             if (this.polarChart) {
                 this.updateChart(this.polarChart, data);
             } else {
-                const polarCanvasCtx = this.polarCanvasTag?.nativeElement.getContext(
-                    '2d'
-                );
-                if(!polarCanvasCtx){
-                    throw new Error("No 2d context on polar")
+                const polarCanvasCtx =
+                    this.polarCanvasTag?.nativeElement.getContext('2d');
+                if (!polarCanvasCtx) {
+                    throw new Error('No 2d context on polar');
                 }
                 this.polarChart = new Chart(polarCanvasCtx, {
                     type: 'polarArea',
@@ -131,23 +134,26 @@ export class BeadUsageComponent implements OnChanges {
                         onClick: (event) => {
                             try {
                                 this.history.push(ld.cloneDeep(this.palettes));
-                                if(!this.polarChart){
-                                    throw new Error("No polar chart")
+                                if (!this.polarChart) {
+                                    throw new Error('No polar chart');
                                 }
-                                const ref = this.polarChart.data.labels?.[
-                                    (this.polarChart.getElementsAtEvent(
-                                        event
-                                    )[0] as {_index:number})._index
-                                ];
+                                const ref =
+                                    this.polarChart.data.labels?.[
+                                        (
+                                            this.polarChart.getElementsAtEvent(
+                                                event,
+                                            )[0] as { _index: number }
+                                        )._index
+                                    ];
                                 const entry = this.findEntry(
                                     ref as string,
-                                    this.palettes
-                                )
-                                if(entry){
+                                    this.palettes,
+                                );
+                                if (entry) {
                                     entry.enabled = false;
                                 }
-                                this.onPaletteChange.emit();
-                            // eslint-disable-next-line no-empty
+                                this.paletteChange.emit();
+                                // eslint-disable-next-line no-empty
                             } catch (_e) {}
                         },
                     },
@@ -162,13 +168,12 @@ export class BeadUsageComponent implements OnChanges {
     }
 
     findEntry(ref: string, palettes: Palette[]) {
-        return palettes.flatMap((p) => p.entries)
-            .find((e) => e.ref === ref);
+        return palettes.flatMap((p) => p.entries).find((e) => e.ref === ref);
     }
 
     generateData(
         usage: Map<string, number>,
-        palettes: Palette[]
+        palettes: Palette[],
     ): Chart.ChartData {
         const data = {
             labels: new Array<string>(),
@@ -201,7 +206,7 @@ export class BeadUsageComponent implements OnChanges {
                     data.labels.push(k);
                     data.datasets[0].data.push(v);
                     data.datasets[0].backgroundColor.push(
-                        `rgba(${e.color.r},${e.color.g},${e.color.b},${e.color.a})`
+                        `rgba(${e.color.r},${e.color.g},${e.color.b},${e.color.a})`,
                     );
                 }
             });
@@ -215,16 +220,16 @@ export class BeadUsageComponent implements OnChanges {
 
     undo() {
         ld.assign(this.palettes, this.history.pop());
-        this.onPaletteChange.emit();
+        this.paletteChange.emit();
     }
 
     removeColorUnderPercent(
         percent: number,
         usage: Map<string, number>,
-        palettes: Palette[]
+        palettes: Palette[],
     ) {
         this.history.push(ld.cloneDeep(this.palettes));
         removeColorUnderPercent(percent, usage, palettes);
-        this.onPaletteChange.emit();
+        this.paletteChange.emit();
     }
 }

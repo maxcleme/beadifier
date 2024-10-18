@@ -29,10 +29,10 @@ export class PaletteService {
             this.loadPalette('artkal_s', 'S', 'Artkal S-5MM'),
             this.loadPalette('perler', 'P').pipe(map(this.perlerTransform)),
             this.loadPalette('perler_mini', 'P', 'Perler Mini').pipe(
-                map(this.perlerTransform)
+                map(this.perlerTransform),
             ),
             this.loadPalette('perler_caps', 'P', 'Perler Caps').pipe(
-                map(this.perlerTransform)
+                map(this.perlerTransform),
             ),
             this.loadPalette('diamondDotz', 'D', 'Diamond Dotz'),
         ]);
@@ -41,24 +41,26 @@ export class PaletteService {
     private perlerTransform(p: Palette): Palette {
         return ld.assign({}, p, {
             entries: p.entries.map((entry) =>
-                    ld.assign({}, entry, {
-                        ref: entry.ref ? `P${(+entry.ref.substring(
-                            entry.ref.length - 3
-                        )).toLocaleString('en-US', {
-                            minimumIntegerDigits: 2,
-                            useGrouping: false,
-                        })}` : undefined,
-                    })
-                )
+                ld.assign({}, entry, {
+                    ref: entry.ref
+                        ? `P${(+entry.ref.substring(
+                              entry.ref.length - 3,
+                          )).toLocaleString('en-US', {
+                              minimumIntegerDigits: 2,
+                              useGrouping: false,
+                          })}`
+                        : undefined,
+                }),
+            ),
         });
     }
 
     private loadPalette(
         name: string,
         prefix: string,
-        nameOverride?: string
+        nameOverride?: string,
     ): Observable<Palette> {
-        const palette = this.palettes.get(name)
+        const palette = this.palettes.get(name);
         if (palette) {
             return of(palette);
         }
@@ -69,7 +71,9 @@ export class PaletteService {
             .pipe(
                 map((p) => {
                     const decoder = new TextDecoder('utf-8');
-                    const entries = decoder.decode(p).split('\n')
+                    const entries = decoder
+                        .decode(p)
+                        .split('\n')
                         .map((line) => line.split(','))
                         .filter((cells) => cells.length > 1)
                         .map((cells) => ({
@@ -78,18 +82,18 @@ export class PaletteService {
                             symbol: cells[2],
                             color: new Color(
                                 +cells[3],
-                                 +cells[4],
+                                +cells[4],
                                 +cells[5],
-                                 255,
+                                255,
                             ),
                             prefix: prefix,
                             enabled: true,
-                        }))
+                        }));
                     return new Palette(
                         nameOverride || ld.capitalize(name),
-                        entries
+                        entries,
                     );
-                })
+                }),
             );
     }
 }

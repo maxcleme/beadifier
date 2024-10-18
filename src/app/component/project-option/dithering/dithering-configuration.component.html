@@ -8,7 +8,11 @@
             >Enable
         </mat-slide-toggle>
     </div>
-    <div flexLayout="row" data-layout-gap="1em" data-layout-align="start center">
+    <div
+        flexLayout="row"
+        data-layout-gap="1em"
+        data-layout-align="start center"
+    >
         <mat-form-field data-flex="15">
             <input
                 type="number"
@@ -21,11 +25,13 @@
             />
             <span matSuffix>%</span>
         </mat-form-field>
-        <mat-slider
-            min="0"
-            max="100"
-            step="1"
-         #ngSlider><input matSliderThumb (change)="callback()" #ngSliderThumb="matSliderThumb" [(value)]="configuration.hardness" />
+        <mat-slider min="0" max="100" step="1" #ngSlider
+            ><input
+                matSliderThumb
+                (change)="callback()"
+                #ngSliderThumb="matSliderThumb"
+                [(value)]="configuration.hardness"
+            />
         </mat-slider>
         <button class="mat-icon-button" (click)="resetHardness()">
             <mat-icon>loop</mat-icon>

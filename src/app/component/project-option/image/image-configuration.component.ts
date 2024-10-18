@@ -14,10 +14,15 @@ const DEFAULT_GRAYSCALE = 0;
     styleUrls: ['./image-configuration.component.scss'],
 })
 export class ImageConfigurationComponent {
-    @Input({required: true}) configuration!: ImageConfiguration;
+    @Input({ required: true }) configuration!: ImageConfiguration;
     @Output() configurationChange = new EventEmitter<ImageConfiguration>();
 
-    imgSettings: Partial<{grayscale:string,brightness:string,saturation:string,contrast:string}>;
+    imgSettings: Partial<{
+        grayscale: string;
+        brightness: string;
+        saturation: string;
+        contrast: string;
+    }>;
     contrast: number;
     saturation: number;
     brightness: number;

@@ -10,9 +10,9 @@ import { Board, BOARDS } from '../../../model/board/board.model';
     styleUrls: ['./board-configuration.component.scss'],
 })
 export class BoardConfigurationComponent {
-    @Input({required: true}) configuration!: BoardConfiguration;
-    @Input({required:true}) srcWidth!: number;
-    @Input({required:true}) srcHeight!: number;
+    @Input({ required: true }) configuration!: BoardConfiguration;
+    @Input({ required: true }) srcWidth!: number;
+    @Input({ required: true }) srcHeight!: number;
 
     @Output() configurationChange = new EventEmitter<BoardConfiguration>();
 
@@ -24,10 +24,10 @@ export class BoardConfigurationComponent {
 
     maximize() {
         this.configuration.nbBoardWidth = Math.ceil(
-            this.srcWidth / this.configuration.board.nbBeadPerRow
+            this.srcWidth / this.configuration.board.nbBeadPerRow,
         );
         this.configuration.nbBoardHeight = Math.ceil(
-            this.srcHeight / this.configuration.board.nbBeadPerRow
+            this.srcHeight / this.configuration.board.nbBeadPerRow,
         );
         this.callback();
     }

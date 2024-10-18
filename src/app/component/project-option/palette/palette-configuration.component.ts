@@ -12,7 +12,7 @@ import { MatSlideToggleChange } from '@angular/material/slide-toggle';
     styleUrls: ['./palette-configuration.component.scss'],
 })
 export class PaletteConfigurationComponent {
-    @Input({required: true}) configuration!: PaletteConfiguration;
+    @Input({ required: true }) configuration!: PaletteConfiguration;
     @Output() configurationChange = new EventEmitter<PaletteConfiguration>();
 
     availablePalettes: Observable<Palette[]>;
@@ -23,11 +23,13 @@ export class PaletteConfigurationComponent {
         this.enableAllPaletteEntry = new Map();
 
         this.availablePalettes.subscribe((palettes) =>
-            palettes.forEach((p) => (this.enableAllPaletteEntry.set(p.name,true))
-        ))
+            palettes.forEach((p) =>
+                this.enableAllPaletteEntry.set(p.name, true),
+            ),
+        );
     }
 
-    toggleAll(e:MatSlideToggleChange , name:string) {
+    toggleAll(e: MatSlideToggleChange, name: string) {
         this.configuration.palettes.forEach((p) => {
             if (p.name === name) {
                 p.entries.forEach((entry) => (entry.enabled = e.checked));

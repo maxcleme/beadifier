@@ -1,6 +1,10 @@
 <div data-layout="column" data-layout-align="start">
     <div class="mat-subtitle-1">Image</div>
-    <div flexLayout="row" data-layout-gap="1em" data-layout-align="start center">
+    <div
+        flexLayout="row"
+        data-layout-gap="1em"
+        data-layout-align="start center"
+    >
         <mat-form-field data-flex="15">
             <input
                 type="number"
@@ -13,17 +17,23 @@
             />
             <span matSuffix>%</span>
         </mat-form-field>
-        <mat-slider
-            min="0"
-            max="200"
-            step="1"
-         #ngSlider><input matSliderThumb (change)="setBrightness()" #ngSliderThumb="matSliderThumb" [(value)]="brightness" />
+        <mat-slider min="0" max="200" step="1" #ngSlider
+            ><input
+                matSliderThumb
+                (change)="setBrightness()"
+                #ngSliderThumb="matSliderThumb"
+                [(value)]="brightness"
+            />
         </mat-slider>
         <button class="mat-icon-button" (click)="resetBrightness()">
             <mat-icon>loop</mat-icon>
         </button>
     </div>
-    <div flexLayout="row" data-layout-gap="1em" data-layout-align="start center">
+    <div
+        flexLayout="row"
+        data-layout-gap="1em"
+        data-layout-align="start center"
+    >
         <mat-form-field data-flex="15">
             <input
                 type="number"
@@ -36,16 +46,22 @@
             />
             <span matSuffix>%</span>
         </mat-form-field>
-        <mat-slider
-            min="0"
-            max="200"
-            step="1"
-         #ngSlider><input matSliderThumb (change)="setContrast()" #ngSliderThumb="matSliderThumb" [(value)]="contrast" /></mat-slider>
+        <mat-slider min="0" max="200" step="1" #ngSlider
+            ><input
+                matSliderThumb
+                (change)="setContrast()"
+                #ngSliderThumb="matSliderThumb"
+                [(value)]="contrast"
+        /></mat-slider>
         <button class="mat-icon-button" (click)="resetContrast()">
             <mat-icon>loop</mat-icon>
         </button>
     </div>
-    <div flexLayout="row" data-layout-gap="1em" data-layout-align="start center">
+    <div
+        flexLayout="row"
+        data-layout-gap="1em"
+        data-layout-align="start center"
+    >
         <mat-form-field data-flex="15">
             <input
                 type="number"
@@ -58,17 +74,23 @@
             />
             <span matSuffix>%</span>
         </mat-form-field>
-        <mat-slider
-            min="0"
-            max="200"
-            step="1"
-         #ngSlider><input matSliderThumb (change)="setSaturation()" #ngSliderThumb="matSliderThumb" [(value)]="saturation" />
+        <mat-slider min="0" max="200" step="1" #ngSlider
+            ><input
+                matSliderThumb
+                (change)="setSaturation()"
+                #ngSliderThumb="matSliderThumb"
+                [(value)]="saturation"
+            />
         </mat-slider>
         <button class="mat-icon-button" (click)="resetSaturation()">
             <mat-icon>loop</mat-icon>
         </button>
     </div>
-    <div flexLayout="row" data-layout-gap="1em" data-layout-align="start center">
+    <div
+        flexLayout="row"
+        data-layout-gap="1em"
+        data-layout-align="start center"
+    >
         <mat-form-field data-flex="15">
             <input
                 type="number"
@@ -81,11 +103,13 @@
             />
             <span matSuffix>%</span>
         </mat-form-field>
-        <mat-slider
-            min="0"
-            max="100"
-            step="1"
-         #ngSlider><input matSliderThumb (change)="setGrayscale()" #ngSliderThumb="matSliderThumb" [(value)]="grayscale" />
+        <mat-slider min="0" max="100" step="1" #ngSlider
+            ><input
+                matSliderThumb
+                (change)="setGrayscale()"
+                #ngSliderThumb="matSliderThumb"
+                [(value)]="grayscale"
+            />
         </mat-slider>
         <button class="mat-icon-button" (click)="resetGrayscale()">
             <mat-icon>loop</mat-icon>

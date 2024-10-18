@@ -21,7 +21,7 @@
             position: 'absolute',
             top: '0px',
             left: '0px',
-            filter: project ? project.imageConfiguration.css() : ''
+            filter: project ? project.imageConfiguration.css() : '',
         }"
     />
 
@@ -84,13 +84,15 @@
                                     [ngStyle]="{
                                         overflow: 'auto hidden',
                                         height:
-                                            (!project || !aspectRatio) ? '0px': aspectRatio *
-                                                project.boardConfiguration.board
-                                                    .nbBeadPerRow *
-                                                project.boardConfiguration
-                                                    .nbBoardHeight *
-                                                beadSize +
-                                            'px'
+                                            !project || !aspectRatio
+                                                ? '0px'
+                                                : aspectRatio *
+                                                      project.boardConfiguration
+                                                          .board.nbBeadPerRow *
+                                                      project.boardConfiguration
+                                                          .nbBoardHeight *
+                                                      beadSize +
+                                                  'px',
                                     }"
                                 >
                                     <div
@@ -104,7 +106,7 @@
                                                 aspectRatio +
                                                 ',' +
                                                 aspectRatio +
-                                                ')'
+                                                ')',
                                         }"
                                     ></div>
                                 </div>
@@ -112,13 +114,15 @@
                                     data-flex="50"
                                     [ngStyle]="{
                                         height:
-                                            (!project || !aspectRatio) ? '0px': aspectRatio *
-                                                project.boardConfiguration.board
-                                                    .nbBeadPerRow *
-                                                project.boardConfiguration
-                                                    .nbBoardHeight *
-                                                beadSize +
-                                            'px'
+                                            !project || !aspectRatio
+                                                ? '0px'
+                                                : aspectRatio *
+                                                      project.boardConfiguration
+                                                          .board.nbBeadPerRow *
+                                                      project.boardConfiguration
+                                                          .nbBoardHeight *
+                                                      beadSize +
+                                                  'px',
                                     }"
                                 >
                                     <img
@@ -143,7 +147,7 @@
                                                 'rgb(128, 128, 128)',
                                             filter: project
                                                 ? project.imageConfiguration.css()
-                                                : ''
+                                                : '',
                                         }"
                                     />
                                 </div>

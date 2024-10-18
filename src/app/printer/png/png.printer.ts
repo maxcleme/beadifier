@@ -12,26 +12,26 @@ export class PngPrinter extends SvgPrinter {
         reducedColor: Uint8ClampedArray,
         usage: Map<string, number>,
         project: Project,
-        filename: string
+        filename: string,
     ) {
         const svg = this.drawSVG(reducedColor, usage, project);
 
         // TODO
         const canvas = document.createElement('canvas');
-        canvas.width = Number.parseInt(svg.getAttribute('width') ?? "0");
-        canvas.height = Number.parseInt(svg.getAttribute('height') ?? "0");
+        canvas.width = Number.parseInt(svg.getAttribute('width') ?? '0');
+        canvas.height = Number.parseInt(svg.getAttribute('height') ?? '0');
         const ctx = canvas.getContext('2d');
 
         const data = new XMLSerializer().serializeToString(svg);
-        const domUrl= window.URL || window.webkitURL || window;
+        const domUrl = window.URL || window.webkitURL || window;
         const img = new Image();
         const url = domUrl.createObjectURL(
-            new Blob([data], { type: 'image/svg+xml' })
+            new Blob([data], { type: 'image/svg+xml' }),
         );
 
         img.onload = function () {
-            if(!ctx){
-                throw new Error("Could not get 2d context")
+            if (!ctx) {
+                throw new Error('Could not get 2d context');
             }
             ctx.drawImage(img, 0, 0);
             domUrl.revokeObjectURL(url);

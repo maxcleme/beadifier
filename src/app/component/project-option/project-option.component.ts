@@ -11,9 +11,9 @@ import { LoadImage } from '../../model/image/load-image.model';
     styleUrls: ['./project-option.component.scss'],
 })
 export class ProjectOptionComponent {
-    @Input({required: true}) project!: Project & {image: {name:string}};
-    @Input({required: true}) usage!: Map<string, number>;
-    @Input({required: true}) reducedColor: Uint8ClampedArray | undefined;
+    @Input({ required: true }) project!: Project & { image: { name: string } };
+    @Input({ required: true }) usage!: Map<string, number>;
+    @Input({ required: true }) reducedColor: Uint8ClampedArray | undefined;
     @Output() loadProject = new EventEmitter<Project>();
 
     onLoadingImageCallback(image: LoadImage) {

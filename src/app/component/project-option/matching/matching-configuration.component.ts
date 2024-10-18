@@ -10,7 +10,7 @@ import { Matching, MATCHINGS } from '../../../model/matching/matching.model';
     styleUrls: ['./matching-configuration.component.scss'],
 })
 export class MatchingConfigurationComponent {
-    @Input({required:true}) configuration!: MatchingConfiguration;
+    @Input({ required: true }) configuration!: MatchingConfiguration;
     @Output() configurationChange = new EventEmitter<MatchingConfiguration>();
 
     availableMatchings: Matching[];

@@ -32,9 +32,9 @@ export class UploadImageButtonComponent {
                     this.loadImage.emit({
                         name: this.input?.nativeElement.files[0].name.replace(
                             /\.[^/.]+$/,
-                            ''
+                            '',
                         ),
-                        src: e.target?.result
+                        src: e.target?.result,
                     });
                 }
             });

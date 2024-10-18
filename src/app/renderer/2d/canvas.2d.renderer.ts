@@ -15,7 +15,7 @@ export class Canvas2dRenderer implements Renderer {
         container: Element,
         _imageWidth: number,
         _imageHeight: number,
-        _beadSizePx: number
+        _beadSizePx: number,
     ) {
         this.container = container;
         this.canvas = container.ownerDocument.createElement('canvas');
@@ -27,17 +27,17 @@ export class Canvas2dRenderer implements Renderer {
         imageWidth: number,
         imageHeight: number,
         beadSizePx: number,
-        project: Project
+        project: Project,
     ) {
-        if(!this.canvas){
-            throw new Error("Container not initialized")
+        if (!this.canvas) {
+            throw new Error('Container not initialized');
         }
         this.canvas.width = imageWidth * beadSizePx;
         this.canvas.height = imageHeight * beadSizePx;
 
         const ctx = this.canvas.getContext('2d');
-        if(!ctx){
-            throw new Error("Could not get 2d context")
+        if (!ctx) {
+            throw new Error('Could not get 2d context');
         }
         ctx.fillStyle = 'rgb(229, 229, 229)';
         ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
@@ -60,7 +60,7 @@ export class Canvas2dRenderer implements Renderer {
                         project.boardConfiguration.board.nbBeadPerRow *
                             beadSizePx,
                         project.boardConfiguration.board.nbBeadPerRow *
-                            beadSizePx
+                            beadSizePx,
                     );
                 }
             }
@@ -72,7 +72,7 @@ export class Canvas2dRenderer implements Renderer {
                     reducedColor[y * imageWidth * 4 + x * 4],
                     reducedColor[y * imageWidth * 4 + x * 4 + 1],
                     reducedColor[y * imageWidth * 4 + x * 4 + 2],
-                    reducedColor[y * imageWidth * 4 + x * 4 + 3]
+                    reducedColor[y * imageWidth * 4 + x * 4 + 3],
                 );
 
                 if (color.a === 255) {
@@ -86,7 +86,7 @@ export class Canvas2dRenderer implements Renderer {
                         y * beadSizePx + beadSizePx / 2,
                         beadSizePx / 2,
                         0,
-                        2 * Math.PI
+                        2 * Math.PI,
                     );
                     ctx.closePath();
                     ctx.fill();
@@ -99,7 +99,7 @@ export class Canvas2dRenderer implements Renderer {
                         y * beadSizePx + beadSizePx / 2,
                         beadSizePx / 6,
                         0,
-                        2 * Math.PI
+                        2 * Math.PI,
                     );
                     ctx.closePath();
                     ctx.fill();

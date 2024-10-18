@@ -14,10 +14,10 @@ import { XlsxPrinter } from '../../../printer/xlsx/xlsx.printer';
     styleUrls: ['./export.component.scss'],
 })
 export class ExportComponent {
-    @Input({required: true}) configuration!: ExportConfiguration;
-    @Input({required:true}) project!: Project & {image: {name: string}};
-    @Input({required:true}) usage!: Map<string, number>;
-    @Input({required:true}) reducedColor: Uint8ClampedArray | undefined;
+    @Input({ required: true }) configuration!: ExportConfiguration;
+    @Input({ required: true }) project!: Project & { image: { name: string } };
+    @Input({ required: true }) usage!: Map<string, number>;
+    @Input({ required: true }) reducedColor: Uint8ClampedArray | undefined;
 
     availablePrinters: Printer[];
     printer: Printer;
@@ -34,18 +34,18 @@ export class ExportComponent {
     }
 
     export() {
-        const imageName = this.project.image?.name
-        if(!imageName){
-            throw new Error("No filename for export")
+        const imageName = this.project.image?.name;
+        if (!imageName) {
+            throw new Error('No filename for export');
         }
-        if(!this.reducedColor){
-            throw new Error("No reduced color")
+        if (!this.reducedColor) {
+            throw new Error('No reduced color');
         }
         this.printer.print(
             this.reducedColor,
             this.usage,
             this.project,
-            imageName
+            imageName,
         );
     }
 }

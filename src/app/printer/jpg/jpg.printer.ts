@@ -12,7 +12,7 @@ export class JpgPrinter extends SvgPrinter {
         reducedColor: Uint8ClampedArray,
         usage: Map<string, number>,
         project: Project,
-        filename: string
+        filename: string,
     ) {
         const svg = this.drawSVG(reducedColor, usage, project);
 
@@ -26,12 +26,12 @@ export class JpgPrinter extends SvgPrinter {
         const domUrl = window.URL || window.webkitURL || window;
         const img = new Image();
         const url = domUrl.createObjectURL(
-            new Blob([data], { type: 'image/svg+xml' })
+            new Blob([data], { type: 'image/svg+xml' }),
         );
 
         img.onload = function () {
-            if(!ctx){
-                throw new Error(" 2d Context not defined")
+            if (!ctx) {
+                throw new Error(' 2d Context not defined');
             }
             ctx.drawImage(img, 0, 0);
             domUrl.revokeObjectURL(url);

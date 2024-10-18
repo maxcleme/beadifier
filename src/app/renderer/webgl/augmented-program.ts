@@ -10,7 +10,7 @@ export class AugmentedProgram {
         vertexPositionAttribute: GLint,
         vertexColorUniform: WebGLUniformLocation | null,
         pMatrixUniform: WebGLUniformLocation | null,
-        mvMatrixUniform: WebGLUniformLocation | null
+        mvMatrixUniform: WebGLUniformLocation | null,
     ) {
         this.program = program;
         this.vertexPositionAttribute = vertexPositionAttribute;

@@ -6,6 +6,6 @@ export interface Printer {
         reducedColor: Uint8ClampedArray,
         usage: Map<string, number>,
         project: Project,
-        filename: string
+        filename: string,
     ): unknown;
 }

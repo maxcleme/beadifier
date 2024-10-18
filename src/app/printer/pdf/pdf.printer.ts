@@ -1,4 +1,4 @@
-import {jsPDF} from 'jspdf';
+import { jsPDF } from 'jspdf';
 import * as ld from 'lodash';
 
 // Huge hack to get the font working in jsPDF, I give up doing it properly TBH
@@ -26,7 +26,7 @@ class Rect {
             this.x + (this.width - this.width * ratio_x) / 2,
             this.y + (this.height - this.height * ratio_y) / 2,
             this.width * ratio_x,
-            this.height * ratio_y
+            this.height * ratio_y,
         );
     }
 }
@@ -40,7 +40,7 @@ export class PdfPrinter implements Printer {
         reducedColor: Uint8ClampedArray,
         usage: Map<string, number>,
         project: Project,
-        filename: string
+        filename: string,
     ) {
         const height = 297;
         const width = 210;
@@ -60,11 +60,11 @@ export class PdfPrinter implements Printer {
         project: Project,
         margin: number,
         width: number,
-        height: number
+        height: number,
     ) {
         const boardSize = Math.min(
             (width - margin * 2) / project.boardConfiguration.nbBoardHeight,
-            (width - margin * 2) / project.boardConfiguration.nbBoardWidth
+            (width - margin * 2) / project.boardConfiguration.nbBoardWidth,
         );
         const boardSheetWidthOffset =
             (width - boardSize * project.boardConfiguration.nbBoardWidth) / 2;
@@ -79,13 +79,13 @@ export class PdfPrinter implements Printer {
                     x * boardSize + boardSheetWidthOffset,
                     y * boardSize + boardSheetHeightOffset,
                     boardSize,
-                    boardSize
+                    boardSize,
                 );
                 doc.rect(
                     container.x,
                     container.y,
                     container.width,
-                    container.height
+                    container.height,
                 );
 
                 const txtContainer = container.scale(0.5);
@@ -99,7 +99,7 @@ export class PdfPrinter implements Printer {
                         this.fontSizeToHeightMm(doc.getFontSize()) / 2,
                     {
                         align: 'center',
-                    }
+                    },
                 );
             }
         }
@@ -111,12 +111,13 @@ export class PdfPrinter implements Printer {
         width: number,
         height: number,
         margin: number,
-        project: Project
+        project: Project,
     ) {
         const usagePerPage = 30;
 
         const maxUsage = '' + ld.max(Array.from(usage.values()));
-        const longestRef = ld.maxBy(Array.from(usage.keys()), (s) => s.length) ?? 'a';
+        const longestRef =
+            ld.maxBy(Array.from(usage.keys()), (s) => s.length) ?? 'a';
 
         const longestWord =
             maxUsage.length > longestRef.length ? maxUsage : longestRef;
@@ -130,7 +131,7 @@ export class PdfPrinter implements Printer {
 
         ld.chunk(
             Array.from(usage.entries()).sort(([_k1, v1], [_k2, v2]) => v2 - v1),
-            usagePerPage
+            usagePerPage,
         ).forEach((entries) => {
             doc.addPage();
             const usageSheetWidthOffset =
@@ -141,10 +142,10 @@ export class PdfPrinter implements Printer {
             Array.from(entries).forEach(([k, _v], idx) => {
                 const entry = getPaletteEntryByColorRef(
                     project.paletteConfiguration.palettes,
-                    '' + k
+                    '' + k,
                 );
-                if(!entry){
-                    throw new Error("Could not find palette entry")
+                if (!entry) {
+                    throw new Error('Could not find palette entry');
                 }
                 const bg = entry.color;
                 const fg = foreground(bg);
@@ -155,20 +156,20 @@ export class PdfPrinter implements Printer {
                     usageSheetWidthOffset,
                     rowHeight * idx + usageSheetHeightOffset,
                     refWidth,
-                    rowHeight
+                    rowHeight,
                 );
                 doc.rect(
                     container.x,
                     container.y,
                     container.width,
                     container.height,
-                    'FD'
+                    'FD',
                 );
 
                 const txtContainer = container.scale(0.7);
                 const text = k;
                 doc.setFontSize(
-                    this.biggestFontSize(longestWord, txtContainer)
+                    this.biggestFontSize(longestWord, txtContainer),
                 );
                 doc.text(
                     text,
@@ -178,7 +179,7 @@ export class PdfPrinter implements Printer {
                         this.fontSizeToHeightMm(doc.getFontSize()) / 2,
                     {
                         align: 'center',
-                    }
+                    },
                 );
             });
 
@@ -187,10 +188,10 @@ export class PdfPrinter implements Printer {
                 Array.from(entries).forEach(([k, _v], idx) => {
                     const entry = getPaletteEntryByColorRef(
                         project.paletteConfiguration.palettes,
-                        '' + k
+                        '' + k,
                     );
-                    if(!entry){
-                        throw new Error("Could not find palette entry")
+                    if (!entry) {
+                        throw new Error('Could not find palette entry');
                     }
                     const bg = entry.color;
                     const fg = foreground(bg);
@@ -201,14 +202,14 @@ export class PdfPrinter implements Printer {
                         usageSheetWidthOffset + refWidth,
                         rowHeight * idx + usageSheetHeightOffset,
                         symbolWidth,
-                        rowHeight
+                        rowHeight,
                     );
                     doc.rect(
                         container.x,
                         container.y,
                         container.width,
                         container.height,
-                        'FD'
+                        'FD',
                     );
 
                     const txtContainer = container.scale(0.7);
@@ -217,7 +218,7 @@ export class PdfPrinter implements Printer {
                             ? entry.prefix
                             : '') + (entry.symbol ?? '');
                     doc.setFontSize(
-                        this.biggestFontSize(longestWord, txtContainer)
+                        this.biggestFontSize(longestWord, txtContainer),
                     );
                     doc.text(
                         text,
@@ -227,7 +228,7 @@ export class PdfPrinter implements Printer {
                             this.fontSizeToHeightMm(doc.getFontSize()) / 2,
                         {
                             align: 'center',
-                        }
+                        },
                     );
                 });
             }
@@ -236,10 +237,10 @@ export class PdfPrinter implements Printer {
             Array.from(entries).forEach(([k, v], idx) => {
                 const entry = getPaletteEntryByColorRef(
                     project.paletteConfiguration.palettes,
-                    '' + k
+                    '' + k,
                 );
-                if(!entry){
-                    throw new Error("Could not find palette entry")
+                if (!entry) {
+                    throw new Error('Could not find palette entry');
                 }
                 const bg = entry.color;
                 const fg = foreground(bg);
@@ -250,20 +251,20 @@ export class PdfPrinter implements Printer {
                     usageSheetWidthOffset + refWidth + symbolWidth,
                     rowHeight * idx + usageSheetHeightOffset,
                     usageWidth,
-                    rowHeight
+                    rowHeight,
                 );
                 doc.rect(
                     container.x,
                     container.y,
                     container.width,
                     container.height,
-                    'FD'
+                    'FD',
                 );
 
                 const txtContainer = container.scale(0.7);
                 const text = '' + v;
                 doc.setFontSize(
-                    this.biggestFontSize(longestWord, txtContainer)
+                    this.biggestFontSize(longestWord, txtContainer),
                 );
                 doc.text(
                     text,
@@ -273,7 +274,7 @@ export class PdfPrinter implements Printer {
                         this.fontSizeToHeightMm(doc.getFontSize()) / 2,
                     {
                         align: 'center',
-                    }
+                    },
                 );
             });
         });
@@ -285,7 +286,7 @@ export class PdfPrinter implements Printer {
         reducedColor: Uint8ClampedArray,
         width: number,
         height: number,
-        margin: number
+        margin: number,
     ) {
         const beadSize =
             (width - margin * 2) /
@@ -301,8 +302,7 @@ export class PdfPrinter implements Printer {
                 doc.setFontSize(24);
                 let text = `${i} - ${j}`;
                 const textWidth =
-                    (doc.getStringUnitWidth(text) *
-                        doc.getFontSize()) /
+                    (doc.getStringUnitWidth(text) * doc.getFontSize()) /
                     doc.internal.scaleFactor;
                 const textOffset =
                     (doc.internal.pageSize.width - textWidth) / 2;
@@ -323,14 +323,14 @@ export class PdfPrinter implements Printer {
                             x * beadSize + margin,
                             y * beadSize + beadSheetOffset,
                             beadSize,
-                            beadSize
+                            beadSize,
                         );
 
                         const paletteEntry = ld.find(
                             ld.flatten(
                                 project.paletteConfiguration.palettes.map(
-                                    (p) => p.entries
-                                )
+                                    (p) => p.entries,
+                                ),
                             ),
                             (entry) => {
                                 return (
@@ -417,26 +417,26 @@ export class PdfPrinter implements Printer {
                                                 3
                                         ]
                                 );
-                            }
+                            },
                         );
                         if (paletteEntry) {
                             doc.setFillColor(
                                 paletteEntry.color.r,
                                 paletteEntry.color.g,
-                                paletteEntry.color.b
+                                paletteEntry.color.b,
                             );
                             const container = new Rect(
                                 x * beadSize + margin,
                                 y * beadSize + beadSheetOffset,
                                 beadSize,
-                                beadSize
+                                beadSize,
                             );
                             doc.rect(
                                 container.x,
                                 container.y,
                                 container.width,
                                 container.height,
-                                'FD'
+                                'FD',
                             );
 
                             const txtContainer = container.scale(0.8);
@@ -449,7 +449,7 @@ export class PdfPrinter implements Printer {
                                         : '') + (paletteEntry.symbol ?? '');
                             }
                             doc.setFontSize(
-                                this.biggestFontSize(text, txtContainer)
+                                this.biggestFontSize(text, txtContainer),
                             );
                             const fg = foreground(paletteEntry.color);
                             doc.setTextColor(fg.r, fg.g, fg.b);
@@ -462,14 +462,14 @@ export class PdfPrinter implements Printer {
                                         2,
                                 {
                                     align: 'center',
-                                }
+                                },
                             );
                         } else {
                             doc.line(
                                 x * beadSize + margin,
                                 y * beadSize + beadSheetOffset,
                                 x * beadSize + margin + beadSize,
-                                y * beadSize + beadSheetOffset + beadSize
+                                y * beadSize + beadSheetOffset + beadSize,
                             );
                         }
                     }

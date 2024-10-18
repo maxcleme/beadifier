@@ -3,18 +3,18 @@ import { ColorToLab } from '../color/lab.model';
 
 export interface Matching {
     name: string;
-    delta(c1:Color, c2: Color): number;
+    delta(c1: Color, c2: Color): number;
 }
 
 class Euclidean {
     name = 'Euclidean';
 
-    delta(c1:Color, c2: Color): number {
+    delta(c1: Color, c2: Color): number {
         return Math.sqrt(
             Math.pow(c1.r - c2.r, 2) +
                 Math.pow(c1.g - c2.g, 2) +
                 Math.pow(c1.b - c2.b, 2) +
-                Math.pow(c1.a - c2.a, 2)
+                Math.pow(c1.a - c2.a, 2),
         );
     }
 }
@@ -75,7 +75,7 @@ class DeltaECIE2000 {
             0.5 *
             (1 -
                 Math.sqrt(
-                    Math.pow(C_ave, 7) / (Math.pow(C_ave, 7) + Math.pow(25, 7))
+                    Math.pow(C_ave, 7) / (Math.pow(C_ave, 7) + Math.pow(25, 7)),
                 ));
         const L1p = l1.l;
         const a1p = (1 + G) * l1.a;
@@ -89,21 +89,21 @@ class DeltaECIE2000 {
             a1p === 0 && b1p === 0
                 ? 0
                 : b1p >= 0
-                ? this.degree(Math.atan2(b1p, a1p))
-                : this.degree(Math.atan2(b1p, a1p)) + 360;
+                  ? this.degree(Math.atan2(b1p, a1p))
+                  : this.degree(Math.atan2(b1p, a1p)) + 360;
         const h2p =
             a2p === 0 && b2p === 0
                 ? 0
                 : b2p >= 0
-                ? this.degree(Math.atan2(b2p, a2p))
-                : this.degree(Math.atan2(b2p, a2p)) + 360;
+                  ? this.degree(Math.atan2(b2p, a2p))
+                  : this.degree(Math.atan2(b2p, a2p)) + 360;
         const dhCond = h2p - h1p > 180 ? 1 : h2p - h1p < -180 ? 2 : 0;
         const dhp =
             dhCond === 0
                 ? h2p - h1p
                 : dhCond === 1
-                ? h2p - h1p - 360
-                : h2p + 360 - h1p;
+                  ? h2p - h1p - 360
+                  : h2p + 360 - h1p;
         const dLp = L2p - L1p;
         const dCp = C2p - C1p;
         const dHp = 2 * Math.sqrt(C1p * C2p) * Math.sin(this.radian(dhp / 2));
@@ -113,18 +113,18 @@ class DeltaECIE2000 {
             C1p * C2p === 0
                 ? 3
                 : Math.abs(h2p - h1p) <= 180
-                ? 0
-                : h1p + h2p < 360
-                ? 1
-                : 2;
+                  ? 0
+                  : h1p + h2p < 360
+                    ? 1
+                    : 2;
         const hp_ave =
             h_aveCond === 3
                 ? h1p + h2p
                 : h_aveCond === 0
-                ? (h1p + h2p) / 2
-                : h_aveCond === 1
-                ? 180 + (h1p + h2p) / 2
-                : -180 + (h1p + h2p) / 2;
+                  ? (h1p + h2p) / 2
+                  : h_aveCond === 1
+                    ? 180 + (h1p + h2p) / 2
+                    : -180 + (h1p + h2p) / 2;
         const SL =
             1 +
             (0.015 * Math.pow(Lp_ave - 50, 2)) /
@@ -141,7 +141,7 @@ class DeltaECIE2000 {
         const RC =
             2 *
             Math.sqrt(
-                Math.pow(Cp_ave, 7) / (Math.pow(Cp_ave, 7) + Math.pow(25, 7))
+                Math.pow(Cp_ave, 7) / (Math.pow(Cp_ave, 7) + Math.pow(25, 7)),
             );
         const RT = -1 * Math.sin(this.radian(2 * dTheta)) * RC;
 
@@ -153,7 +153,7 @@ class DeltaECIE2000 {
             Math.pow(dLp / (SL * KL), 2) +
                 Math.pow(dCp / (SC * KC), 2) +
                 Math.pow(dHp / (SH * KH), 2) +
-                RT * (dCp / (SC * KC)) * (dHp / (SH * KH))
+                RT * (dCp / (SC * KC)) * (dHp / (SH * KH)),
         );
         return deltaE2000;
     }

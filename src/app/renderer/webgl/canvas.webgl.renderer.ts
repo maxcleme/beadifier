@@ -29,7 +29,7 @@ export class CanvasWebGLRenderer implements Renderer {
         container: Element,
         imageWidth: number,
         imageHeight: number,
-        beadSizePx: number
+        beadSizePx: number,
     ) {
         this.container = container;
         this.canvas = container.ownerDocument.createElement('canvas');
@@ -43,10 +43,10 @@ export class CanvasWebGLRenderer implements Renderer {
         imageWidth: number,
         imageHeight: number,
         beadSizePx: number,
-        project: Project
+        project: Project,
     ) {
-        if(!this.canvas){
-            throw new Error("initContainer have not been called")
+        if (!this.canvas) {
+            throw new Error('initContainer have not been called');
         }
         const gl = this.initGL(this.canvas);
         const program = this.initShaders(gl);
@@ -64,7 +64,7 @@ export class CanvasWebGLRenderer implements Renderer {
             imageHeight,
             beadSizePx,
             reducedColor,
-            project
+            project,
         );
     }
 
@@ -83,14 +83,14 @@ export class CanvasWebGLRenderer implements Renderer {
         height: number,
         beadSizePx: number,
         reducedColor: Uint8ClampedArray,
-        project: Project
+        project: Project,
     ) {
         const mvMatrix = mat4.create();
         const pMatrix = mat4.create();
 
         gl.viewport(0, 0, width * beadSizePx, height * beadSizePx);
         gl.clearColor(0.9, 0.9, 0.9, 1);
-               gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         const wBeadRatio = 1 / width;
         const hBeadRatio = 1 / height;
@@ -118,7 +118,7 @@ export class CanvasWebGLRenderer implements Renderer {
 
                     gl.bindBuffer(
                         gl.ARRAY_BUFFER,
-                        beadShape.positionBuffer.buffer
+                        beadShape.positionBuffer.buffer,
                     );
                     gl.vertexAttribPointer(
                         program.vertexPositionAttribute,
@@ -126,12 +126,12 @@ export class CanvasWebGLRenderer implements Renderer {
                         gl.FLOAT,
                         false,
                         0,
-                        0
+                        0,
                     );
 
                     gl.bindBuffer(
                         gl.ARRAY_BUFFER,
-                        beadShape.colorBuffer.buffer
+                        beadShape.colorBuffer.buffer,
                     );
                     gl.uniform4f(program.vertexColorUniform, r, g, b, a);
 
@@ -139,12 +139,12 @@ export class CanvasWebGLRenderer implements Renderer {
                     gl.uniformMatrix4fv(
                         program.mvMatrixUniform,
                         false,
-                        mvMatrix
+                        mvMatrix,
                     );
                     gl.drawArrays(
                         beadShape.drawingMode,
                         0,
-                        beadShape.positionBuffer.numItems
+                        beadShape.positionBuffer.numItems,
                     );
                 }
             }
@@ -178,7 +178,7 @@ export class CanvasWebGLRenderer implements Renderer {
 
                     gl.bindBuffer(
                         gl.ARRAY_BUFFER,
-                        boardShape.positionBuffer.buffer
+                        boardShape.positionBuffer.buffer,
                     );
                     gl.vertexAttribPointer(
                         program.vertexPositionAttribute,
@@ -186,12 +186,12 @@ export class CanvasWebGLRenderer implements Renderer {
                         gl.FLOAT,
                         false,
                         0,
-                        0
+                        0,
                     );
 
                     gl.bindBuffer(
                         gl.ARRAY_BUFFER,
-                        boardShape.colorBuffer.buffer
+                        boardShape.colorBuffer.buffer,
                     );
                     gl.uniform4f(program.vertexColorUniform, 0.5, 0.5, 0.5, 1);
 
@@ -199,12 +199,12 @@ export class CanvasWebGLRenderer implements Renderer {
                     gl.uniformMatrix4fv(
                         program.mvMatrixUniform,
                         false,
-                        mvMatrix
+                        mvMatrix,
                     );
                     gl.drawArrays(
                         boardShape.drawingMode,
                         0,
-                        boardShape.positionBuffer.numItems
+                        boardShape.positionBuffer.numItems,
                     );
                 }
             }
@@ -226,17 +226,13 @@ export class CanvasWebGLRenderer implements Renderer {
         const fragmentShader = this.initShader(
             gl,
             shaderFs,
-            gl.FRAGMENT_SHADER
+            gl.FRAGMENT_SHADER,
         );
-        const vertexShader = this.initShader(
-            gl,
-            shaderVs,
-            gl.VERTEX_SHADER
-        );
+        const vertexShader = this.initShader(gl, shaderVs, gl.VERTEX_SHADER);
 
         const shaderProgram = gl.createProgram();
-        if(!shaderProgram){
-            throw new Error("No shader program")
+        if (!shaderProgram) {
+            throw new Error('No shader program');
         }
         gl.attachShader(shaderProgram, vertexShader);
         gl.attachShader(shaderProgram, fragmentShader);
@@ -253,7 +249,7 @@ export class CanvasWebGLRenderer implements Renderer {
             gl.getAttribLocation(shaderProgram, 'aVertexPosition'),
             gl.getUniformLocation(shaderProgram, 'uColor'),
             gl.getUniformLocation(shaderProgram, 'uPMatrix'),
-            gl.getUniformLocation(shaderProgram, 'uMVMatrix')
+            gl.getUniformLocation(shaderProgram, 'uMVMatrix'),
         );
         gl.enableVertexAttribArray(program.vertexPositionAttribute);
         return program;
@@ -262,17 +258,19 @@ export class CanvasWebGLRenderer implements Renderer {
     initShader(
         gl: WebGLRenderingContext,
         shaderSource: string,
-        shaderType: number
+        shaderType: number,
     ): WebGLShader {
         const shader = gl.createShader(shaderType);
-        if(!shader){
-            throw new Error("No shader created")
+        if (!shader) {
+            throw new Error('No shader created');
         }
         gl.shaderSource(shader, shaderSource);
         gl.compileShader(shader);
 
         if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-            throw new Error(gl.getShaderInfoLog(shader) ?? 'no shader info log');
+            throw new Error(
+                gl.getShaderInfoLog(shader) ?? 'no shader info log',
+            );
         }
 
         return shader;
@@ -288,13 +286,13 @@ export class CanvasWebGLRenderer implements Renderer {
         gl.bufferData(
             gl.ARRAY_BUFFER,
             new Float32Array(positionVerticles),
-            gl.STATIC_DRAW
+            gl.STATIC_DRAW,
         );
 
         return new Shape(
             gl.LINE_STRIP,
             new AugmentedBuffer(vertexPositionBuffer, 2, 5),
-            new AugmentedBuffer(vertexColorBuffer, 4, 5)
+            new AugmentedBuffer(vertexColorBuffer, 4, 5),
         );
     }
 
@@ -317,7 +315,7 @@ export class CanvasWebGLRenderer implements Renderer {
         gl.bufferData(
             gl.ARRAY_BUFFER,
             new Float32Array(positionVerticles),
-            gl.STATIC_DRAW
+            gl.STATIC_DRAW,
         );
 
         return new Shape(
@@ -325,13 +323,13 @@ export class CanvasWebGLRenderer implements Renderer {
             new AugmentedBuffer(
                 vertexPositionBuffer,
                 2,
-                positionVerticles.length / 2
+                positionVerticles.length / 2,
             ),
             new AugmentedBuffer(
                 vertexColorBuffer,
                 4,
-                positionVerticles.length / 2
-            )
+                positionVerticles.length / 2,
+            ),
         );
     }
 }

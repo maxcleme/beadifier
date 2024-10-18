@@ -8,6 +8,6 @@ export interface Scaler {
         project: Project,
         previewContainerWidth: number,
         previewContainerHeight: number,
-        beadSize: number
+        beadSize: number,
     ): number;
 }

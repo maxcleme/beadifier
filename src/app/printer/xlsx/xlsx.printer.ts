@@ -1,5 +1,5 @@
 import * as ld from 'lodash';
-import {Alignment, Border, Borders, Fill, Workbook} from 'exceljs';
+import { Alignment, Border, Borders, Fill, Workbook } from 'exceljs';
 
 import { Printer } from '../printer';
 import { Project } from '../../model/project/project.model';
@@ -7,7 +7,10 @@ import { ColorToHex } from '../../model/color/hex.model';
 import { Color } from '../../model/color/color.model';
 import { foreground, getPaletteEntryByColorRef } from '../../utils/utils';
 
-const cellBorderStyle = { style: 'thin', color: { argb: 'FFFFFFFF' } } satisfies Border;
+const cellBorderStyle = {
+    style: 'thin',
+    color: { argb: 'FFFFFFFF' },
+} satisfies Border;
 const emptyCellBorderStyle = {
     style: 'thin',
     color: { argb: 'FF000000' },
@@ -44,7 +47,11 @@ export class XlsxPrinter implements Printer {
         return 'XLSX (Beta)';
     }
 
-    pattern(workbook: Workbook, reducedColor: Uint8ClampedArray, project: Project) {
+    pattern(
+        workbook: Workbook,
+        reducedColor: Uint8ClampedArray,
+        project: Project,
+    ) {
         const worksheet = workbook.addWorksheet('Pattern');
 
         // define all cells
@@ -63,14 +70,14 @@ export class XlsxPrinter implements Printer {
                     reducedColor[y * width * 4 + x * 4],
                     reducedColor[y * width * 4 + x * 4 + 1],
                     reducedColor[y * width * 4 + x * 4 + 2],
-                    reducedColor[y * width * 4 + x * 4 + 3]
+                    reducedColor[y * width * 4 + x * 4 + 3],
                 );
 
                 const paletteEntry = ld.find(
                     ld.flatten(
                         project.paletteConfiguration.palettes.map(
-                            (p) => p.entries
-                        )
+                            (p) => p.entries,
+                        ),
                     ),
                     (entry) => {
                         return (
@@ -78,14 +85,14 @@ export class XlsxPrinter implements Printer {
                             entry.color.g === color.g &&
                             entry.color.b === color.b
                         );
-                    }
+                    },
                 );
                 if (paletteEntry) {
                     const fg = `FF${ColorToHex(
-                        foreground(paletteEntry.color)
+                        foreground(paletteEntry.color),
                     ).substring(1)}`;
                     const bg = `FF${ColorToHex(paletteEntry.color).substring(
-                        1
+                        1,
                     )}`;
 
                     let text = paletteEntry.ref;
@@ -166,13 +173,13 @@ export class XlsxPrinter implements Printer {
                 const row = worksheet.getRow(y + 1);
                 const entry = getPaletteEntryByColorRef(
                     project.paletteConfiguration.palettes,
-                    k
+                    k,
                 );
-                if(!entry){
-                    throw new Error("Could not get pallette entry")
+                if (!entry) {
+                    throw new Error('Could not get pallette entry');
                 }
                 const fg = `FF${ColorToHex(foreground(entry.color)).substring(
-                    1
+                    1,
                 )}`;
                 const bg = `FF${ColorToHex(entry.color).substring(1)}`;
                 const font = {
@@ -223,7 +230,7 @@ export class XlsxPrinter implements Printer {
         reducedColor: Uint8ClampedArray,
         usage: Map<string, number>,
         project: Project,
-        filename: string
+        filename: string,
     ) {
         const workbook = new Workbook();
 
@@ -234,9 +241,8 @@ export class XlsxPrinter implements Printer {
             const a = document.createElement('a');
             a.href = URL.createObjectURL(
                 new Blob([buffer], {
-                    type:
-                        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                })
+                    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                }),
             );
             a.setAttribute('download', `${filename}.xlsx`);
             document.body.appendChild(a);

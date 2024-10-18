@@ -27,7 +27,7 @@ export class Project {
         imageConfiguration: ImageConfiguration,
         ditheringConfiguration: DitheringConfiguration,
         rendererConfiguration: RendererConfiguration,
-        exportConfiguration: ExportConfiguration
+        exportConfiguration: ExportConfiguration,
     ) {
         this.paletteConfiguration = paletteConfiguration;
         this.boardConfiguration = boardConfiguration;
@@ -36,6 +36,6 @@ export class Project {
         this.ditheringConfiguration = ditheringConfiguration;
         this.rendererConfiguration = rendererConfiguration;
         this.exportConfiguration = exportConfiguration;
-        this.image = {name: '',src: null}
+        this.image = { name: '', src: null };
     }
 }
