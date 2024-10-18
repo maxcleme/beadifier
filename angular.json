@@ -20,7 +20,7 @@
             "index": "src/index.html",
             "tsConfig": "tsconfig.app.json",
             "polyfills": [
-              "src/polyfills.ts"
+              "zone.js"
             ],
             "assets": [
               "src/assets",
