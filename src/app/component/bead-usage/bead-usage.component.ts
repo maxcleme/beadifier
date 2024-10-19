@@ -16,7 +16,7 @@ import {
     hasUsageUnderPercent,
 } from '../../utils/utils';
 
-import { Chart } from 'chart.js';
+import { Chart, ChartData } from 'chart.js';
 import * as ld from 'lodash';
 
 @Component({
@@ -38,7 +38,7 @@ export class BeadUsageComponent implements OnChanges {
     @Output() paletteChange = new EventEmitter<void>();
 
     barChart: Chart | undefined;
-    polarChart: Chart | undefined;
+    polarChart: Chart<'polarArea',number[],string> | undefined;
 
     history: Palette[][] = [];
     hasUsageUnderPercent = hasUsageUnderPercent;
@@ -58,46 +58,44 @@ export class BeadUsageComponent implements OnChanges {
                     type: 'bar',
                     data: data,
                     options: {
-                        maintainAspectRatio: false,
+                       
                         scales: {
-                            xAxes: [
+                            x: 
                                 {
-                                    gridLines: {
+                                    grid: {
                                         display: false,
                                     },
                                     ticks: {
                                         autoSkip: false,
                                     },
                                 },
-                            ],
-                            yAxes: [
+                            
+                            y: 
                                 {
                                     type: 'linear',
-                                    barPercentage: 0.8,
-                                    categoryPercentage: 1,
-                                    gridLines: {
+                                  
+                                    grid: {
                                         display: false,
                                     },
-                                } as Chart.ChartYAxe,
-                            ],
+                                },
+                            
                         },
                         responsive: true,
-                        legend: {
-                            display: false,
+                        plugins: {
+                            legend: {
+                                display: false,
+                            },
                         },
-                        onClick: (event) => {
+                        onClick: (event,elements) => {
                             try {
                                 this.history.push(ld.cloneDeep(this.palettes));
                                 if (!this.barChart) {
                                     throw new Error('Bar chart not defined');
                                 }
+                               
                                 const ref =
                                     this.barChart.data.labels?.[
-                                        (
-                                            this.barChart.getElementsAtEvent(
-                                                event,
-                                            )[0] as { _index: number }
-                                        )._index
+                                        elements[0].index
                                     ];
                                 const foundEntry = this.findEntry(
                                     ref as string,
@@ -115,7 +113,7 @@ export class BeadUsageComponent implements OnChanges {
             }
 
             if (this.polarChart) {
-                this.updateChart(this.polarChart, data);
+                this.updatePolarChart(this.polarChart, data);
             } else {
                 const polarCanvasCtx =
                     this.polarCanvasTag?.nativeElement.getContext('2d');
@@ -128,10 +126,12 @@ export class BeadUsageComponent implements OnChanges {
                     options: {
                         maintainAspectRatio: false,
                         responsive: true,
-                        legend: {
-                            display: false,
+                        plugins: {
+                            legend: {
+                                display: false,
+                            },
                         },
-                        onClick: (event) => {
+                        onClick: (event,elements) => {
                             try {
                                 this.history.push(ld.cloneDeep(this.palettes));
                                 if (!this.polarChart) {
@@ -140,10 +140,8 @@ export class BeadUsageComponent implements OnChanges {
                                 const ref =
                                     this.polarChart.data.labels?.[
                                         (
-                                            this.polarChart.getElementsAtEvent(
-                                                event,
-                                            )[0] as { _index: number }
-                                        )._index
+                                            elements[0]
+                                        ).index
                                     ];
                                 const entry = this.findEntry(
                                     ref as string,
@@ -162,7 +160,11 @@ export class BeadUsageComponent implements OnChanges {
         }
     }
 
-    updateChart(chart: Chart, data: Chart.ChartData) {
+    updateChart(chart: Chart, data: ChartData) {
+        chart.data = data;
+        chart.update();
+    }
+    updatePolarChart(chart: Chart<'polarArea',number[],string>, data: ChartData<'polarArea',number[],string>) {
         chart.data = data;
         chart.update();
     }
@@ -174,19 +176,20 @@ export class BeadUsageComponent implements OnChanges {
     generateData(
         usage: Map<string, number>,
         palettes: Palette[],
-    ): Chart.ChartData {
+    ) {
         const data = {
             labels: new Array<string>(),
             datasets: [
                 {
-                    options: {},
+                    barPercentage: 0.8,
+                    categoryPercentage: 1,
                     data: new Array<number>(),
                     backgroundColor: new Array<string>(),
                     borderColor: '#cccccc',
                     borderWidth: 1,
                 },
             ],
-        };
+        } satisfies ChartData;
 
         Array.from(usage.entries())
             .sort(([k1], [k2]) => {
