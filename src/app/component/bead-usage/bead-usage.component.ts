@@ -7,6 +7,7 @@ import {
     ElementRef,
     Output,
     EventEmitter,
+    OnInit,
 } from '@angular/core';
 import { Palette } from '../../model/palette/palette.model';
 import { ColorToHsl } from '../../model/color/hsl.model';
@@ -16,7 +17,7 @@ import {
     hasUsageUnderPercent,
 } from '../../utils/utils';
 
-import { Chart, ChartData } from 'chart.js';
+import { ArcElement, BarController, BarElement, CategoryScale, Chart, ChartData, LinearScale, PolarAreaController, RadialLinearScale } from 'chart.js';
 import * as ld from 'lodash';
 
 @Component({
@@ -24,7 +25,7 @@ import * as ld from 'lodash';
     templateUrl: './bead-usage.component.html',
     styleUrls: ['./bead-usage.component.scss'],
 })
-export class BeadUsageComponent implements OnChanges {
+export class BeadUsageComponent implements OnChanges,OnInit {
     @ViewChild('bar', { static: true }) barCanvasTag:
         | ElementRef<HTMLCanvasElement>
         | undefined;
@@ -42,6 +43,10 @@ export class BeadUsageComponent implements OnChanges {
 
     history: Palette[][] = [];
     hasUsageUnderPercent = hasUsageUnderPercent;
+
+    ngOnInit(): void {
+        Chart.register(CategoryScale,LinearScale,PolarAreaController,BarController,RadialLinearScale,ArcElement,BarElement)
+    }
 
     ngOnChanges(_changes: SimpleChanges): void {
         if (this.usage.size) {
