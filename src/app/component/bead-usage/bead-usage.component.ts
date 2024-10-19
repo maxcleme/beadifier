@@ -17,7 +17,17 @@ import {
     hasUsageUnderPercent,
 } from '../../utils/utils';
 
-import { ArcElement, BarController, BarElement, CategoryScale, Chart, ChartData, LinearScale, PolarAreaController, RadialLinearScale } from 'chart.js';
+import {
+    ArcElement,
+    BarController,
+    BarElement,
+    CategoryScale,
+    Chart,
+    ChartData,
+    LinearScale,
+    PolarAreaController,
+    RadialLinearScale,
+} from 'chart.js';
 import * as ld from 'lodash';
 
 @Component({
@@ -25,7 +35,7 @@ import * as ld from 'lodash';
     templateUrl: './bead-usage.component.html',
     styleUrls: ['./bead-usage.component.scss'],
 })
-export class BeadUsageComponent implements OnChanges,OnInit {
+export class BeadUsageComponent implements OnChanges, OnInit {
     @ViewChild('bar', { static: true }) barCanvasTag:
         | ElementRef<HTMLCanvasElement>
         | undefined;
@@ -39,13 +49,21 @@ export class BeadUsageComponent implements OnChanges,OnInit {
     @Output() paletteChange = new EventEmitter<void>();
 
     barChart: Chart | undefined;
-    polarChart: Chart<'polarArea',number[],string> | undefined;
+    polarChart: Chart<'polarArea', number[], string> | undefined;
 
     history: Palette[][] = [];
     hasUsageUnderPercent = hasUsageUnderPercent;
 
     ngOnInit(): void {
-        Chart.register(CategoryScale,LinearScale,PolarAreaController,BarController,RadialLinearScale,ArcElement,BarElement)
+        Chart.register(
+            CategoryScale,
+            LinearScale,
+            PolarAreaController,
+            BarController,
+            RadialLinearScale,
+            ArcElement,
+            BarElement,
+        );
     }
 
     ngOnChanges(_changes: SimpleChanges): void {
@@ -63,27 +81,23 @@ export class BeadUsageComponent implements OnChanges,OnInit {
                     type: 'bar',
                     data: data,
                     options: {
-                       
                         scales: {
-                            x: 
-                                {
-                                    grid: {
-                                        display: false,
-                                    },
-                                    ticks: {
-                                        autoSkip: false,
-                                    },
+                            x: {
+                                grid: {
+                                    display: false,
                                 },
-                            
-                            y: 
-                                {
-                                    type: 'linear',
-                                  
-                                    grid: {
-                                        display: false,
-                                    },
+                                ticks: {
+                                    autoSkip: false,
                                 },
-                            
+                            },
+
+                            y: {
+                                type: 'linear',
+
+                                grid: {
+                                    display: false,
+                                },
+                            },
                         },
                         responsive: true,
                         plugins: {
@@ -91,13 +105,13 @@ export class BeadUsageComponent implements OnChanges,OnInit {
                                 display: false,
                             },
                         },
-                        onClick: (event,elements) => {
+                        onClick: (event, elements) => {
                             try {
                                 this.history.push(ld.cloneDeep(this.palettes));
                                 if (!this.barChart) {
                                     throw new Error('Bar chart not defined');
                                 }
-                               
+
                                 const ref =
                                     this.barChart.data.labels?.[
                                         elements[0].index
@@ -136,7 +150,7 @@ export class BeadUsageComponent implements OnChanges,OnInit {
                                 display: false,
                             },
                         },
-                        onClick: (event,elements) => {
+                        onClick: (event, elements) => {
                             try {
                                 this.history.push(ld.cloneDeep(this.palettes));
                                 if (!this.polarChart) {
@@ -144,9 +158,7 @@ export class BeadUsageComponent implements OnChanges,OnInit {
                                 }
                                 const ref =
                                     this.polarChart.data.labels?.[
-                                        (
-                                            elements[0]
-                                        ).index
+                                        elements[0].index
                                     ];
                                 const entry = this.findEntry(
                                     ref as string,
@@ -169,7 +181,10 @@ export class BeadUsageComponent implements OnChanges,OnInit {
         chart.data = data;
         chart.update();
     }
-    updatePolarChart(chart: Chart<'polarArea',number[],string>, data: ChartData<'polarArea',number[],string>) {
+    updatePolarChart(
+        chart: Chart<'polarArea', number[], string>,
+        data: ChartData<'polarArea', number[], string>,
+    ) {
         chart.data = data;
         chart.update();
     }
@@ -178,10 +193,7 @@ export class BeadUsageComponent implements OnChanges,OnInit {
         return palettes.flatMap((p) => p.entries).find((e) => e.ref === ref);
     }
 
-    generateData(
-        usage: Map<string, number>,
-        palettes: Palette[],
-    ) {
+    generateData(usage: Map<string, number>, palettes: Palette[]) {
         const data = {
             labels: new Array<string>(),
             datasets: [
