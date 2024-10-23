@@ -14,14 +14,14 @@
 ### Build
 Project can be built using the following command :
 ```
-yarn build:prod
+npm run build:prod
 ```
 
 ### Contribute
 
 Project can be run locally by using the following command : 
 ```
-yarn start
+npm run start
 ```
 
 
