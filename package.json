@@ -44,7 +44,7 @@
     "@angular/compiler-cli": "^18.2.8",
     "@angular/language-service": "^18.2.8",
     "@types/lodash": "4.17.12",
-    "@types/node": "^20.16.12",
+    "@types/node": "^20.17.0",
     "angular-eslint": "18.4.0",
     "eslint": "^9.13.0",
     "eslint-config-prettier": "^9.1.0",
