@@ -3,22 +3,21 @@
 #############################################################################
 
 # base image
-FROM node:20.17.0 as build
+FROM node:20.17.0-alpine as build
 
 # set working directory
 WORKDIR /app
 
 # install app dependencies
-RUN npm install -g yarn
 COPY package.json /app/package.json
-COPY yarn.lock /app/yarn.lock
-RUN yarn
+COPY package-lock.json /app/package-lock.json
+RUN npm ci
 
 # add app
 COPY . /app
 
 # generate build
-RUN yarn build:prod
+RUN npm run build:prod
 
 # base image
 FROM nginx:1.27.2-alpine-slim
