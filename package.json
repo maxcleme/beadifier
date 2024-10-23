@@ -43,7 +43,6 @@
     "@angular/cli": "^18.2.8",
     "@angular/compiler-cli": "^18.2.8",
     "@angular/language-service": "^18.2.8",
-    "@types/gl-matrix": "^3.2.0",
     "@types/lodash": "4.17.12",
     "@types/node": "^20.16.12",
     "angular-eslint": "18.4.0",
