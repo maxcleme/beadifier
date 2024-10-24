@@ -37,7 +37,7 @@ export class AppComponent {
         | ElementRef<HTMLImageElement>
         | undefined;
     @ViewChild('canvasContainer', { static: true })
-    canvasContainerTag: ElementRef | undefined;
+    canvasContainerTag: ElementRef<HTMLDivElement> | undefined;
     @ViewChild('preview', { static: true }) previewTag: ElementRef | undefined;
 
     availableRenderers: Renderer[];
@@ -97,14 +97,17 @@ export class AppComponent {
                 const canvasContainer = this.canvasContainerTag.nativeElement;
 
                 // clear previous canvas if any
-                while (canvasContainer.firstChild) {
+                while (canvasContainer.firstChild && canvasContainer.lastChild) {
                     canvasContainer.removeChild(canvasContainer.lastChild);
                 }
                 if (!this.project) {
                     throw new Error('Project has not initialized');
                 }
-
                 const canvas = document.createElement('canvas');
+                canvas.style.display = 'none';
+                canvas.style.position= 'absolute';
+                canvas.style.top ='0px';
+                canvas.style.left='0px';
                 canvas.width =
                     this.project.boardConfiguration.nbBoardWidth *
                     this.project.boardConfiguration.board.nbBeadPerRow;
