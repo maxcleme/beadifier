@@ -97,7 +97,10 @@ export class AppComponent {
                 const canvasContainer = this.canvasContainerTag.nativeElement;
 
                 // clear previous canvas if any
-                while (canvasContainer.firstChild && canvasContainer.lastChild) {
+                while (
+                    canvasContainer.firstChild &&
+                    canvasContainer.lastChild
+                ) {
                     canvasContainer.removeChild(canvasContainer.lastChild);
                 }
                 if (!this.project) {
@@ -105,9 +108,9 @@ export class AppComponent {
                 }
                 const canvas = document.createElement('canvas');
                 canvas.style.display = 'none';
-                canvas.style.position= 'absolute';
-                canvas.style.top ='0px';
-                canvas.style.left='0px';
+                canvas.style.position = 'absolute';
+                canvas.style.top = '0px';
+                canvas.style.left = '0px';
                 canvas.width =
                     this.project.boardConfiguration.nbBoardWidth *
                     this.project.boardConfiguration.board.nbBeadPerRow;
