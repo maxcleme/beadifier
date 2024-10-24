@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import * as ld from 'lodash';
 
 import { Component, Input, EventEmitter, Output } from '@angular/core';
 import { ImageConfiguration } from '../../../model/configuration/image-configuration.model';
@@ -14,10 +14,15 @@ const DEFAULT_GRAYSCALE = 0;
     styleUrls: ['./image-configuration.component.scss'],
 })
 export class ImageConfigurationComponent {
-    @Input() configuration: ImageConfiguration;
-    @Output() onChange = new EventEmitter<ImageConfiguration>();
+    @Input({ required: true }) configuration!: ImageConfiguration;
+    @Output() configurationChange = new EventEmitter<ImageConfiguration>();
 
-    imgSettings: any;
+    imgSettings: Partial<{
+        grayscale: string;
+        brightness: string;
+        saturation: string;
+        contrast: string;
+    }>;
     contrast: number;
     saturation: number;
     brightness: number;
@@ -33,8 +38,8 @@ export class ImageConfigurationComponent {
 
     callback() {
         this.configuration.clear();
-        _.values(this.imgSettings).forEach((f) => this.configuration.add(f));
-        this.onChange.emit(this.configuration);
+        ld.values(this.imgSettings).forEach((f) => this.configuration.add(f));
+        this.configurationChange.emit(this.configuration);
     }
 
     setGrayscale() {

@@ -4,7 +4,7 @@ export class Color {
     b: number;
     a: number;
 
-    constructor(r, g, b, a) {
+    constructor(r: number, g: number, b: number, a: number) {
         this.r = r;
         this.g = g;
         this.b = b;

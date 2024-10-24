@@ -9,13 +9,11 @@ const DEFAULT_HARDNESS = 100;
     styleUrls: ['./dithering-configuration.component.scss'],
 })
 export class DitheringConfigurationComponent {
-    @Input() configuration: DitheringConfiguration;
-    @Output() onChange = new EventEmitter<DitheringConfiguration>();
-
-    constructor() {}
+    @Input({ required: true }) configuration!: DitheringConfiguration;
+    @Output() configurationChange = new EventEmitter<DitheringConfiguration>();
 
     callback() {
-        this.onChange.emit(this.configuration);
+        this.configurationChange.emit(this.configuration);
     }
 
     resetHardness() {

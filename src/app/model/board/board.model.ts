@@ -2,7 +2,7 @@ export class Board {
     name: string;
     nbBeadPerRow: number;
 
-    constructor(name, nbBeadPerRow) {
+    constructor(name: string, nbBeadPerRow: number) {
         this.name = name;
         this.nbBeadPerRow = nbBeadPerRow;
     }

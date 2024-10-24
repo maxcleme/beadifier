@@ -1,7 +1,10 @@
 <div
+    role="button"
+    tabindex="0"
+    (keydown)="toggle()"
     class="palette-entry"
-    fxLayout="row"
-    fxLayoutAlign="start center"
+    data-layout="row"
+    data-layout-align="start center"
     (click)="toggle()"
     [ngStyle]="{ opacity: entry.enabled ? '1' : '0.3' }"
 >
@@ -17,7 +20,7 @@
                 entry.color.b +
                 ',' +
                 entry.color.a / 255 +
-                ')'
+                ')',
         }"
     ></div>
     <em class="palette-entry-color-ref">{{ entry.ref }}</em>

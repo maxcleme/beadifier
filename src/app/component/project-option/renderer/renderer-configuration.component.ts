@@ -7,12 +7,10 @@ import { RendererConfiguration } from '../../../model/configuration/renderer-con
     styleUrls: ['./renderer-configuration.component.scss'],
 })
 export class RendererConfigurationComponent {
-    @Input() configuration: RendererConfiguration;
-    @Output() onChange = new EventEmitter<RendererConfiguration>();
-
-    constructor() {}
+    @Input({ required: true }) configuration!: RendererConfiguration;
+    @Output() configurationChange = new EventEmitter<RendererConfiguration>();
 
     callback() {
-        this.onChange.emit(this.configuration);
+        this.configurationChange.emit(this.configuration);
     }
 }

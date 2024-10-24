@@ -9,7 +9,7 @@ import {
     EventEmitter,
     OnInit,
 } from '@angular/core';
-import { Palette, PaletteEntry } from '../../model/palette/palette.model';
+import { Palette } from '../../model/palette/palette.model';
 import { ColorToHsl } from '../../model/color/hsl.model';
 import {
     countBeads,
@@ -17,117 +17,159 @@ import {
     hasUsageUnderPercent,
 } from '../../utils/utils';
 
-import { Chart } from 'chart.js';
-import * as _ from 'lodash';
+import {
+    ArcElement,
+    BarController,
+    BarElement,
+    CategoryScale,
+    Chart,
+    ChartData,
+    LinearScale,
+    PolarAreaController,
+    RadialLinearScale,
+} from 'chart.js';
+import * as ld from 'lodash';
 
 @Component({
     selector: 'app-bead-usage',
     templateUrl: './bead-usage.component.html',
     styleUrls: ['./bead-usage.component.scss'],
 })
-export class BeadUsageComponent implements OnChanges {
-    @ViewChild('bar', { static: true }) barCanvasTag: ElementRef;
-    @ViewChild('polar', { static: true }) polarCanvasTag: ElementRef;
+export class BeadUsageComponent implements OnChanges, OnInit {
+    @ViewChild('bar', { static: true }) barCanvasTag:
+        | ElementRef<HTMLCanvasElement>
+        | undefined;
+    @ViewChild('polar', { static: true }) polarCanvasTag:
+        | ElementRef<HTMLCanvasElement>
+        | undefined;
 
-    @Input() usage: Map<string, number>;
-    @Input() palettes: Palette[];
+    @Input({ required: true }) usage!: Map<string, number>;
+    @Input({ required: true }) palettes!: Palette[];
 
-    @Output() onPaletteChange = new EventEmitter<void>();
+    @Output() paletteChange = new EventEmitter<void>();
 
-    barChart: Chart;
-    polarChart: Chart;
+    barChart: Chart | undefined;
+    polarChart: Chart<'polarArea', number[], string> | undefined;
 
-    history: Map<string, number>[] = [];
+    history: Palette[][] = [];
     hasUsageUnderPercent = hasUsageUnderPercent;
 
-    ngOnChanges(changes: SimpleChanges): void {
+    ngOnInit(): void {
+        Chart.register(
+            CategoryScale,
+            LinearScale,
+            PolarAreaController,
+            BarController,
+            RadialLinearScale,
+            ArcElement,
+            BarElement,
+        );
+    }
+
+    ngOnChanges(_changes: SimpleChanges): void {
         if (this.usage.size) {
             const data = this.generateData(this.usage, this.palettes);
             if (this.barChart) {
                 this.updateChart(this.barChart, data);
             } else {
-                const barCanvasCtx = this.barCanvasTag.nativeElement.getContext(
-                    '2d'
-                );
+                const barCanvasCtx =
+                    this.barCanvasTag?.nativeElement.getContext('2d');
+                if (!barCanvasCtx) {
+                    throw new Error('Can not get 2d context from bar canvas');
+                }
                 this.barChart = new Chart(barCanvasCtx, {
                     type: 'bar',
                     data: data,
                     options: {
-                        maintainAspectRatio: false,
                         scales: {
-                            xAxes: [
-                                {
-                                    gridLines: {
-                                        display: false,
-                                    },
-                                    ticks: {
-                                        autoSkip: false,
-                                    },
+                            x: {
+                                grid: {
+                                    display: false,
                                 },
-                            ],
-                            yAxes: [
-                                {
-                                    type: 'linear',
-                                    barPercentage: 0.8,
-                                    categoryPercentage: 1,
-                                    gridLines: {
-                                        display: false,
-                                    },
-                                } as Chart.ChartYAxe,
-                            ],
+                                ticks: {
+                                    autoSkip: false,
+                                },
+                            },
+
+                            y: {
+                                type: 'linear',
+
+                                grid: {
+                                    display: false,
+                                },
+                            },
                         },
                         responsive: true,
-                        legend: {
-                            display: false,
+                        plugins: {
+                            legend: {
+                                display: false,
+                            },
                         },
-                        onClick: (event) => {
+                        onClick: (event, elements) => {
                             try {
-                                this.history.push(_.cloneDeep(this.palettes));
-                                const ref = this.barChart.data.labels[
-                                    (this.barChart.getElementsAtEvent(
-                                        event
-                                    )[0] as any)._index
-                                ];
-                                this.findEntry(
+                                this.history.push(ld.cloneDeep(this.palettes));
+                                if (!this.barChart) {
+                                    throw new Error('Bar chart not defined');
+                                }
+
+                                const ref =
+                                    this.barChart.data.labels?.[
+                                        elements[0].index
+                                    ];
+                                const foundEntry = this.findEntry(
                                     ref as string,
-                                    this.palettes
-                                ).enabled = false;
-                                this.onPaletteChange.emit();
-                            } catch (e) {}
+                                    this.palettes,
+                                );
+                                if (foundEntry) {
+                                    foundEntry.enabled = false;
+                                }
+                                this.paletteChange.emit();
+                                // eslint-disable-next-line no-empty
+                            } catch (_e) {}
                         },
                     },
                 });
             }
 
             if (this.polarChart) {
-                this.updateChart(this.polarChart, data);
+                this.updatePolarChart(this.polarChart, data);
             } else {
-                const polarCanvasCtx = this.polarCanvasTag.nativeElement.getContext(
-                    '2d'
-                );
+                const polarCanvasCtx =
+                    this.polarCanvasTag?.nativeElement.getContext('2d');
+                if (!polarCanvasCtx) {
+                    throw new Error('No 2d context on polar');
+                }
                 this.polarChart = new Chart(polarCanvasCtx, {
                     type: 'polarArea',
                     data: data,
                     options: {
                         maintainAspectRatio: false,
                         responsive: true,
-                        legend: {
-                            display: false,
+                        plugins: {
+                            legend: {
+                                display: false,
+                            },
                         },
-                        onClick: (event) => {
+                        onClick: (event, elements) => {
                             try {
-                                this.history.push(_.cloneDeep(this.palettes));
-                                const ref = this.polarChart.data.labels[
-                                    (this.polarChart.getElementsAtEvent(
-                                        event
-                                    )[0] as any)._index
-                                ];
-                                this.findEntry(
+                                this.history.push(ld.cloneDeep(this.palettes));
+                                if (!this.polarChart) {
+                                    throw new Error('No polar chart');
+                                }
+                                const ref =
+                                    this.polarChart.data.labels?.[
+                                        elements[0].index
+                                    ];
+                                const entry = this.findEntry(
                                     ref as string,
-                                    this.palettes
-                                ).enabled = false;
-                                this.onPaletteChange.emit();
-                            } catch (e) {}
+                                    this.palettes,
+                                );
+                                if (entry) {
+                                    entry.enabled = false;
+                                }
+                                this.paletteChange.emit();
+                                // eslint-disable-next-line no-empty
+                            } catch (_e) {}
                         },
                     },
                 });
@@ -135,44 +177,46 @@ export class BeadUsageComponent implements OnChanges {
         }
     }
 
-    updateChart(chart: Chart, data: Chart.ChartData) {
+    updateChart(chart: Chart, data: ChartData) {
+        chart.data = data;
+        chart.update();
+    }
+    updatePolarChart(
+        chart: Chart<'polarArea', number[], string>,
+        data: ChartData<'polarArea', number[], string>,
+    ) {
         chart.data = data;
         chart.update();
     }
 
-    findEntry(ref: string, palettes: Palette[]): PaletteEntry {
-        return _(palettes)
-            .map((p) => p.entries)
-            .flatten()
-            .find((e) => e.ref === ref);
+    findEntry(ref: string, palettes: Palette[]) {
+        return palettes.flatMap((p) => p.entries).find((e) => e.ref === ref);
     }
 
-    generateData(
-        usage: Map<string, number>,
-        palettes: Palette[]
-    ): Chart.ChartData {
+    generateData(usage: Map<string, number>, palettes: Palette[]) {
         const data = {
-            labels: [],
+            labels: new Array<string>(),
             datasets: [
                 {
-                    options: {},
-                    data: [],
-                    backgroundColor: [],
+                    barPercentage: 0.8,
+                    categoryPercentage: 1,
+                    data: new Array<number>(),
+                    backgroundColor: new Array<string>(),
                     borderColor: '#cccccc',
                     borderWidth: 1,
                 },
             ],
-        };
+        } satisfies ChartData;
 
         Array.from(usage.entries())
-            .sort(([k1, v1], [k2, v2]) => {
+            .sort(([k1], [k2]) => {
                 const e1 = this.findEntry(k1, palettes);
                 if (!e1) {
-                    return;
+                    return 0;
                 }
                 const e2 = this.findEntry(k2, palettes);
                 if (!e2) {
-                    return;
+                    return 0;
                 }
                 return ColorToHsl(e1.color).h - ColorToHsl(e2.color).h;
             })
@@ -182,7 +226,7 @@ export class BeadUsageComponent implements OnChanges {
                     data.labels.push(k);
                     data.datasets[0].data.push(v);
                     data.datasets[0].backgroundColor.push(
-                        `rgba(${e.color.r},${e.color.g},${e.color.b},${e.color.a})`
+                        `rgba(${e.color.r},${e.color.g},${e.color.b},${e.color.a})`,
                     );
                 }
             });
@@ -195,17 +239,17 @@ export class BeadUsageComponent implements OnChanges {
     }
 
     undo() {
-        _.assign(this.palettes, this.history.pop());
-        this.onPaletteChange.emit();
+        ld.assign(this.palettes, this.history.pop());
+        this.paletteChange.emit();
     }
 
     removeColorUnderPercent(
         percent: number,
         usage: Map<string, number>,
-        palettes: Palette[]
+        palettes: Palette[],
     ) {
-        this.history.push(_.cloneDeep(this.palettes));
+        this.history.push(ld.cloneDeep(this.palettes));
         removeColorUnderPercent(percent, usage, palettes);
-        this.onPaletteChange.emit();
+        this.paletteChange.emit();
     }
 }

@@ -4,34 +4,37 @@ import { Project } from '../../model/project/project.model';
 import { SvgPrinter } from '../svg/svg.printer';
 
 export class JpgPrinter extends SvgPrinter {
-    name(): string {
+    override name(): string {
         return 'JPEG (Beta)';
     }
 
-    print(
+    override print(
         reducedColor: Uint8ClampedArray,
         usage: Map<string, number>,
         project: Project,
-        filename: string
+        filename: string,
     ) {
         const svg = this.drawSVG(reducedColor, usage, project);
 
         // TODO
         const canvas = document.createElement('canvas');
-        canvas.width = +svg.getAttribute('width');
-        canvas.height = +svg.getAttribute('height');
+        canvas.width = Number.parseInt(svg.getAttribute('width') ?? '0');
+        canvas.height = Number.parseInt(svg.getAttribute('height') ?? '0');
         const ctx = canvas.getContext('2d');
 
         const data = new XMLSerializer().serializeToString(svg);
-        const DOMURL: any = window.URL || window.webkitURL || window;
+        const domUrl = window.URL || window.webkitURL || window;
         const img = new Image();
-        const url = DOMURL.createObjectURL(
-            new Blob([data], { type: 'image/svg+xml' })
+        const url = domUrl.createObjectURL(
+            new Blob([data], { type: 'image/svg+xml' }),
         );
 
         img.onload = function () {
+            if (!ctx) {
+                throw new Error(' 2d Context not defined');
+            }
             ctx.drawImage(img, 0, 0);
-            DOMURL.revokeObjectURL(url);
+            domUrl.revokeObjectURL(url);
 
             const a = document.createElement('a');
             a.href = canvas

@@ -1,12 +1,11 @@
-import * as jsPDF from 'jspdf';
-import * as _ from 'lodash';
+import { jsPDF } from 'jspdf';
+import * as ld from 'lodash';
 
 // Huge hack to get the font working in jsPDF, I give up doing it properly TBH
 import './MonoFont';
 
 import { Printer } from './../printer';
 import { Project } from '../../model/project/project.model';
-import { PaletteEntry } from '../../model/palette/palette.model';
 import { foreground, getPaletteEntryByColorRef } from '../../utils/utils';
 
 class Rect {
@@ -27,7 +26,7 @@ class Rect {
             this.x + (this.width - this.width * ratio_x) / 2,
             this.y + (this.height - this.height * ratio_y) / 2,
             this.width * ratio_x,
-            this.height * ratio_y
+            this.height * ratio_y,
         );
     }
 }
@@ -41,7 +40,7 @@ export class PdfPrinter implements Printer {
         reducedColor: Uint8ClampedArray,
         usage: Map<string, number>,
         project: Project,
-        filename: string
+        filename: string,
     ) {
         const height = 297;
         const width = 210;
@@ -61,11 +60,11 @@ export class PdfPrinter implements Printer {
         project: Project,
         margin: number,
         width: number,
-        height: number
+        height: number,
     ) {
         const boardSize = Math.min(
             (width - margin * 2) / project.boardConfiguration.nbBoardHeight,
-            (width - margin * 2) / project.boardConfiguration.nbBoardWidth
+            (width - margin * 2) / project.boardConfiguration.nbBoardWidth,
         );
         const boardSheetWidthOffset =
             (width - boardSize * project.boardConfiguration.nbBoardWidth) / 2;
@@ -80,13 +79,13 @@ export class PdfPrinter implements Printer {
                     x * boardSize + boardSheetWidthOffset,
                     y * boardSize + boardSheetHeightOffset,
                     boardSize,
-                    boardSize
+                    boardSize,
                 );
                 doc.rect(
                     container.x,
                     container.y,
                     container.width,
-                    container.height
+                    container.height,
                 );
 
                 const txtContainer = container.scale(0.5);
@@ -100,7 +99,7 @@ export class PdfPrinter implements Printer {
                         this.fontSizeToHeightMm(doc.getFontSize()) / 2,
                     {
                         align: 'center',
-                    }
+                    },
                 );
             }
         }
@@ -112,12 +111,13 @@ export class PdfPrinter implements Printer {
         width: number,
         height: number,
         margin: number,
-        project: Project
+        project: Project,
     ) {
         const usagePerPage = 30;
 
-        const maxUsage = '' + _.max(Array.from(usage.values()));
-        const longestRef = _.maxBy(Array.from(usage.keys()), (s) => s.length);
+        const maxUsage = '' + ld.max(Array.from(usage.values()));
+        const longestRef =
+            ld.maxBy(Array.from(usage.keys()), (s) => s.length) ?? 'a';
 
         const longestWord =
             maxUsage.length > longestRef.length ? maxUsage : longestRef;
@@ -129,9 +129,9 @@ export class PdfPrinter implements Printer {
         const heightWithMargins = height - 2 * margin;
         const rowHeight = heightWithMargins / usagePerPage;
 
-        _.chunk(
-            Array.from(usage.entries()).sort(([k1, v1], [k2, v2]) => v2 - v1),
-            usagePerPage
+        ld.chunk(
+            Array.from(usage.entries()).sort(([_k1, v1], [_k2, v2]) => v2 - v1),
+            usagePerPage,
         ).forEach((entries) => {
             doc.addPage();
             const usageSheetWidthOffset =
@@ -139,11 +139,14 @@ export class PdfPrinter implements Printer {
             const usageSheetHeightOffset = margin;
 
             // ref column
-            Array.from(entries).forEach(([k, v], idx) => {
+            Array.from(entries).forEach(([k, _v], idx) => {
                 const entry = getPaletteEntryByColorRef(
                     project.paletteConfiguration.palettes,
-                    '' + k
+                    '' + k,
                 );
+                if (!entry) {
+                    throw new Error('Could not find palette entry');
+                }
                 const bg = entry.color;
                 const fg = foreground(bg);
                 doc.setFillColor(bg.r, bg.g, bg.b);
@@ -153,20 +156,20 @@ export class PdfPrinter implements Printer {
                     usageSheetWidthOffset,
                     rowHeight * idx + usageSheetHeightOffset,
                     refWidth,
-                    rowHeight
+                    rowHeight,
                 );
                 doc.rect(
                     container.x,
                     container.y,
                     container.width,
                     container.height,
-                    'FD'
+                    'FD',
                 );
 
                 const txtContainer = container.scale(0.7);
                 const text = k;
                 doc.setFontSize(
-                    this.biggestFontSize(longestWord, txtContainer)
+                    this.biggestFontSize(longestWord, txtContainer),
                 );
                 doc.text(
                     text,
@@ -176,17 +179,20 @@ export class PdfPrinter implements Printer {
                         this.fontSizeToHeightMm(doc.getFontSize()) / 2,
                     {
                         align: 'center',
-                    }
+                    },
                 );
             });
 
             if (project.exportConfiguration.useSymbols) {
                 // symbol column
-                Array.from(entries).forEach(([k, v], idx) => {
+                Array.from(entries).forEach(([k, _v], idx) => {
                     const entry = getPaletteEntryByColorRef(
                         project.paletteConfiguration.palettes,
-                        '' + k
+                        '' + k,
                     );
+                    if (!entry) {
+                        throw new Error('Could not find palette entry');
+                    }
                     const bg = entry.color;
                     const fg = foreground(bg);
                     doc.setFillColor(bg.r, bg.g, bg.b);
@@ -196,23 +202,23 @@ export class PdfPrinter implements Printer {
                         usageSheetWidthOffset + refWidth,
                         rowHeight * idx + usageSheetHeightOffset,
                         symbolWidth,
-                        rowHeight
+                        rowHeight,
                     );
                     doc.rect(
                         container.x,
                         container.y,
                         container.width,
                         container.height,
-                        'FD'
+                        'FD',
                     );
 
                     const txtContainer = container.scale(0.7);
                     const text =
                         (project.paletteConfiguration.palettes.length > 1
                             ? entry.prefix
-                            : '') + entry.symbol;
+                            : '') + (entry.symbol ?? '');
                     doc.setFontSize(
-                        this.biggestFontSize(longestWord, txtContainer)
+                        this.biggestFontSize(longestWord, txtContainer),
                     );
                     doc.text(
                         text,
@@ -222,7 +228,7 @@ export class PdfPrinter implements Printer {
                             this.fontSizeToHeightMm(doc.getFontSize()) / 2,
                         {
                             align: 'center',
-                        }
+                        },
                     );
                 });
             }
@@ -231,8 +237,11 @@ export class PdfPrinter implements Printer {
             Array.from(entries).forEach(([k, v], idx) => {
                 const entry = getPaletteEntryByColorRef(
                     project.paletteConfiguration.palettes,
-                    '' + k
+                    '' + k,
                 );
+                if (!entry) {
+                    throw new Error('Could not find palette entry');
+                }
                 const bg = entry.color;
                 const fg = foreground(bg);
                 doc.setFillColor(bg.r, bg.g, bg.b);
@@ -242,20 +251,20 @@ export class PdfPrinter implements Printer {
                     usageSheetWidthOffset + refWidth + symbolWidth,
                     rowHeight * idx + usageSheetHeightOffset,
                     usageWidth,
-                    rowHeight
+                    rowHeight,
                 );
                 doc.rect(
                     container.x,
                     container.y,
                     container.width,
                     container.height,
-                    'FD'
+                    'FD',
                 );
 
                 const txtContainer = container.scale(0.7);
                 const text = '' + v;
                 doc.setFontSize(
-                    this.biggestFontSize(longestWord, txtContainer)
+                    this.biggestFontSize(longestWord, txtContainer),
                 );
                 doc.text(
                     text,
@@ -265,7 +274,7 @@ export class PdfPrinter implements Printer {
                         this.fontSizeToHeightMm(doc.getFontSize()) / 2,
                     {
                         align: 'center',
-                    }
+                    },
                 );
             });
         });
@@ -277,7 +286,7 @@ export class PdfPrinter implements Printer {
         reducedColor: Uint8ClampedArray,
         width: number,
         height: number,
-        margin: number
+        margin: number,
     ) {
         const beadSize =
             (width - margin * 2) /
@@ -293,8 +302,7 @@ export class PdfPrinter implements Printer {
                 doc.setFontSize(24);
                 let text = `${i} - ${j}`;
                 const textWidth =
-                    (doc.getStringUnitWidth(text) *
-                        doc.internal.getFontSize()) /
+                    (doc.getStringUnitWidth(text) * doc.getFontSize()) /
                     doc.internal.scaleFactor;
                 const textOffset =
                     (doc.internal.pageSize.width - textWidth) / 2;
@@ -315,14 +323,14 @@ export class PdfPrinter implements Printer {
                             x * beadSize + margin,
                             y * beadSize + beadSheetOffset,
                             beadSize,
-                            beadSize
+                            beadSize,
                         );
 
-                        const paletteEntry: PaletteEntry = _.find(
-                            _.flatten(
+                        const paletteEntry = ld.find(
+                            ld.flatten(
                                 project.paletteConfiguration.palettes.map(
-                                    (p) => p.entries
-                                )
+                                    (p) => p.entries,
+                                ),
                             ),
                             (entry) => {
                                 return (
@@ -409,39 +417,39 @@ export class PdfPrinter implements Printer {
                                                 3
                                         ]
                                 );
-                            }
+                            },
                         );
                         if (paletteEntry) {
                             doc.setFillColor(
                                 paletteEntry.color.r,
                                 paletteEntry.color.g,
-                                paletteEntry.color.b
+                                paletteEntry.color.b,
                             );
                             const container = new Rect(
                                 x * beadSize + margin,
                                 y * beadSize + beadSheetOffset,
                                 beadSize,
-                                beadSize
+                                beadSize,
                             );
                             doc.rect(
                                 container.x,
                                 container.y,
                                 container.width,
                                 container.height,
-                                'FD'
+                                'FD',
                             );
 
                             const txtContainer = container.scale(0.8);
-                            text = paletteEntry.ref;
+                            text = paletteEntry.ref ?? '';
                             if (project.exportConfiguration.useSymbols) {
                                 text =
                                     (project.paletteConfiguration.palettes
                                         .length > 1
                                         ? paletteEntry.prefix
-                                        : '') + paletteEntry.symbol;
+                                        : '') + (paletteEntry.symbol ?? '');
                             }
                             doc.setFontSize(
-                                this.biggestFontSize(text, txtContainer)
+                                this.biggestFontSize(text, txtContainer),
                             );
                             const fg = foreground(paletteEntry.color);
                             doc.setTextColor(fg.r, fg.g, fg.b);
@@ -454,14 +462,14 @@ export class PdfPrinter implements Printer {
                                         2,
                                 {
                                     align: 'center',
-                                }
+                                },
                             );
                         } else {
                             doc.line(
                                 x * beadSize + margin,
                                 y * beadSize + beadSheetOffset,
                                 x * beadSize + margin + beadSize,
-                                y * beadSize + beadSheetOffset + beadSize
+                                y * beadSize + beadSheetOffset + beadSize,
                             );
                         }
                     }

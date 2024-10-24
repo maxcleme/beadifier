@@ -6,13 +6,14 @@ export class FitScreenScaler implements Scaler {
         project: Project,
         previewContainerWidth: number,
         previewContainerHeight: number,
-        beadSize: number
+        beadSize: number,
     ): number {
         const expectedSize =
             project.boardConfiguration.nbBoardWidth *
             project.boardConfiguration.board.nbBeadPerRow *
             beadSize;
-        const result = Math.floor((100 * previewContainerWidth) / expectedSize) / 100;
-        return Math.max(0.2, result)
+        const result =
+            Math.floor((100 * previewContainerWidth) / expectedSize) / 100;
+        return Math.max(0.2, result);
     }
 }

@@ -18,7 +18,7 @@
                     class="btn-small"
                     mat-raised-button
                     (click)="decreaseNbBoardHeight()"
-                    *ngIf="configuration.nbBoardHeight != 1"
+                    *ngIf="configuration.nbBoardHeight !== 1"
                 >
                     <mat-icon>keyboard_arrow_up</mat-icon>
                 </button>
@@ -51,7 +51,7 @@
                     class="btn-small"
                     mat-raised-button
                     (click)="decreaseNbBoardWidth()"
-                    *ngIf="configuration.nbBoardWidth != 1"
+                    *ngIf="configuration.nbBoardWidth !== 1"
                 >
                     <mat-icon>keyboard_arrow_left</mat-icon>
                 </button>

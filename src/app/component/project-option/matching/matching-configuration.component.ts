@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import * as ld from 'lodash';
 
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { MatchingConfiguration } from '../../../model/configuration/matching-configuration.model';
@@ -10,16 +10,16 @@ import { Matching, MATCHINGS } from '../../../model/matching/matching.model';
     styleUrls: ['./matching-configuration.component.scss'],
 })
 export class MatchingConfigurationComponent {
-    @Input() configuration: MatchingConfiguration;
-    @Output() onChange = new EventEmitter<MatchingConfiguration>();
+    @Input({ required: true }) configuration!: MatchingConfiguration;
+    @Output() configurationChange = new EventEmitter<MatchingConfiguration>();
 
     availableMatchings: Matching[];
 
     constructor() {
-        this.availableMatchings = _.values(MATCHINGS);
+        this.availableMatchings = ld.values(MATCHINGS);
     }
 
     callback() {
-        this.onChange.emit(this.configuration);
+        this.configurationChange.emit(this.configuration);
     }
 }

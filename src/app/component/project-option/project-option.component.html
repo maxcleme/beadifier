@@ -4,21 +4,21 @@
             <form (submit)="preventSubmit($event)">
                 <div
                     style="padding: 1em"
-                    fxLayout="row"
-                    fxLayoutAlign="space-between wrap"
+                    data-layout="row"
+                    data-layout-align="space-between wrap"
                 >
                     <div
-                        fxLayout="column"
-                        fxLayoutGap="1em"
-                        fxFlex.xs="100%"
-                        fxFlex.sm="100%"
-                        fxFlex.md="33%"
-                        fxFlex.lg="33%"
-                        fxFlex.xl="33%"
+                        data-layout="column"
+                        data-layout-gap="1em"
+                        data-flex-xs="100"
+                        data-flex-sm="100"
+                        data-flex-md="33"
+                        data-flex-lg="33"
+                        data-flex-xl="33"
                     >
                         <div>
                             <app-upload-image-button
-                                (onLoad)="onLoadingImageCallback($event)"
+                                (loadImage)="onLoadingImageCallback($event)"
                             ></app-upload-image-button>
                         </div>
                     </div>
@@ -32,14 +32,14 @@
             <form (submit)="preventSubmit($event)">
                 <div
                     style="padding: 1em"
-                    fxLayout="row wrap"
-                    fxLayoutAlign="space-between start"
+                    data-layout="row wrap"
+                    data-layout-align="space-between start"
                 >
                     <app-board-configuration
                         [configuration]="project.boardConfiguration"
-                        [srcWidth]="project.srcWidth"
-                        [srcHeight]="project.srcHeight"
-                        (onChange)="callback()"
+                        [srcWidth]="project.srcWidth ?? 0"
+                        [srcHeight]="project.srcHeight ?? 0"
+                        (configurationChange)="callback()"
                     >
                     </app-board-configuration>
                 </div>
@@ -52,12 +52,12 @@
             <form (submit)="preventSubmit($event)">
                 <div
                     style="padding: 1em"
-                    fxLayout="row wrap"
-                    fxLayoutAlign="space-between start"
+                    data-layout="row wrap"
+                    data-layout-align="space-between start"
                 >
                     <app-palette-configuration
                         [configuration]="project.paletteConfiguration"
-                        (onChange)="callback()"
+                        (configurationChange)="callback()"
                     >
                     </app-palette-configuration>
                 </div>
@@ -70,58 +70,58 @@
             <form (submit)="preventSubmit($event)">
                 <div
                     style="padding: 1em"
-                    fxLayout="row wrap"
-                    fxLayoutAlign="space-between start"
+                    data-layout="row wrap"
+                    data-layout-align="space-between start"
                 >
                     <div
-                        fxFlex.xs="100%"
-                        fxFlex.sm="100%"
-                        fxFlex.md="50%"
-                        fxFlex.lg="33%"
-                        fxFlex.xl="25%"
+                        data-flex-xs="100"
+                        data-flex-sm="100"
+                        data-flex-md="50"
+                        data-flex-lg="33"
+                        data-flex-xl="25"
                     >
                         <app-image-configuration
                             [configuration]="project.imageConfiguration"
-                            (onChange)="callback()"
+                            (configurationChange)="callback()"
                         >
                         </app-image-configuration>
                     </div>
                     <div
-                        fxFlex.xs="100%"
-                        fxFlex.sm="100%"
-                        fxFlex.md="50%"
-                        fxFlex.lg="33%"
-                        fxFlex.xl="25%"
+                        data-flex-xs="100"
+                        data-flex-sm="100"
+                        data-flex-md="50"
+                        data-flex-lg="33"
+                        data-flex-xl="25"
                     >
                         <app-dithering-configuration
                             [configuration]="project.ditheringConfiguration"
-                            (onChange)="callback()"
+                            (configurationChange)="callback()"
                         >
                         </app-dithering-configuration>
                     </div>
                     <div
-                        fxFlex.xs="100%"
-                        fxFlex.sm="100%"
-                        fxFlex.md="50%"
-                        fxFlex.lg="33%"
-                        fxFlex.xl="25%"
+                        data-flex-xs="100"
+                        data-flex-sm="100"
+                        data-flex-md="50"
+                        data-flex-lg="33"
+                        data-flex-xl="25"
                     >
                         <app-matching-configuration
                             [configuration]="project.matchingConfiguration"
-                            (onChange)="callback()"
+                            (configurationChange)="callback()"
                         >
                         </app-matching-configuration>
                     </div>
                     <div
-                        fxFlex.xs="100%"
-                        fxFlex.sm="100%"
-                        fxFlex.md="50%"
-                        fxFlex.lg="33%"
-                        fxFlex.xl="25%"
+                        data-flex-xs="100"
+                        data-flex-sm="100"
+                        data-flex-md="50"
+                        data-flex-lg="33"
+                        data-flex-xl="25"
                     >
                         <app-renderer-configuration
                             [configuration]="project.rendererConfiguration"
-                            (onChange)="callback()"
+                            (configurationChange)="callback()"
                         >
                         </app-renderer-configuration>
                     </div>
@@ -135,13 +135,13 @@
             <form (submit)="preventSubmit($event)">
                 <div
                     style="padding: 1em"
-                    fxLayout="row wrap"
-                    fxLayoutAlign="space-between start"
+                    data-layout="row wrap"
+                    data-layout-align="space-between start"
                 >
                     <app-bead-usage
                         [usage]="usage"
                         [palettes]="project.paletteConfiguration.palettes"
-                        (onPaletteChange)="callback()"
+                        (paletteChange)="callback()"
                     ></app-bead-usage>
                 </div>
             </form>

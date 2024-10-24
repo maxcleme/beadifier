@@ -1,8 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import {
+    provideHttpClient,
+    withInterceptorsFromDi,
+} from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
 import { ServiceWorkerModule } from '@angular/service-worker';
 
@@ -44,22 +46,17 @@ import { environment } from './../environments/environment';
         RendererConfigurationComponent,
         ExportComponent,
     ],
+    bootstrap: [AppComponent],
     imports: [
         BrowserModule,
-        HttpClientModule,
         BrowserAnimationsModule,
-        FlexLayoutModule,
-
         FormsModule,
         MaterialModule,
-
         NtkmeButtonModule,
-
         ServiceWorkerModule.register('/ngsw-worker.js', {
             enabled: environment.production,
         }),
     ],
-    providers: [PaletteService],
-    bootstrap: [AppComponent],
+    providers: [PaletteService, provideHttpClient(withInterceptorsFromDi())],
 })
 export class AppModule {}

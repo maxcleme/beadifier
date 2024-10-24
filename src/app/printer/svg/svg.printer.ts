@@ -1,11 +1,11 @@
 import 'canvas2svg';
-import * as _ from 'lodash';
+import * as ld from 'lodash';
 
 import { Printer } from '../printer';
 import { Project } from '../../model/project/project.model';
-import { PaletteEntry } from '../../model/palette/palette.model';
 import { Color } from '../../model/color/color.model';
 import { foreground, getPaletteEntryByColorRef } from '../../utils/utils';
+import C2S from 'canvas2svg';
 
 import { defsStyle } from './MonoFont';
 
@@ -27,7 +27,7 @@ class Rect {
             this.x + (this.width - this.width * ratio_x) / 2,
             this.y + (this.height - this.height * ratio_y) / 2,
             this.width * ratio_x,
-            this.height * ratio_y
+            this.height * ratio_y,
         );
     }
 
@@ -48,7 +48,7 @@ export class SvgPrinter implements Printer {
     drawSVG(
         reducedColor: Uint8ClampedArray,
         usage: Map<string, number>,
-        project: Project
+        project: Project,
     ): SVGElement {
         const height =
             project.boardConfiguration.nbBoardHeight *
@@ -91,10 +91,9 @@ export class SvgPrinter implements Printer {
             usage.size * (inventoryTabHeight + inventoryTabMargin) +
             inventoryTabMargin;
 
-        // @ts-ignore
         const ctx = new C2S(
             patternWidth + inventoryMargin + inventoryWidth,
-            Math.max(patternHeight, inventoryHeight)
+            Math.max(patternHeight, inventoryHeight),
         );
         ctx.textBaseline = 'middle';
         ctx.textAlign = 'center';
@@ -103,11 +102,12 @@ export class SvgPrinter implements Printer {
             0,
             0,
             patternWidth + inventoryMargin + inventoryWidth,
-            Math.max(patternHeight, inventoryHeight)
+            Math.max(patternHeight, inventoryHeight),
         );
 
-        const maxUsage = '' + _.max(Array.from(usage.values()));
-        const longestRef = _.maxBy(Array.from(usage.keys()), (s) => s.length);
+        const maxUsage = '' + ld.max(Array.from(usage.values()));
+        const longestRef =
+            ld.maxBy(Array.from(usage.keys()), (s) => s.length) ?? 'a';
 
         const longestWord =
             maxUsage.length > longestRef.length ? maxUsage : longestRef;
@@ -119,15 +119,18 @@ export class SvgPrinter implements Printer {
             patternWidth + inventoryMargin,
             0,
             inventoryWidth,
-            inventoryHeight
+            inventoryHeight,
         );
         Array.from(usage.entries())
-            .sort(([k1, v1], [k2, v2]) => v2 - v1)
+            .sort(([_k1, v1], [_k2, v2]) => v2 - v1)
             .forEach(([k, v]) => {
                 const entry = getPaletteEntryByColorRef(
                     project.paletteConfiguration.palettes,
-                    k
+                    k,
                 );
+                if (!entry) {
+                    throw new Error('palette entry not found');
+                }
                 const bg = entry.color;
                 const fg = foreground(bg);
                 ctx.fillStyle = `rgb(${bg.r}, ${bg.g}, ${bg.b})`;
@@ -136,7 +139,7 @@ export class SvgPrinter implements Printer {
                     inventoryTabMargin +
                         cpt * (inventoryTabHeight + inventoryTabMargin),
                     inventoryTabNameWidth,
-                    inventoryTabHeight
+                    inventoryTabHeight,
                 );
                 if (project.exportConfiguration.useSymbols) {
                     ctx.fillRect(
@@ -147,7 +150,7 @@ export class SvgPrinter implements Printer {
                         inventoryTabMargin +
                             cpt * (inventoryTabHeight + inventoryTabMargin),
                         inventoryTabNameWidth,
-                        inventoryTabHeight
+                        inventoryTabHeight,
                     );
                 }
                 ctx.fillRect(
@@ -160,7 +163,7 @@ export class SvgPrinter implements Printer {
                     inventoryTabMargin +
                         cpt * (inventoryTabHeight + inventoryTabMargin),
                     inventoryTabNameWidth,
-                    inventoryTabHeight
+                    inventoryTabHeight,
                 );
 
                 ctx.fillStyle = `rgb(${fg.r}, ${fg.g}, ${fg.b})`;
@@ -169,23 +172,23 @@ export class SvgPrinter implements Printer {
                     cpt * (inventoryTabMargin + inventoryTabHeight) +
                         inventoryTabMargin,
                     inventoryTabNameWidth,
-                    inventoryTabHeight
+                    inventoryTabHeight,
                 ).scale(0.7);
                 ctx.font = `${this.biggestFontSize(
                     longestWord,
-                    txtContainerName
+                    txtContainerName,
                 )}pt MonoFont`;
                 ctx.fillText(
                     k,
                     txtContainerName.centerX(),
-                    txtContainerName.centerY()
+                    txtContainerName.centerY(),
                 );
 
                 if (project.exportConfiguration.useSymbols) {
                     const text =
                         (project.paletteConfiguration.palettes.length > 1
                             ? entry.prefix
-                            : '') + entry.symbol;
+                            : '') + (entry.symbol ?? '');
                     txtContainerName = new Rect(
                         patternWidth +
                             inventoryMargin +
@@ -194,16 +197,16 @@ export class SvgPrinter implements Printer {
                         cpt * (inventoryTabMargin + inventoryTabHeight) +
                             inventoryTabMargin,
                         inventoryTabNameWidth,
-                        inventoryTabHeight
+                        inventoryTabHeight,
                     ).scale(0.7);
                     ctx.font = `${this.biggestFontSize(
                         longestWord,
-                        txtContainerName
+                        txtContainerName,
                     )}pt MonoFont`;
                     ctx.fillText(
                         text,
                         txtContainerName.centerX(),
-                        txtContainerName.centerY()
+                        txtContainerName.centerY(),
                     );
                 }
 
@@ -217,16 +220,16 @@ export class SvgPrinter implements Printer {
                     cpt * (inventoryTabMargin + inventoryTabHeight) +
                         inventoryTabMargin,
                     inventoryTabCountWidth,
-                    inventoryTabHeight
+                    inventoryTabHeight,
                 ).scale(0.7);
                 ctx.font = `${this.biggestFontSize(
                     longestWord,
-                    txtContainerCount
+                    txtContainerCount,
                 )}pt MonoFont`;
                 ctx.fillText(
                     '' + v,
                     txtContainerCount.centerX(),
-                    txtContainerCount.centerY()
+                    txtContainerCount.centerY(),
                 );
 
                 cpt++;
@@ -253,7 +256,7 @@ export class SvgPrinter implements Printer {
                                 beadSize +
                             (project.boardConfiguration.board.nbBeadPerRow +
                                 1) *
-                                beadMargin)
+                                beadMargin),
             );
         }
         for (let y = 0; y < project.boardConfiguration.nbBoardHeight + 1; y++) {
@@ -274,7 +277,7 @@ export class SvgPrinter implements Printer {
                             (project.boardConfiguration.board.nbBeadPerRow +
                                 1) *
                                 beadMargin),
-                boardMargin
+                boardMargin,
             );
         }
 
@@ -286,7 +289,7 @@ export class SvgPrinter implements Printer {
                     reducedColor[y * width * 4 + x * 4],
                     reducedColor[y * width * 4 + x * 4 + 1],
                     reducedColor[y * width * 4 + x * 4 + 2],
-                    reducedColor[y * width * 4 + x * 4 + 3]
+                    reducedColor[y * width * 4 + x * 4 + 3],
                 );
 
                 const beadX =
@@ -295,7 +298,7 @@ export class SvgPrinter implements Printer {
                     boardMargin +
                     (beadMargin + boardMargin) *
                         Math.floor(
-                            x / project.boardConfiguration.board.nbBeadPerRow
+                            x / project.boardConfiguration.board.nbBeadPerRow,
                         );
                 const beadY =
                     y * (beadSize + beadMargin) +
@@ -303,7 +306,7 @@ export class SvgPrinter implements Printer {
                     boardMargin +
                     (beadMargin + boardMargin) *
                         Math.floor(
-                            y / project.boardConfiguration.board.nbBeadPerRow
+                            y / project.boardConfiguration.board.nbBeadPerRow,
                         );
 
                 const container = new Rect(beadX, beadY, beadSize, beadSize);
@@ -313,14 +316,14 @@ export class SvgPrinter implements Printer {
                         container.x,
                         container.y,
                         container.width,
-                        container.height
+                        container.height,
                     );
 
-                    const paletteEntry: PaletteEntry = _.find(
-                        _.flatten(
+                    const paletteEntry = ld.find(
+                        ld.flatten(
                             project.paletteConfiguration.palettes.map(
-                                (p) => p.entries
-                            )
+                                (p) => p.entries,
+                            ),
                         ),
                         (entry) => {
                             return (
@@ -328,7 +331,7 @@ export class SvgPrinter implements Printer {
                                 entry.color.g === color.g &&
                                 entry.color.b === color.b
                             );
-                        }
+                        },
                     );
                     if (paletteEntry) {
                         const bg = paletteEntry.color;
@@ -342,16 +345,16 @@ export class SvgPrinter implements Printer {
                                 (project.paletteConfiguration.palettes.length >
                                 1
                                     ? paletteEntry.prefix
-                                    : '') + paletteEntry.symbol;
+                                    : '') + (paletteEntry.symbol ?? '');
                         }
                         ctx.font = `${this.biggestFontSize(
-                            text,
-                            txtContainer
+                            text ?? '',
+                            txtContainer,
                         )}pt MonoFont`;
                         ctx.fillText(
                             text,
                             txtContainer.centerX(),
-                            txtContainer.centerY()
+                            txtContainer.centerY(),
                         );
 
                         let referenceText = paletteEntry.ref;
@@ -361,13 +364,14 @@ export class SvgPrinter implements Printer {
                                 project.paletteConfiguration.palettes.length > 1
                             ) {
                                 referenceText =
-                                    paletteEntry.prefix + referenceText;
+                                    (paletteEntry.prefix ?? '') +
+                                    (referenceText ?? '');
                             }
                         }
                         ctx.fillText(
                             referenceText,
                             beadX + beadSize / 2,
-                            beadY + beadSize / 2
+                            beadY + beadSize / 2,
                         );
                     }
                 } else {
@@ -376,14 +380,14 @@ export class SvgPrinter implements Printer {
                         container.x,
                         container.y,
                         container.width,
-                        container.height
+                        container.height,
                     );
                     ctx.fillStyle = 'rgb(255,255,255)';
                     ctx.fillRect(
                         beadX + 1,
                         beadY + 1,
                         beadSize - 2 * 1,
-                        beadSize - 2 * 1
+                        beadSize - 2 * 1,
                     );
 
                     ctx.strokeStyle = 'rgb(0,0,0)';
@@ -391,7 +395,7 @@ export class SvgPrinter implements Printer {
                     ctx.moveTo(beadX + 1, beadY + 1);
                     ctx.lineTo(
                         beadX + 1 + beadSize - 2 * 1,
-                        beadY + 1 + beadSize - 2 * 1
+                        beadY + 1 + beadSize - 2 * 1,
                     );
                     ctx.stroke();
                     ctx.beginPath();
@@ -416,7 +420,7 @@ export class SvgPrinter implements Printer {
         reducedColor: Uint8ClampedArray,
         usage: Map<string, number>,
         project: Project,
-        filename: string
+        filename: string,
     ) {
         const svg = this.drawSVG(reducedColor, usage, project);
 
@@ -425,7 +429,7 @@ export class SvgPrinter implements Printer {
         a.href = URL.createObjectURL(
             new Blob([new XMLSerializer().serializeToString(svg)], {
                 type: 'image/svg+xml',
-            })
+            }),
         );
         a.setAttribute('download', `${filename}.svg`);
         document.body.appendChild(a);
@@ -435,7 +439,8 @@ export class SvgPrinter implements Printer {
 
     // Welcome to realm of magic values, works only for current font
     biggestFontSize(text: string, r: Rect): number {
-        const biggestForWidth = r.width / text.length / 0.959136962890625;
+        const biggestForWidth =
+            r.width / (text.length ?? 1) / 0.959136962890625;
         const expectedHeight = biggestForWidth * 0.959136962890625;
         if (expectedHeight <= r.height) {
             return biggestForWidth;

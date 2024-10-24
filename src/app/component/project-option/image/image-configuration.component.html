@@ -1,11 +1,16 @@
-<div fxLayout="column" fxLayoutAlign="start">
-    <div class="mat-subheading-2">Image</div>
-    <div flexLayout="row" fxLayoutGap="1em" fxLayoutAlign="start center">
-        <mat-form-field fxFlex="15%">
+<div data-layout="column" data-layout-align="start">
+    <div class="mat-subtitle-1">Image</div>
+    <div
+        flexLayout="row"
+        data-layout-gap="1em"
+        data-layout-align="start center"
+    >
+        <mat-form-field data-flex="15">
+            <mat-label>Brightness</mat-label>
             <input
                 type="number"
                 matInput
-                (change)="setBrightness()"
+                (input)="setBrightness()"
                 [(ngModel)]="brightness"
                 placeholder="Brightness"
                 [value]="brightness"
@@ -13,24 +18,29 @@
             />
             <span matSuffix>%</span>
         </mat-form-field>
-        <mat-slider
-            (change)="setBrightness()"
-            min="0"
-            max="200"
-            step="1"
-            [(value)]="brightness"
-        >
+        <mat-slider min="0" max="200" step="1" #ngSlider
+            ><input
+                matSliderThumb
+                (change)="setBrightness()"
+                #ngSliderThumb="matSliderThumb"
+                [(value)]="brightness"
+            />
         </mat-slider>
         <button class="mat-icon-button" (click)="resetBrightness()">
             <mat-icon>loop</mat-icon>
         </button>
     </div>
-    <div flexLayout="row" fxLayoutGap="1em" fxLayoutAlign="start center">
-        <mat-form-field fxFlex="15%">
+    <div
+        flexLayout="row"
+        data-layout-gap="1em"
+        data-layout-align="start center"
+    >
+        <mat-form-field data-flex="15">
+            <mat-label>Contrast</mat-label>
             <input
                 type="number"
                 matInput
-                (change)="setContrast()"
+                (input)="setContrast()"
                 [(ngModel)]="contrast"
                 placeholder="Contrast"
                 [value]="contrast"
@@ -38,23 +48,28 @@
             />
             <span matSuffix>%</span>
         </mat-form-field>
-        <mat-slider
-            (change)="setContrast()"
-            min="0"
-            max="200"
-            step="1"
-            [(value)]="contrast"
-        ></mat-slider>
+        <mat-slider min="0" max="200" step="1" #ngSlider
+            ><input
+                matSliderThumb
+                (change)="setContrast()"
+                #ngSliderThumb="matSliderThumb"
+                [(value)]="contrast"
+        /></mat-slider>
         <button class="mat-icon-button" (click)="resetContrast()">
             <mat-icon>loop</mat-icon>
         </button>
     </div>
-    <div flexLayout="row" fxLayoutGap="1em" fxLayoutAlign="start center">
-        <mat-form-field fxFlex="15%">
+    <div
+        flexLayout="row"
+        data-layout-gap="1em"
+        data-layout-align="start center"
+    >
+        <mat-form-field data-flex="15">
+            <mat-label>Saturation</mat-label>
             <input
                 type="number"
                 matInput
-                (change)="setSaturation()"
+                (input)="setSaturation()"
                 [(ngModel)]="saturation"
                 placeholder="Saturation"
                 [value]="saturation"
@@ -62,24 +77,29 @@
             />
             <span matSuffix>%</span>
         </mat-form-field>
-        <mat-slider
-            (change)="setSaturation()"
-            min="0"
-            max="200"
-            step="1"
-            [(value)]="saturation"
-        >
+        <mat-slider min="0" max="200" step="1" #ngSlider
+            ><input
+                matSliderThumb
+                (change)="setSaturation()"
+                #ngSliderThumb="matSliderThumb"
+                [(value)]="saturation"
+            />
         </mat-slider>
         <button class="mat-icon-button" (click)="resetSaturation()">
             <mat-icon>loop</mat-icon>
         </button>
     </div>
-    <div flexLayout="row" fxLayoutGap="1em" fxLayoutAlign="start center">
-        <mat-form-field fxFlex="15%">
+    <div
+        flexLayout="row"
+        data-layout-gap="1em"
+        data-layout-align="start center"
+    >
+        <mat-form-field data-flex="15">
+            <mat-label>Grayscale</mat-label>
             <input
                 type="number"
                 matInput
-                (change)="setGrayscale()"
+                (input)="setGrayscale()"
                 [(ngModel)]="grayscale"
                 placeholder="Grayscale"
                 [value]="grayscale"
@@ -87,13 +107,13 @@
             />
             <span matSuffix>%</span>
         </mat-form-field>
-        <mat-slider
-            (change)="setGrayscale()"
-            min="0"
-            max="100"
-            step="1"
-            [(value)]="grayscale"
-        >
+        <mat-slider min="0" max="100" step="1" #ngSlider
+            ><input
+                matSliderThumb
+                (change)="setGrayscale()"
+                #ngSliderThumb="matSliderThumb"
+                [(value)]="grayscale"
+            />
         </mat-slider>
         <button class="mat-icon-button" (click)="resetGrayscale()">
             <mat-icon>loop</mat-icon>

@@ -1,5 +1,5 @@
-<div fxLayout="column" fxLayoutAlign="start start">
-    <div class="mat-subheading-2">Dithering</div>
+<div data-layout="column" data-layout-align="start start">
+    <div class="mat-subtitle-1">Dithering</div>
     <div>
         <mat-slide-toggle
             [(ngModel)]="configuration.enable"
@@ -8,12 +8,17 @@
             >Enable
         </mat-slide-toggle>
     </div>
-    <div flexLayout="row" fxLayoutGap="1em" fxLayoutAlign="start center">
-        <mat-form-field fxFlex="15%">
+    <div
+        flexLayout="row"
+        data-layout-gap="1em"
+        data-layout-align="start center"
+    >
+        <mat-form-field data-flex="15">
+            <mat-label>Hardness</mat-label>
             <input
                 type="number"
                 matInput
-                (change)="callback()"
+                (input)="callback()"
                 [(ngModel)]="configuration.hardness"
                 placeholder="Hardness"
                 [value]="configuration.hardness"
@@ -21,13 +26,13 @@
             />
             <span matSuffix>%</span>
         </mat-form-field>
-        <mat-slider
-            (change)="callback()"
-            min="0"
-            max="100"
-            step="1"
-            [(value)]="configuration.hardness"
-        >
+        <mat-slider min="0" max="100" step="1" #ngSlider
+            ><input
+                matSliderThumb
+                (change)="callback()"
+                #ngSliderThumb="matSliderThumb"
+                [(value)]="configuration.hardness"
+            />
         </mat-slider>
         <button class="mat-icon-button" (click)="resetHardness()">
             <mat-icon>loop</mat-icon>

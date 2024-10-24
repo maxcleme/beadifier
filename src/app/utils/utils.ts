@@ -1,7 +1,7 @@
-import { Palette, PaletteEntry } from '../model/palette/palette.model';
+import { Palette } from '../model/palette/palette.model';
 import { Color } from '../model/color/color.model';
 
-import * as _ from 'lodash';
+import * as ld from 'lodash';
 import { Matching } from '../model/matching/matching.model';
 import { Project } from '../model/project/project.model';
 import { RendererConfiguration } from '../model/configuration/renderer-configuration.model';
@@ -30,9 +30,9 @@ export class ImagePosition {
 }
 
 export function drawImageInsideCanvas(
-    canvas,
-    image,
-    rendererConfiguration: RendererConfiguration
+    canvas: HTMLCanvasElement,
+    image: HTMLImageElement,
+    rendererConfiguration: RendererConfiguration,
 ): ImagePosition {
     /**
      * Credit to : https://sdqali.in/blog/2013/10/03/fitting-an-image-in-to-a-canvas-object/
@@ -40,7 +40,7 @@ export function drawImageInsideCanvas(
 
     const imageAspectRatio = image.width / image.height;
     const canvasAspectRatio = canvas.width / canvas.height;
-    let renderableHeight, renderableWidth, xStart, yStart;
+    let renderableHeight, renderableWidth;
 
     // If image's aspect ratio is less than canvas's we fit on height
     // and place the image centrally along width
@@ -67,10 +67,10 @@ export function drawImageInsideCanvas(
             : image.width;
     }
 
-    xStart = rendererConfiguration.center
+    const xStart = rendererConfiguration.center
         ? (canvas.width - renderableWidth) / 2
         : 0;
-    yStart = rendererConfiguration.center
+    const yStart = rendererConfiguration.center
         ? (canvas.height - renderableHeight) / 2
         : 0;
 
@@ -78,31 +78,35 @@ export function drawImageInsideCanvas(
     const ryStart = Math.floor(yStart);
     const rrenderableWidth = Math.floor(renderableWidth);
     const rrenderableHeight = Math.floor(renderableHeight);
-
-    canvas.getContext('2d').filter = image.style.filter;
-    canvas
-        .getContext('2d')
-        .drawImage(
-            image,
-            rxStart,
-            ryStart,
-            rrenderableWidth,
-            rrenderableHeight
-        );
+    const context = canvas.getContext('2d');
+    if (!context) {
+        throw new Error('Could not get 2d context');
+    }
+    context.filter = image.style.filter;
+    context.drawImage(
+        image,
+        rxStart,
+        ryStart,
+        rrenderableWidth,
+        rrenderableHeight,
+    );
     return new ImagePosition(
         rxStart,
         ryStart,
         rrenderableWidth,
-        rrenderableHeight
+        rrenderableHeight,
     );
 }
 
 export function reduceColor(
     canvas: HTMLCanvasElement,
     project: Project,
-    drawingPosition: ImagePosition
+    drawingPosition: ImagePosition,
 ): ImageData {
     const context = canvas.getContext('2d');
+    if (!context) {
+        throw new Error('Could not get canvas context');
+    }
     const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
 
     for (let y = 0; y < canvas.height; y++) {
@@ -112,8 +116,11 @@ export function reduceColor(
                 const closestPaletteEntry = getClosestPaletteEntry(
                     project.paletteConfiguration.palettes,
                     color,
-                    project.matchingConfiguration.matching
+                    project.matchingConfiguration.matching,
                 );
+                if (!closestPaletteEntry) {
+                    continue;
+                }
                 set(imageData, canvas, x, y, closestPaletteEntry.color);
 
                 if (project.ditheringConfiguration.enable) {
@@ -130,9 +137,9 @@ export function reduceColor(
                                     ((project.ditheringConfiguration.hardness /
                                         100) *
                                         7) /
-                                        16
-                                )
-                            )
+                                        16,
+                                ),
+                            ),
                         );
                     }
                     if (drawingPosition.contains(x - 1, y + 1)) {
@@ -146,9 +153,9 @@ export function reduceColor(
                                     ((project.ditheringConfiguration.hardness /
                                         100) *
                                         3) /
-                                        16
-                                )
-                            )
+                                        16,
+                                ),
+                            ),
                         );
                     }
                     if (drawingPosition.contains(x, y + 1)) {
@@ -162,9 +169,9 @@ export function reduceColor(
                                     ((project.ditheringConfiguration.hardness /
                                         100) *
                                         5) /
-                                        16
-                                )
-                            )
+                                        16,
+                                ),
+                            ),
                         );
                     }
                     if (drawingPosition.contains(x + 1, y + 1)) {
@@ -178,9 +185,9 @@ export function reduceColor(
                                     ((project.ditheringConfiguration.hardness /
                                         100) *
                                         1) /
-                                        16
-                                )
-                            )
+                                        16,
+                                ),
+                            ),
                         );
                     }
                 }
@@ -195,13 +202,13 @@ function get(
     source: ImageData,
     canvas: HTMLCanvasElement,
     x: number,
-    y: number
+    y: number,
 ): Color {
     return new Color(
         source.data[y * canvas.width * 4 + x * 4],
         source.data[y * canvas.width * 4 + x * 4 + 1],
         source.data[y * canvas.width * 4 + x * 4 + 2],
-        source.data[y * canvas.width * 4 + x * 4 + 3]
+        source.data[y * canvas.width * 4 + x * 4 + 3],
     );
 }
 
@@ -210,7 +217,7 @@ function set(
     canvas: HTMLCanvasElement,
     x: number,
     y: number,
-    color: Color
+    color: Color,
 ) {
     source.data[y * canvas.width * 4 + x * 4] = color.r;
     source.data[y * canvas.width * 4 + x * 4 + 1] = color.g;
@@ -221,13 +228,13 @@ function set(
 export function getClosestPaletteEntry(
     palettes: Palette[],
     color: Color,
-    matching: Matching
-): PaletteEntry {
-    return _.minBy(
-        _.flatten(palettes.map((p) => p.entries)).filter(
-            (paletteEntry) => paletteEntry.enabled
-        ),
-        (paletteEntry) => matching.delta(paletteEntry.color, color)
+    matching: Matching,
+) {
+    return ld.minBy(
+        ld
+            .flatten(palettes.map((p) => p.entries))
+            .filter((paletteEntry) => paletteEntry.enabled),
+        (paletteEntry) => matching.delta(paletteEntry.color, color),
     );
 }
 
@@ -237,39 +244,41 @@ export function clearNode(node: Element) {
     }
 }
 
-export function parsePalette(json): Palette {
+export function parsePalette(json: unknown): Palette {
     try {
         return JSON.parse(JSON.stringify(json));
     } catch (e) {
-        throw new Error(`Invalid palette : ${e.message}`);
+        throw new Error(
+            `Invalid palette : ${typeof e === 'object' && e && 'message' in e ? e.message : ''}`,
+        );
     }
 }
 
 export function computeUsage(
     colors: Uint8ClampedArray,
-    palettes: Palette[]
+    palettes: Palette[],
 ): Map<string, number> {
     const usage = new Map<string, number>();
-    _.chunk(colors, 4)
+    ld.chunk(colors, 4)
         .map(
             (component) =>
                 new Color(
                     component[0],
                     component[1],
                     component[2],
-                    component[3]
-                )
+                    component[3],
+                ),
         )
         .forEach((color) => {
-            const entry: PaletteEntry = _.find(
-                _.flatten(palettes.map((p) => p.entries)),
+            const entry = ld.find(
+                ld.flatten(palettes.map((p) => p.entries)),
                 (e) =>
                     e.color.r === color.r &&
                     e.color.g === color.g &&
                     e.color.b === color.b &&
-                    e.color.a === color.a
+                    e.color.a === color.a,
             );
-            if (entry) {
+            if (entry?.ref) {
                 usage.set(entry.ref, (usage.get(entry.ref) || 0) + 1);
             }
         });
@@ -277,31 +286,30 @@ export function computeUsage(
 }
 
 export function countBeads(usage: Map<string, number>): number {
-    return Array.from(usage.values()).reduce(_.add, 0);
+    return Array.from(usage.values()).reduce(ld.add, 0);
 }
 
 export function hasUsageUnderPercent(
     percent: number,
-    usage: Map<string, number>
+    usage: Map<string, number>,
 ) {
     const total = countBeads(usage);
     const lowerBound = total * (percent / 100);
-    return _.find(Array.from(usage.values()), (v) => v < lowerBound);
+    return ld.find(Array.from(usage.values()), (v) => v < lowerBound);
 }
 
 export function removeColorUnderPercent(
     percent: number,
     usage: Map<string, number>,
-    palettes: Palette[]
+    palettes: Palette[],
 ) {
     const total = countBeads(usage);
     const lowerBound = total * (percent / 100);
     Array.from(usage.entries())
-        .filter(([k, v]) => v < lowerBound)
-        .forEach(([k, v]) => {
-            _(palettes)
-                .map((p) => p.entries)
-                .flatten()
+        .filter(([_k, v]) => v < lowerBound)
+        .forEach(([k, _v]) => {
+            palettes
+                .flatMap((p) => p.entries)
                 .filter((e) => e.ref === k)
                 .forEach((e) => {
                     e.enabled = false;
@@ -309,15 +317,12 @@ export function removeColorUnderPercent(
         });
 }
 
-export function getPaletteEntryByColorRef(
-    palettes: Palette[],
-    ref: string
-): PaletteEntry {
-    const paletteList = _.flatten(palettes.map((p) => p.entries));
-    return _.minBy(
-        _.filter(paletteList, (paletteEntry) => {
+export function getPaletteEntryByColorRef(palettes: Palette[], ref: string) {
+    const paletteList = ld.flatten(palettes.map((p) => p.entries));
+    return ld.minBy(
+        ld.filter(paletteList, (paletteEntry) => {
             return paletteEntry.enabled && paletteEntry.ref === ref;
-        })
+        }),
     );
 }
 

@@ -6,14 +6,14 @@ export interface Renderer {
         container: Element,
         imageWidth: number,
         imageHeight: number,
-        beadSizePx: number
+        beadSizePx: number,
     ) => void;
     render: (
         reducedColor: Uint8ClampedArray,
         imageWidth: number,
         imageHeight: number,
         beadSizePx: number,
-        project: Project
+        project: Project,
     ) => void;
     destroy: () => void;
 }

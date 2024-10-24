@@ -6,7 +6,9 @@
         height: 6px;
         width: 6px;
         border-radius: 12px;
-        box-shadow: 0 0 1px black, inset 0 0 1px #cccccc;
+        box-shadow:
+            0 0 1px black,
+            inset 0 0 1px #cccccc;
         display: inline-block;
         border-width: 4px;
         border-style: solid;
