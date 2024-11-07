@@ -3,7 +3,7 @@
 #############################################################################
 
 # base image
-FROM node:12.6.0 as build
+FROM node:12.6.0 AS build
 
 # set working directory
 WORKDIR /app
