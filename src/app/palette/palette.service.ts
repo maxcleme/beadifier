@@ -34,6 +34,7 @@ export class PaletteService {
             this.loadPalette('perler_caps', 'P', 'Perler Caps').pipe(
                 map(this.perlerTransform)
             ),
+            this.loadPalette('yant', 'Y', 'Yant'),
             this.loadPalette('diamondDotz', 'D', 'Diamond Dotz'),
         ]);
     }
