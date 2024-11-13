@@ -32,14 +32,10 @@
             >
         </div>
         <div
-            data-flex-xs="50"
-            data-flex-sm="33"
-            data-flex-md="25"
-            data-flex-lg="20"
-            data-flex-gt-lg="20"
-            *ngFor="let entry of palette.entries"
+            class="entries-container"
         >
             <app-palette-entry
+                *ngFor="let entry of palette.entries"
                 [entry]="entry"
                 (toggleCallback)="callback()"
             ></app-palette-entry>

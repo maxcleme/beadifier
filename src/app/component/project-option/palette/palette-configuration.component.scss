@@ -1,3 +1,29 @@
+@use "css-fx-layout" as fx;
 :host {
     width: 100%;
 }
+
+
+
+
+    .entries-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap:4px;
+        @include fx.xs {
+            grid-template-columns: repeat(3, 1fr);
+        }
+        @include fx.sm {
+            grid-template-columns: repeat(3, 1fr);
+        }
+        @include fx.md {
+            grid-template-columns: repeat(5, 1fr);
+        }
+        @include fx.lg {
+            grid-template-columns: repeat(6, 1fr);
+        }
+        @include fx.gt-lg {
+            grid-template-columns: repeat(7, 1fr);
+        }
+      
+    }
