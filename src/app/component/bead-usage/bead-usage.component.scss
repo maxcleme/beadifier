@@ -1,8 +1,34 @@
-:host {
-    width: 100%;
+
 
     .usage-chart-container {
         width: 100%;
-        min-height: 300px;
+        padding: 0px 16px;
+        position: relative;
+        height: 40vh;
     }
-}
+    .charts-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .bead-usage-container {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+    .toolbar {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        .buttons {
+            display: flex;
+            flex-direction: row;
+            justify-content: end;
+        }
+    }
+
+    :host{
+        width:100%;
+    }
+

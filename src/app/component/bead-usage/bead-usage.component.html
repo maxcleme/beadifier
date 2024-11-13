@@ -1,11 +1,9 @@
-<div data-layout="row wrap" data-flex="100" data-layout="space-between start">
-    <div data-flex="100" data-layout-align="space-between start">
+<div class="bead-usage-container">
+    <div class="toolbar">
         <div class="mat-subtitle-1">Total : {{ countBeads(usage) }} beads</div>
 
         <div
-            data-flex="row"
-            data-layout-align="end center"
-            data-layout-gap="1em"
+            class="buttons"
         >
             <button
                 aria-label="reduce color"
@@ -25,38 +23,18 @@
             </button>
         </div>
     </div>
-    <div
-        data-flex-xs="100"
-        data-flex-sm="100"
-        data-flex-md="100"
-        data-flex-lg="33"
-        data-flex-xl="25"
-    >
-        <div data-layout="column" data-layout-align="center center">
-            <div
-                class="usage-chart-container"
-                data-layout="row"
-                data-layout-align="center center"
+    <div class="charts-container">
+        
+                <div
+                    class="usage-chart-container polar-chart-container"
             >
-                <canvas #polar width="100%"></canvas>
-            </div>
-        </div>
-    </div>
-    <div
-        data-flex-xs="100"
-        data-flex-sm="100"
-        data-flex-md="100"
-        data-flex-lg="66"
-        data-flex-xl="75"
-    >
-        <div data-layout="column" data-layout-align="center center">
-            <div
-                class="usage-chart-container"
-                data-layout="row"
-                data-layout-align="center center"
-            >
-                <canvas #bar width="100%"></canvas>
-            </div>
-        </div>
+                    <canvas #polar></canvas>
+                </div>
+                <div
+                    class="usage-chart-container bar-chart-container"
+                >
+                    <canvas #bar></canvas>
+                </div>
+         
     </div>
 </div>

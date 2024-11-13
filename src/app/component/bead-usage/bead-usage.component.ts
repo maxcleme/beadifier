@@ -81,6 +81,7 @@ export class BeadUsageComponent implements OnChanges, OnInit {
                     type: 'bar',
                     data: data,
                     options: {
+                        maintainAspectRatio:false,
                         scales: {
                             x: {
                                 grid: {
