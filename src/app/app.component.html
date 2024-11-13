@@ -27,22 +27,18 @@
 
     <div #canvasContainer class="hidden-container"></div>
 
-    <div data-layout="row" data-layout-align="center" *ngIf="project">
-        <div data-flex="90">
-            <mat-card appearance="outlined">
-                <mat-card-content>
-                    <app-project-option
-                        [project]="project"
-                        [usage]="usage"
-                        [reducedColor]="reducedColor"
-                        (loadProject)="beadify($event)"
-                    >
-                    </app-project-option>
-                </mat-card-content>
-            </mat-card>
-        </div>
-    </div>
-
+    <mat-card appearance="outlined" *ngIf="project">
+        <mat-card-content>
+            <app-project-option
+                [project]="project"
+                [usage]="usage"
+                [reducedColor]="reducedColor"
+                (loadProject)="beadify($event)"
+            >
+            </app-project-option>
+        </mat-card-content>
+    </mat-card>
+    
     <div [ngStyle]="{ visibility: reducedColor ? 'visible' : 'hidden' }">
         <div data-layout="row" data-layout-align="center">
             <div data-flex="90">
