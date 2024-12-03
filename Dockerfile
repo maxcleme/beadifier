@@ -9,16 +9,15 @@ FROM node:12.6.0 AS build
 WORKDIR /app
 
 # install app dependencies
-RUN npm install -g yarn
 COPY package.json /app/package.json
-COPY yarn.lock /app/yarn.lock
-RUN yarn
+COPY package-lock.json /app/package-lock.json
+RUN npm ci
 
 # add app
 COPY . /app
 
 # generate build
-RUN yarn build:prod
+RUN npm run build:prod
 
 # base image
 FROM nginx:1.17.1-alpine
