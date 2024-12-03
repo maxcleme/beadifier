@@ -13,7 +13,7 @@
             <input
                 type="number"
                 matInput
-                (change)="callback()"
+                (input)="callback()"
                 [(ngModel)]="configuration.hardness"
                 placeholder="Hardness"
                 [value]="configuration.hardness"
