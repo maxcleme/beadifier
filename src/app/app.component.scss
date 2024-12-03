@@ -12,7 +12,7 @@
     pointer-events: none;
 }
 
-:host /deep/ .hidden-container canvas {
+:host ::ng-deep .hidden-container canvas {
     display: none;
     position: absolute;
     top: 0px;
