@@ -21,7 +21,7 @@ COPY . /app
 RUN yarn build:prod
 
 # base image
-FROM nginx:1.17.1-alpine
+FROM nginx:1.29-alpine
 
 # copy artifact build from the 'build environment'
 COPY --from=build /app/dist /usr/share/nginx/html
