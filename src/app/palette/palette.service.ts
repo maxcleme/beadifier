@@ -25,6 +25,7 @@ export class PaletteService {
             this.loadPalette('nabbi', 'N'),
             this.loadPalette('artkal_a', 'A', 'Artkal A-2.6MM'),
             this.loadPalette('artkal_c', 'C', 'Artkal C-2.6MM'),
+            this.loadPalette('artkal_m', 'M', 'Artkal M-2.6MM'),
             this.loadPalette('artkal_r', 'R', 'Artkal R-5MM'),
             this.loadPalette('artkal_s', 'S', 'Artkal S-5MM'),
             this.loadPalette('perler', 'P').pipe(map(this.perlerTransform)),
