@@ -25,6 +25,7 @@ export class PaletteService {
             this.loadPalette('hama_mini', 'H', 'Hama Mini'),
             this.loadPalette('hama_maxi', 'H', 'Hama Maxi'),
             this.loadPalette('nabbi', 'N'),
+            this.loadPalette('mard', 'M'),
             this.loadPalette('artkal_a', 'A', 'Artkal A-2.6MM'),
             this.loadPalette('artkal_c', 'C', 'Artkal C-2.6MM'),
             this.loadPalette('artkal_m', 'M', 'Artkal M-2.6MM'),
