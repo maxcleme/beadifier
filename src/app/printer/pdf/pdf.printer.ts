@@ -326,6 +326,7 @@ export class PdfPrinter implements Printer {
                             ),
                             (entry) => {
                                 return (
+                                    entry.enabled &&
                                     entry.color.r ===
                                         reducedColor[
                                             4 *

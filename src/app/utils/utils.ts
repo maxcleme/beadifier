@@ -264,6 +264,7 @@ export function computeUsage(
             const entry: PaletteEntry = _.find(
                 _.flatten(palettes.map((p) => p.entries)),
                 (e) =>
+                    e.enabled &&
                     e.color.r === color.r &&
                     e.color.g === color.g &&
                     e.color.b === color.b &&
