@@ -75,6 +75,7 @@ export class XlsxPrinter implements Printer {
                     ),
                     (entry) => {
                         return (
+                            entry.enabled &&
                             entry.color.r === color.r &&
                             entry.color.g === color.g &&
                             entry.color.b === color.b
